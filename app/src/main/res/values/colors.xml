@@ -2,4 +2,25 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="primary_green">#FF00C9A7</color>
+    <color name="primary_green_dark">#FF00A88A</color>
+    <color name="light_mint">#FFE8FFF5</color>
+    <color name="very_light_mint">#FFF0FFF8</color>
+    <color name="card_background">#FFFFFFFF</color>
+    <color name="input_field_bg">#FFE8F5E9</color>
+    <color name="dark_text">#FF1A1A2E</color>
+    <color name="secondary_text">#FF6B7280</color>
+    <color name="hint_text">#FF9CA3AF</color>
+    <color name="button_secondary_bg">#FFE0F2E9</color>
+    <color name="red_hangup">#FFFF3B30</color>
+    <color name="red_prohibited">#FFFF0000</color>
+    <color name="green_active">#FF4CAF50</color>
+    <color name="meeting_control_bg">#FF2D3436</color>
+    <color name="meeting_control_bg_light">#FF3D4446</color>
+    <color name="overlay_dark">#80000000</color>
+    <color name="icon_blue">#FF4A90D9</color>
+    <color name="transparent">#00000000</color>
+    <color name="gradient_start">#FF00C9A7</color>
+    <color name="gradient_end">#FF00E6B8</color>
 </resources>

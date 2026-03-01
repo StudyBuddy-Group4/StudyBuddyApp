@@ -10,16 +10,46 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.StudyBuddyApp">
+        android:theme="@style/Theme.StudyBuddyApp"
+        tools:targetApi="31">
+
+        <!-- Splash (Launcher) -->
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Authentication Flow -->
+        <activity android:name=".LaunchOptionsActivity" android:exported="false" />
+        <activity android:name=".LoginActivity" android:exported="false" />
+        <activity android:name=".CreateAccountActivity" android:exported="false" />
+        <activity android:name=".ForgotPasswordActivity" android:exported="false" />
+        <activity android:name=".SecurityCodeActivity" android:exported="false" />
+        <activity android:name=".NewPasswordActivity" android:exported="false" />
+        <activity android:name=".PasswordChangedActivity" android:exported="false" />
+
+        <!-- Main Hub -->
+        <activity android:name=".MainHubActivity" android:exported="false" />
+
+        <!-- Meeting Room -->
+        <activity android:name=".MeetingRoomActivity" android:exported="false" />
+        <activity android:name=".FlagParticipantActivity" android:exported="false" />
+        <activity android:name=".AdminMeetingRoomActivity" android:exported="false" />
+
+        <!-- Profile Sub-screens -->
+        <activity android:name=".EditProfileActivity" android:exported="false" />
+        <activity android:name=".SecurityMenuActivity" android:exported="false" />
+        <activity android:name=".ChangePasswordActivity" android:exported="false" />
+        <activity android:name=".PasswordChangedSuccessActivity" android:exported="false" />
+        <activity android:name=".SettingsMenuActivity" android:exported="false" />
+        <activity android:name=".NotificationSettingsActivity" android:exported="false" />
+        <activity android:name=".DeleteAccountActivity" android:exported="false" />
+        <activity android:name=".HistoryReportsActivity" android:exported="false" />
+
     </application>
 
 </manifest>

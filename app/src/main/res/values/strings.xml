@@ -1,3 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">StudyBuddyApp</string>
+    <string name="app_name">StudyBuddy</string>
+
+    <!-- Splash & Launch -->
+    <string name="splash_app_name">StudyBuddy</string>
+    <string name="launch_tagline">Focus together. Study smarter.\nJoin structured study sessions and stay accountable.</string>
+    <string name="btn_log_in">Log In</string>
+    <string name="btn_sign_up">Sign Up</string>
+    <string name="forgot_password_link">Forgot Password?</string>
+
+    <!-- Login -->
+    <string name="welcome">Welcome</string>
+    <string name="username_or_email">Username Or Email</string>
+    <string name="hint_email">example@example.com</string>
+    <string name="password">Password</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+
+    <!-- Create Account -->
+    <string name="create_account">Create Account</string>
+    <string name="username">Username</string>
+    <string name="hint_username">Enter your username</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="account_created_msg">New Account Has Been Created!</string>
+    <string name="btn_back">Back</string>
+
+    <!-- Forgot Password -->
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="reset_password_question">Reset Password?</string>
+    <string name="reset_password_desc">Enter your registered email address and we will send you instructions to reset your password.</string>
+    <string name="enter_email_address">Enter Email Address</string>
+    <string name="btn_next_step">Next Step</string>
+
+    <!-- Security Code -->
+    <string name="security_code_title">Security Code</string>
+    <string name="enter_security_code">Enter Security Code</string>
+    <string name="btn_confirm">Confirm</string>
+    <string name="btn_send_again">Send Again</string>
+
+    <!-- New Password -->
+    <string name="new_password_title">New Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="btn_change_password">Change Password</string>
+
+    <!-- Password Changed -->
+    <string name="password_changed_success">Password Has Been\nChanged Successfully</string>
+
+    <!-- Home Page -->
+    <string name="home_page_title">Home Page</string>
+    <string name="focus_time">Focus time</string>
+    <string name="time_15_min">15 min</string>
+    <string name="time_30_min">30 min</string>
+    <string name="time_custom">Custom</string>
+    <string name="btn_start">START</string>
+
+    <!-- Ready To Focus Modal -->
+    <string name="ready_to_focus">Ready To Focus?</string>
+    <string name="btn_add_task">Add A Task</string>
+    <string name="btn_start_anyway">Start Anyway</string>
+
+    <!-- Task List -->
+    <string name="task_list_title">Task List</string>
+    <string name="create_new_task">Create A New Task:</string>
+    <string name="task_label">Task:</string>
+    <string name="note_label">Note:</string>
+    <string name="hint_write">Write…</string>
+    <string name="btn_save">Save</string>
+
+    <!-- Mock Tasks -->
+    <string name="mock_task_1">Finish Math Assignment</string>
+    <string name="mock_task_note_1">Note: Finish before Feb 16</string>
+    <string name="mock_task_2">Review Lecture Slides</string>
+    <string name="mock_task_note_2">Note: Finish before Feb 16</string>
+    <string name="mock_task_3">Prepare For Final Exams</string>
+    <string name="mock_task_note_3">Note: Finish before Feb 16</string>
+
+    <!-- Meeting Room -->
+    <string name="meeting_room_title">Meeting Room</string>
+    <string name="time_left">12:36\nLeft</string>
+
+    <!-- Flag -->
+    <string name="flag_title">Flag</string>
+    <string name="flag_this_user_for">Flag This User For…</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <!-- Session Completed -->
+    <string name="session_congratulations">Congratulations!\nYou Have Completed\nYour Focus Goal!</string>
+    <string name="btn_home">Home</string>
+    <string name="btn_start_new_session">Start New Session</string>
+    <string name="btn_go_to_task_list">Go To Task List</string>
+
+    <!-- Distraction Warning -->
+    <string name="distraction_warning">Switching To Another App\nWill End Your Focus Session\nAnd Affect Your Rating.</string>
+    <string name="btn_continue_studying">Continue Studying</string>
+    <string name="btn_leave_session">Leave Session</string>
+
+    <!-- Manual Exit Warning -->
+    <string name="manual_exit_warning">Ending Your Focus Session\nWill Affect Your Rating.</string>
+
+    <!-- Statistics -->
+    <string name="statistics_title">Statistics</string>
+    <string name="personal_rating">Personal Rating</string>
+    <string name="accumulated_focus_time">Accumulated Focus Time</string>
+    <string name="mock_rating">4.5</string>
+    <string name="mock_focus_time">6:30:00</string>
+    <string name="completed">Completed</string>
+    <string name="uncompleted">Uncompleted</string>
+
+    <!-- Calculation Rule -->
+    <string name="how_rating_calculated">How Is Personal Rating Calculated</string>
+    <string name="rating_explanation">Your Rating Is A Score Out Of 5.0 That Reflects Your Focus Success! It Is Calculated By Dividing Your Successfully Completed Sessions By Your Total Attempted Sessions. Stay Focused To Keep Your Score High!</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="mock_user_name">John Smith</string>
+    <string name="mock_user_id">ID: 25030024</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="security">Security</string>
+    <string name="setting">Setting</string>
+    <string name="logout">Logout</string>
+    <string name="administrator">Administrator</string>
+    <string name="history_reports">History Reports</string>
+
+    <!-- Edit Profile -->
+    <string name="edit_my_profile">Edit My Profile</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="email_address">Email Address</string>
+    <string name="btn_update_profile">Update Profile</string>
+
+    <!-- Security Menu -->
+    <string name="change_password">Change Password</string>
+    <string name="current_password">Current Password</string>
+
+    <!-- Settings Menu -->
+    <string name="settings_title">Settings</string>
+    <string name="notification_settings">Notification Settings</string>
+    <string name="delete_account">Delete Account</string>
+
+    <!-- Notification Settings -->
+    <string name="general_notification">General Notification</string>
+
+    <!-- Delete Account -->
+    <string name="delete_account_title">Delete Account</string>
+    <string name="delete_account_question">Are You Sure You Want To Delete Your Account?</string>
+    <string name="delete_account_warning">This action will permanently delete all of your data, and you will not be able to recover it. Please keep the following in mind before proceeding:</string>
+    <string name="delete_warning_1">All your session history will be eliminated.</string>
+    <string name="delete_warning_2">You will not be able to access your account or any related information.</string>
+    <string name="delete_warning_3">This action cannot be undone.</string>
+    <string name="delete_confirm_prompt">Please Enter Your Password To Confirm Deletion Of Your Account.</string>
+    <string name="btn_yes_delete">Yes, Delete Account</string>
+
+    <!-- Admin Meeting Room -->
+    <string name="admin_decision_title">How Do You Want To Deal With This Account</string>
+    <string name="btn_kick_out">Kick It Out</string>
+    <string name="btn_ban_3_days">Ban For 3 Days</string>
+    <string name="btn_ban_permanently">Ban Permanently</string>
+
+    <!-- User Removal -->
+    <string name="you_have_been_removed">You Have Been Removed</string>
+    <string name="ban_message">Your Account Is Banned For 3 Days, Please Refrain From Conducting Inappropriate Behavior E.G. Nudity, Noise, Violence</string>
+
+    <!-- History Reports -->
+    <string name="history_reports_title">History Reports</string>
+
+    <!-- Flag Notification -->
+    <string name="flag_notification_title">You Just Received A Flag</string>
+    <string name="btn_go_to_meeting">Go To The Meeting</string>
+    <string name="btn_dismiss">Dismiss</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_tasks">Tasks</string>
+    <string name="nav_statistics">Statistics</string>
+    <string name="nav_profile">Profile</string>
 </resources>

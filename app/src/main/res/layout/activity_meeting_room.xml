@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_green">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/meeting_room_title"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Main speaker video -->
+    <FrameLayout
+        android:id="@+id/mainVideoContainer"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_video_rounded" />
+
+        <!-- Timer bubble at top-right -->
+        <TextView
+            android:id="@+id/tvTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="12dp"
+            android:background="@drawable/bg_timer_bubble"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="6dp"
+            android:text="@string/time_left"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <!-- Thumbnails row -->
+    <LinearLayout
+        android:id="@+id/thumbnailRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mainVideoContainer">
+
+        <FrameLayout
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="8dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_video_rounded" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="4dp"
+                android:contentDescription="@string/meeting_room_title"
+                android:src="@drawable/ic_mic"
+                app:tint="@color/red_hangup" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="8dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_video_rounded" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="4dp"
+                android:contentDescription="@string/meeting_room_title"
+                android:src="@drawable/ic_mic"
+                app:tint="@color/red_hangup" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="8dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_video_rounded" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="4dp"
+                android:contentDescription="@string/meeting_room_title"
+                android:src="@drawable/ic_mic"
+                app:tint="@color/red_hangup" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="70dp"
+            android:layout_height="70dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_video_rounded" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="4dp"
+                android:contentDescription="@string/meeting_room_title"
+                android:src="@drawable/ic_mic"
+                app:tint="@color/red_hangup" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- Bottom control bar -->
+    <LinearLayout
+        android:id="@+id/controlBar"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/bg_meeting_control"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/btnSpeaker"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_circle_control"
+            android:contentDescription="@string/meeting_room_title"
+            android:padding="10dp"
+            android:src="@drawable/ic_speaker"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/btnCamera"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_circle_control"
+            android:contentDescription="@string/meeting_room_title"
+            android:padding="10dp"
+            android:src="@drawable/ic_videocam"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/btnHangUp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_circle_red"
+            android:contentDescription="@string/meeting_room_title"
+            android:padding="10dp"
+            android:src="@drawable/ic_call_end"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/btnMic"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_circle_control"
+            android:contentDescription="@string/meeting_room_title"
+            android:padding="10dp"
+            android:src="@drawable/ic_mic"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/btnFlag"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_circle_control"
+            android:contentDescription="@string/flag_title"
+            android:padding="10dp"
+            android:src="@drawable/ic_flag"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
