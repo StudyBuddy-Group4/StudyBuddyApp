@@ -2,11 +2,14 @@ package com.example.studybuddyapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +19,8 @@ import androidx.fragment.app.Fragment;
 public class HomeFragment extends Fragment {
 
     private TextView chip15, chip30, chipCustom;
+    private int selectedMinutes = 15; // Default selection
+    private boolean isCustomSelected = false;
 
     @Nullable
     @Override
@@ -33,11 +38,29 @@ public class HomeFragment extends Fragment {
         chipCustom = view.findViewById(R.id.chip_custom);
         Button btnStart = view.findViewById(R.id.btn_start);
 
-        chip15.setOnClickListener(v -> selectChip(chip15));
-        chip30.setOnClickListener(v -> selectChip(chip30));
-        chipCustom.setOnClickListener(v -> selectChip(chipCustom));
+        chip15.setOnClickListener(v -> {
+            selectedMinutes = 15;
+            isCustomSelected = false;
+            chipCustom.setText(getString(R.string.time_custom));
+            selectChip(chip15);
+        });
 
-        btnStart.setOnClickListener(v -> showReadyToFocusDialog());
+        chip30.setOnClickListener(v -> {
+            selectedMinutes = 30;
+            isCustomSelected = false;
+            chipCustom.setText(getString(R.string.time_custom));
+            selectChip(chip30);
+        });
+
+        chipCustom.setOnClickListener(v -> showCustomMinutesDialog());
+
+        btnStart.setOnClickListener(v -> {
+            if (selectedMinutes <= 0) {
+                Toast.makeText(requireContext(), "Please enter a valid number of minutes.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            showReadyToFocusDialog();
+        });
     }
 
     private void selectChip(TextView selected) {
@@ -51,6 +74,40 @@ public class HomeFragment extends Fragment {
                 chip.setTextColor(getResources().getColor(R.color.dark_text, null));
             }
         }
+    }
+
+    private void showCustomMinutesDialog() {
+        final EditText input = new EditText(requireContext());
+        input.setHint("Enter minutes");
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setPadding(50, 30, 50, 30);
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Custom focus time")
+                .setMessage("Enter the number of minutes:")
+                .setView(input)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    String value = input.getText().toString().trim();
+
+                    if (value.isEmpty()) {
+                        Toast.makeText(requireContext(), "Please enter a number.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    int minutes = Integer.parseInt(value);
+
+                    if (minutes <= 0) {
+                        Toast.makeText(requireContext(), "Minutes must be greater than 0.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    selectedMinutes = minutes;
+                    isCustomSelected = true;
+                    chipCustom.setText(minutes + " min");
+                    selectChip(chipCustom);
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     private void showReadyToFocusDialog() {
@@ -75,7 +132,9 @@ public class HomeFragment extends Fragment {
 
         dialogView.findViewById(R.id.btn_start_anyway).setOnClickListener(v -> {
             dialog.dismiss();
-            startActivity(new Intent(requireContext(), MeetingRoomActivity.class));
+            Intent intent = new Intent(requireContext(), MeetingRoomActivity.class);
+            intent.putExtra("focus_minutes", selectedMinutes);
+            startActivity(intent);
         });
 
         dialog.show();
