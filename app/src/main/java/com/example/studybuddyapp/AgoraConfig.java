@@ -17,7 +17,7 @@ public final class AgoraConfig {
     public static final String APP_ID = "19c0c9217e3c429c9a3ce1839f92d90d";
 
     // TODO: Paste a temporary token here (leave empty for APP ID-only auth)
-    public static final String TEMP_TOKEN = "007eJxTYOA155TbkfvnuduL+jBp9wyvOZFvvr7aWnz+xaFW8z+pOf8UGAwtkw2SLY0MzVONk02MLJMtE42TUw0tjC3TLI1SLA1SYv+vy2wIZGSwYOBmYmSAQBCfg6G4pDSlMt7QlIEBADHfIbU=";
+    public static final String TEMP_TOKEN = "007eJxTYPCVroxae+Se6B/n2S77itcF9X1wd1WLKqg+U5XhWN6mY6zAYGiZbJBsaWRonmqcbGJkmWyZaJycamhhbJlmaZRiaZCyiHt9ZkMgI4PAzIVMjAwQCOJzMBSXlKZUxhuaMjAAAHTLH0o=";
 
     private AgoraConfig() {}
 
