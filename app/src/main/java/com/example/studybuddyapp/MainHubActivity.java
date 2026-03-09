@@ -40,7 +40,17 @@ public class MainHubActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_statistics) {
                 selectedFragment = new StatisticsFragment();
             } else if (itemId == R.id.nav_profile) {
-                selectedFragment = new ProfileFragment();
+                
+                // ADMIN CHECK LOGIC
+                // For testing purposes, we hardcode this to be true/false.
+                // Later, we will replace this with an actual check from login system/database.
+                boolean isAdmin = false;
+                
+                if (isAdmin) {
+                    selectedFragment = new AdminProfileFragment(); // Loads the Admin Layout
+                } else {
+                    selectedFragment = new ProfileFragment();      // Loads the Standard Layout
+                }
             }
 
             if (selectedFragment != null) {
