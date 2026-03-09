@@ -74,21 +74,12 @@ public class MeetingRoomActivity extends AppCompatActivity {
         btnCamera.setOnClickListener(v -> {
             isCameraOff = !isCameraOff;
             updateToggleButton(btnCamera, isCameraOff);
-            Toast.makeText(
-                    this,
-                    isCameraOff ? "Camera off" : "Camera on",
-                    Toast.LENGTH_SHORT
-            ).show();
+
         });
 
         btnMic.setOnClickListener(v -> {
             isMicOff = !isMicOff;
             updateToggleButton(btnMic, isMicOff);
-            Toast.makeText(
-                    this,
-                    isMicOff ? "Microphone off" : "Microphone on",
-                    Toast.LENGTH_SHORT
-            ).show();
         });
 
         seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -104,11 +95,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(
-                        MeetingRoomActivity.this,
-                        "Volume: " + seekBar.getProgress() + "%",
-                        Toast.LENGTH_SHORT
-                ).show();
+                // No action needed.
             }
         });
     }
