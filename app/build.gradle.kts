@@ -58,6 +58,8 @@ jacoco {
 
 // Create a custom JaCoCo report task
 tasks.register<JacocoReport>("jacocoTestReport") {
+    group = "Code coverage"
+    description = "Generates reports using JaCoCo."
 
     // Run BOTH test types before generating report
     dependsOn("testDebugUnitTest")
