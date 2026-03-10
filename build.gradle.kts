@@ -18,6 +18,6 @@ sonar {
         property("sonar.scm.disabled", "true") // Temporarily disable SCM detection to avoid Git autodetection error
 
         //Integrate JacoCo to SonarQube
-//        property("sonar.coverage.jacoco.xmlReportPaths", "${rootProject.projectDir}/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${rootProject.projectDir}/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
     }
 }
