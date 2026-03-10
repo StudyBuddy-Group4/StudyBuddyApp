@@ -19,11 +19,11 @@ sonar {
 
         //Integrate JacoCo to SonarQube
         property("sonar.coverage.jacoco.xmlReportPaths", "${rootProject.projectDir}/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
-        property("sonar.androidLint.reportPaths", "${rootProject.projectDir}/app/build/reports/lint-results-debug.xml")
+        property("sonar.androidLint.reportPaths", "app/build/reports/lint-results-debug.xml")
 
     }
 }
 
 tasks.named("sonar") {
-    dependsOn(":app:jacocoTestReport")
+    dependsOn(":app:lintDebug", ":app:jacocoTestReport")
 }
