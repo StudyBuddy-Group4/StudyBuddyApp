@@ -107,7 +107,3 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     }
     )
 }
-
-tasks.named("sonar") {
-    dependsOn("jacocoTestReport")
-}

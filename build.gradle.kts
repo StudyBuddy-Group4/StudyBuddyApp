@@ -21,3 +21,7 @@ sonar {
         property("sonar.coverage.jacoco.xmlReportPaths", "${rootProject.projectDir}/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
     }
 }
+
+tasks.named("sonar") {
+    dependsOn(":app:jacocoTestReport")
+}
