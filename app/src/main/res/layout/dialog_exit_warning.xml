@@ -22,25 +22,25 @@
 
     <Button
         android:id="@+id/btnContinueStudying"
+        style="@style/PrimaryButton"
         android:layout_width="240dp"
         android:layout_height="48dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/bg_button_primary"
         android:stateListAnimator="@null"
         android:text="@string/btn_continue_studying"
-        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/btnLeaveSession"
+        style="@style/SecondaryButton"
         android:layout_width="240dp"
         android:layout_height="48dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/bg_button_secondary"
         android:stateListAnimator="@null"
         android:text="@string/btn_leave_session"
-        android:textColor="@color/dark_text"
         android:textSize="16sp"
         android:textStyle="bold" />
 

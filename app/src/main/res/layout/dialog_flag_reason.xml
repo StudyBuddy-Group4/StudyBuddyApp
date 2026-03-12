@@ -37,6 +37,7 @@
 
     <Button
         android:id="@+id/btnSave"
+        style="@style/PrimaryButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
@@ -49,6 +50,7 @@
 
     <Button
         android:id="@+id/btnCancel"
+        style="@style/SecondaryButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
