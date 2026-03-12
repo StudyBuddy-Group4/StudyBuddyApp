@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -111,6 +112,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         parseIntentExtras();
         bindViews();
         wireControlButtons();
+        setupBackHandler();
 
         if (checkPermissions()) {
             initAndJoin();
@@ -143,13 +145,18 @@ public class MeetingRoomActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (isInChannel && !isSessionCompleted) {
-            showManualExitWarningDialog();
-        } else {
-            super.onBackPressed();
-        }
+    private void setupBackHandler() {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (isInChannel && !isSessionCompleted) {
+                    showManualExitWarningDialog();
+                } else {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        });
     }
 
     // Init helpers
