@@ -44,17 +44,17 @@ public class MeetingRoomActivity extends AppCompatActivity {
     public static final String EXTRA_FOCUS_DURATION = "extra_focus_duration";
     public static final String EXTRA_CHANNEL_NAME = "extra_channel_name";
 
-    // ── Agora ────────────────────────────────────────────────
+    // Agora
     private RtcEngine rtcEngine;
     private String channelName;
 
-    // ── UI ────────────────────────────────────────────────────
+    // UI
     private FrameLayout mainVideoContainer;
     private LinearLayout thumbnailContainer;
     private TextView tvTimer;
     private ImageView btnSpeaker, btnCamera, btnHangUp, btnMic, btnFlag;
 
-    // ── State ─────────────────────────────────────────────────
+    // State
     private boolean isMicMuted = false;
     private boolean isCameraOff = false;
     private boolean isSpeakerOff = false;
@@ -64,13 +64,13 @@ public class MeetingRoomActivity extends AppCompatActivity {
     private long focusDurationMs;
     private CountDownTimer focusTimer;
 
-    // ── Participant tracking ─────────────────────────────────
+    // Participant tracking
     private final List<Integer> remoteUids = new ArrayList<>();
     private final Map<Integer, SurfaceView> remoteSurfaces = new HashMap<>();
     private int mainViewUid = 0; // 0 = local user occupies main view
     private SurfaceView localSurface;
 
-    // ── Agora event handler ──────────────────────────────────
+    // Agora event handler
     private final IRtcEngineEventHandler rtcEventHandler = new IRtcEngineEventHandler() {
 
         @Override
@@ -100,9 +100,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         }
     };
 
-    // ═════════════════════════════════════════════════════════
     // Lifecycle
-    // ═════════════════════════════════════════════════════════
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,9 +152,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         }
     }
 
-    // ═════════════════════════════════════════════════════════
     // Init helpers
-    // ═════════════════════════════════════════════════════════
 
     private void parseIntentExtras() {
         int durationMinutes = getIntent().getIntExtra(EXTRA_FOCUS_DURATION, 15);
@@ -206,9 +202,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
                 startActivity(new Intent(this, FlagParticipantActivity.class)));
     }
 
-    // ═════════════════════════════════════════════════════════
     // Permissions
-    // ═════════════════════════════════════════════════════════
 
     private String[] getRequiredPermissions() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
@@ -253,9 +247,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         }
     }
 
-    // ═════════════════════════════════════════════════════════
     // Agora engine
-    // ═════════════════════════════════════════════════════════
 
     private void initAndJoin() {
         if (AgoraConfig.APP_ID.isEmpty()) {
@@ -339,9 +331,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         }
     }
 
-    // ═════════════════════════════════════════════════════════
     // Video layout management (Speaker layout)
-    // ═════════════════════════════════════════════════════════
 
     private void addRemoteUser(int uid) {
         if (remoteUids.contains(uid)) return;
@@ -483,9 +473,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         }
     }
 
-    // ═════════════════════════════════════════════════════════
     // Focus timer
-    // ═════════════════════════════════════════════════════════
 
     private void startFocusTimer() {
         updateTimerText(focusDurationMs);
@@ -513,9 +501,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         tvTimer.setText(formatted);
     }
 
-    // ═════════════════════════════════════════════════════════
     // Dialogs
-    // ═════════════════════════════════════════════════════════
 
     private void showSessionCompletedDialog() {
         if (isFinishing() || isDestroyed()) return;
@@ -606,9 +592,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    // ═════════════════════════════════════════════════════════
     // Navigation helpers
-    // ═════════════════════════════════════════════════════════
 
     private void leaveAndGoHome(boolean goToTasks) {
         if (focusTimer != null) focusTimer.cancel();
@@ -627,9 +611,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         startFocusTimer();
     }
 
-    // ═════════════════════════════════════════════════════════
     // Utility
-    // ═════════════════════════════════════════════════════════
 
     private int dpToPx(int dp) {
         return Math.round(dp * getResources().getDisplayMetrics().density);
