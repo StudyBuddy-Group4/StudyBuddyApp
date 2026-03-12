@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient_top"
@@ -90,7 +91,7 @@
                         android:layout_gravity="center"
                         android:contentDescription="@string/edit_profile"
                         android:src="@drawable/ic_edit_profile"
-                        android:tint="@color/white" />
+                        app:tint="@color/white" />
                 </FrameLayout>
 
                 <TextView
@@ -126,7 +127,7 @@
                         android:layout_gravity="center"
                         android:contentDescription="@string/security"
                         android:src="@drawable/ic_security"
-                        android:tint="@color/white" />
+                        app:tint="@color/white" />
                 </FrameLayout>
 
                 <TextView
@@ -162,7 +163,7 @@
                         android:layout_gravity="center"
                         android:contentDescription="@string/history_reports"
                         android:src="@drawable/ic_history_reports"
-                        android:tint="@color/white" />
+                        app:tint="@color/white" />
                 </FrameLayout>
 
                 <TextView
@@ -198,7 +199,7 @@
                         android:layout_gravity="center"
                         android:contentDescription="@string/flag_notification_title"
                         android:src="@drawable/ic_flag"
-                        android:tint="@color/white" />
+                        app:tint="@color/white" />
                 </FrameLayout>
 
                 <TextView
@@ -234,7 +235,7 @@
                         android:layout_gravity="center"
                         android:contentDescription="@string/logout"
                         android:src="@drawable/ic_logout"
-                        android:tint="@color/white" />
+                        app:tint="@color/white" />
                 </FrameLayout>
 
                 <TextView
