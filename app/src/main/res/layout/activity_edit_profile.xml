@@ -60,6 +60,7 @@
             android:padding="24dp">
 
             <TextView
+                android:id="@+id/tvHeaderName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -70,6 +71,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvHeaderId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

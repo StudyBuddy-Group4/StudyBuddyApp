@@ -12,8 +12,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.studybuddyapp.api.ApiClient;
+import com.example.studybuddyapp.api.UserApi;
+import com.example.studybuddyapp.api.dto.UserProfileResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
+
+    private TextView tvName;
+    private TextView tvId;
 
     @Nullable
     @Override
@@ -26,18 +35,10 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SessionManager session = new SessionManager(requireContext());
-        TextView tvName = view.findViewById(R.id.tvProfileName);
-        TextView tvId = view.findViewById(R.id.tvProfileId);
+        tvName = view.findViewById(R.id.tvProfileName);
+        tvId = view.findViewById(R.id.tvProfileId);
 
-        String username = session.getUsername();
-        if (username != null && !username.isEmpty()) {
-            tvName.setText(username);
-        }
-        long userId = session.getUserId();
-        if (userId > 0) {
-            tvId.setText("ID: " + userId);
-        }
+        showCachedData();
 
         view.findViewById(R.id.menu_edit_profile).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), EditProfileActivity.class)));
@@ -49,11 +50,54 @@ public class ProfileFragment extends Fragment {
                 startActivity(new Intent(requireContext(), SettingsMenuActivity.class)));
 
         view.findViewById(R.id.menu_logout).setOnClickListener(v -> {
-            session.clearSession();
+            new SessionManager(requireContext()).clearSession();
             ApiClient.resetInstance();
             Intent intent = new Intent(requireContext(), LaunchOptionsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadProfileFromBackend();
+    }
+
+    private void showCachedData() {
+        SessionManager session = new SessionManager(requireContext());
+        String username = session.getUsername();
+        if (username != null && !username.isEmpty()) {
+            tvName.setText(username);
+        }
+        long userId = session.getUserId();
+        if (userId > 0) {
+            tvId.setText("ID: " + userId);
+        }
+    }
+
+    private void loadProfileFromBackend() {
+        UserApi api = ApiClient.getUserApi(requireContext());
+        api.getProfile().enqueue(new Callback<UserProfileResponse>() {
+            @Override
+            public void onResponse(Call<UserProfileResponse> call,
+                                   Response<UserProfileResponse> response) {
+                if (!isAdded()) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    UserProfileResponse profile = response.body();
+                    tvName.setText(profile.getUsername());
+                    tvId.setText("ID: " + profile.getId());
+
+                    SessionManager session = new SessionManager(requireContext());
+                    session.saveLoginSession(session.getToken(), profile.getId(),
+                            profile.getUsername(), profile.isAdmin());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                // Keep showing cached data
+            }
         });
     }
 }

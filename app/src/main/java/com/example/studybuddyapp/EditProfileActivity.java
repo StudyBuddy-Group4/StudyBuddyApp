@@ -2,6 +2,7 @@ package com.example.studybuddyapp;
 
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -24,6 +25,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private EditText etUsername;
     private EditText etEmail;
+    private TextView tvHeaderName;
+    private TextView tvHeaderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
         etUsername = findViewById(R.id.etUsername);
         etEmail = findViewById(R.id.etEmail);
+        tvHeaderName = findViewById(R.id.tvHeaderName);
+        tvHeaderId = findViewById(R.id.tvHeaderId);
 
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
 
@@ -56,6 +61,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     UserProfileResponse profile = response.body();
                     etUsername.setText(profile.getUsername());
                     etEmail.setText(profile.getEmail());
+                    tvHeaderName.setText(profile.getUsername());
+                    tvHeaderId.setText("ID: " + profile.getId());
                 }
             }
 
@@ -63,6 +70,9 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
                 SessionManager session = new SessionManager(EditProfileActivity.this);
                 etUsername.setText(session.getUsername());
+                tvHeaderName.setText(session.getUsername());
+                long uid = session.getUserId();
+                if (uid > 0) tvHeaderId.setText("ID: " + uid);
             }
         });
     }
@@ -84,6 +94,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     SessionManager session = new SessionManager(EditProfileActivity.this);
                     session.saveLoginSession(session.getToken(), session.getUserId(),
                             username, session.isAdmin());
+                    tvHeaderName.setText(username);
                     Toast.makeText(EditProfileActivity.this,
                             "Profile Updated", Toast.LENGTH_SHORT).show();
                     finish();
