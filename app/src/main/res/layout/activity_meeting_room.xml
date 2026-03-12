@@ -11,7 +11,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:text="@string/meeting_room_title"
         android:textColor="@color/white"
         android:textSize="20sp"
@@ -20,24 +20,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Main speaker video -->
+    <!-- Main / speaker video container -->
     <FrameLayout
         android:id="@+id/mainVideoContainer"
         android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_video_rounded"
+        android:clipToOutline="true"
+        app:layout_constraintBottom_toTopOf="@id/thumbnailScroll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_video_rounded" />
-
-        <!-- Timer bubble at top-right -->
+        <!-- Timer bubble overlaid on the main video -->
         <TextView
             android:id="@+id/tvTimer"
             android:layout_width="wrap_content"
@@ -46,181 +44,103 @@
             android:layout_margin="12dp"
             android:background="@drawable/bg_timer_bubble"
             android:gravity="center"
-            android:paddingStart="12dp"
-            android:paddingTop="6dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="6dp"
+            android:paddingStart="14dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="8dp"
             android:text="@string/time_left"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:textStyle="bold" />
     </FrameLayout>
 
-    <!-- Thumbnails row -->
-    <LinearLayout
-        android:id="@+id/thumbnailRow"
+    <!-- Horizontal scroll for thumbnail videos -->
+    <HorizontalScrollView
+        android:id="@+id/thumbnailScroll"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/controlBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mainVideoContainer">
+        app:layout_constraintStart_toStartOf="parent">
 
-        <FrameLayout
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginEnd="8dp">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_video_rounded" />
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="4dp"
-                android:contentDescription="@string/meeting_room_title"
-                android:src="@drawable/ic_mic"
-                app:tint="@color/red_hangup" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginEnd="8dp">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_video_rounded" />
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="4dp"
-                android:contentDescription="@string/meeting_room_title"
-                android:src="@drawable/ic_mic"
-                app:tint="@color/red_hangup" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginEnd="8dp">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_video_rounded" />
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="4dp"
-                android:contentDescription="@string/meeting_room_title"
-                android:src="@drawable/ic_mic"
-                app:tint="@color/red_hangup" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="70dp"
-            android:layout_height="70dp">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_video_rounded" />
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="4dp"
-                android:contentDescription="@string/meeting_room_title"
-                android:src="@drawable/ic_mic"
-                app:tint="@color/red_hangup" />
-        </FrameLayout>
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/thumbnailContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
 
     <!-- Bottom control bar -->
     <LinearLayout
         android:id="@+id/controlBar"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/bg_meeting_control"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/btnSpeaker"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_weight="1"
             android:background="@drawable/bg_circle_control"
             android:contentDescription="@string/meeting_room_title"
-            android:padding="10dp"
-            android:src="@drawable/ic_speaker"
-            app:tint="@color/white" />
+            android:padding="11dp"
+            android:src="@drawable/ic_speaker" />
 
         <ImageView
             android:id="@+id/btnCamera"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_weight="1"
             android:background="@drawable/bg_circle_control"
             android:contentDescription="@string/meeting_room_title"
-            android:padding="10dp"
-            android:src="@drawable/ic_videocam"
-            app:tint="@color/white" />
+            android:padding="11dp"
+            android:src="@drawable/ic_videocam" />
 
         <ImageView
             android:id="@+id/btnHangUp"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_weight="1"
             android:background="@drawable/bg_circle_red"
             android:contentDescription="@string/meeting_room_title"
-            android:padding="10dp"
-            android:src="@drawable/ic_call_end"
-            app:tint="@color/white" />
+            android:padding="11dp"
+            android:src="@drawable/ic_call_end" />
 
         <ImageView
             android:id="@+id/btnMic"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_weight="1"
             android:background="@drawable/bg_circle_control"
             android:contentDescription="@string/meeting_room_title"
-            android:padding="10dp"
-            android:src="@drawable/ic_mic"
-            app:tint="@color/white" />
+            android:padding="11dp"
+            android:src="@drawable/ic_mic" />
 
         <ImageView
             android:id="@+id/btnFlag"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_weight="1"
             android:background="@drawable/bg_circle_control"
             android:contentDescription="@string/flag_title"
-            android:padding="10dp"
-            android:src="@drawable/ic_flag"
-            app:tint="@color/white" />
+            android:padding="11dp"
+            android:src="@drawable/ic_flag" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

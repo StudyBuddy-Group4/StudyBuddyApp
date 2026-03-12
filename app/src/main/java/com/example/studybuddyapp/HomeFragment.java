@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 public class HomeFragment extends Fragment {
 
     private TextView chip15, chip30, chipCustom;
+    private int selectedDurationMinutes = 15;
 
     @Nullable
     @Override
@@ -33,14 +34,15 @@ public class HomeFragment extends Fragment {
         chipCustom = view.findViewById(R.id.chip_custom);
         Button btnStart = view.findViewById(R.id.btn_start);
 
-        chip15.setOnClickListener(v -> selectChip(chip15));
-        chip30.setOnClickListener(v -> selectChip(chip30));
-        chipCustom.setOnClickListener(v -> selectChip(chipCustom));
+        chip15.setOnClickListener(v -> selectChip(chip15, 15));
+        chip30.setOnClickListener(v -> selectChip(chip30, 30));
+        chipCustom.setOnClickListener(v -> selectChip(chipCustom, 60));
 
         btnStart.setOnClickListener(v -> showReadyToFocusDialog());
     }
 
-    private void selectChip(TextView selected) {
+    private void selectChip(TextView selected, int durationMinutes) {
+        selectedDurationMinutes = durationMinutes;
         TextView[] chips = {chip15, chip30, chipCustom};
         for (TextView chip : chips) {
             if (chip == selected) {
@@ -75,9 +77,15 @@ public class HomeFragment extends Fragment {
 
         dialogView.findViewById(R.id.btn_start_anyway).setOnClickListener(v -> {
             dialog.dismiss();
-            startActivity(new Intent(requireContext(), MeetingRoomActivity.class));
+            launchMeetingRoom();
         });
 
         dialog.show();
+    }
+
+    private void launchMeetingRoom() {
+        Intent intent = new Intent(requireContext(), MeetingRoomActivity.class);
+        intent.putExtra(MeetingRoomActivity.EXTRA_FOCUS_DURATION, selectedDurationMinutes);
+        startActivity(intent);
     }
 }
