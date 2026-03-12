@@ -1,6 +1,7 @@
 package com.example.studybuddyapp;
 
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -9,7 +10,20 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.studybuddyapp.api.ApiClient;
+import com.example.studybuddyapp.api.ErrorUtils;
+import com.example.studybuddyapp.api.UserApi;
+import com.example.studybuddyapp.api.dto.UpdateProfileRequest;
+import com.example.studybuddyapp.api.dto.UserProfileResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class EditProfileActivity extends AppCompatActivity {
+
+    private EditText etUsername;
+    private EditText etEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +36,69 @@ public class EditProfileActivity extends AppCompatActivity {
             return insets;
         });
 
+        etUsername = findViewById(R.id.etUsername);
+        etEmail = findViewById(R.id.etEmail);
+
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
 
-        findViewById(R.id.btnUpdateProfile).setOnClickListener(v -> {
-            Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT).show();
-            finish();
+        loadProfile();
+
+        findViewById(R.id.btnUpdateProfile).setOnClickListener(v -> updateProfile());
+    }
+
+    private void loadProfile() {
+        UserApi api = ApiClient.getUserApi(this);
+        api.getProfile().enqueue(new Callback<UserProfileResponse>() {
+            @Override
+            public void onResponse(Call<UserProfileResponse> call,
+                                   Response<UserProfileResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    UserProfileResponse profile = response.body();
+                    etUsername.setText(profile.getUsername());
+                    etEmail.setText(profile.getEmail());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                SessionManager session = new SessionManager(EditProfileActivity.this);
+                etUsername.setText(session.getUsername());
+            }
+        });
+    }
+
+    private void updateProfile() {
+        String username = etUsername.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
+
+        if (username.isEmpty() || email.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        UserApi api = ApiClient.getUserApi(this);
+        api.updateProfile(new UpdateProfileRequest(username, email)).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    SessionManager session = new SessionManager(EditProfileActivity.this);
+                    session.saveLoginSession(session.getToken(), session.getUserId(),
+                            username, session.isAdmin());
+                    Toast.makeText(EditProfileActivity.this,
+                            "Profile Updated", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    String msg = ErrorUtils.parseError(response, "Update failed");
+                    Toast.makeText(EditProfileActivity.this, msg,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(EditProfileActivity.this,
+                        "Network error", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

@@ -9,17 +9,18 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.studybuddyapp.api.ApiClient;
 
-public class ProfileFragment extends Fragment {
+public class AdminProfileFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.fragment_admin_profile, container, false);
     }
 
     @Override
@@ -27,8 +28,8 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         SessionManager session = new SessionManager(requireContext());
-        TextView tvName = view.findViewById(R.id.tvProfileName);
-        TextView tvId = view.findViewById(R.id.tvProfileId);
+        TextView tvName = view.findViewById(R.id.tvAdminProfileName);
+        TextView tvId = view.findViewById(R.id.tvAdminProfileId);
 
         String username = session.getUsername();
         if (username != null && !username.isEmpty()) {
@@ -45,8 +46,11 @@ public class ProfileFragment extends Fragment {
         view.findViewById(R.id.menu_security).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), SecurityMenuActivity.class)));
 
-        view.findViewById(R.id.menu_setting).setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), SettingsMenuActivity.class)));
+        view.findViewById(R.id.menu_history_reports).setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), HistoryReportsActivity.class)));
+
+        view.findViewById(R.id.menu_simulate_alert).setOnClickListener(v ->
+                showFlagNotificationDialog());
 
         view.findViewById(R.id.menu_logout).setOnClickListener(v -> {
             session.clearSession();
@@ -55,5 +59,16 @@ public class ProfileFragment extends Fragment {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         });
+    }
+
+    private void showFlagNotificationDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.flag_notification_title)
+                .setMessage("Flagged User Id : 25020098\nFor: Nudity")
+                .setCancelable(false)
+                .setPositiveButton(R.string.btn_go_to_meeting, (dialog, which) ->
+                        startActivity(new Intent(requireContext(), AdminMeetingRoomActivity.class)))
+                .setNegativeButton(R.string.btn_dismiss, (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }

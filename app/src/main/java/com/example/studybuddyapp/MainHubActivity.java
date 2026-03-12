@@ -13,13 +13,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainHubActivity extends AppCompatActivity {
 
+    public static final String EXTRA_IS_ADMIN = "extra_is_admin";
+
     private BottomNavigationView bottomNavigation;
+    private boolean isAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main_hub);
+
+        SessionManager session = new SessionManager(this);
+        isAdmin = session.isAdmin() || getIntent().getBooleanExtra(EXTRA_IS_ADMIN, false);
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
@@ -40,7 +46,11 @@ public class MainHubActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_statistics) {
                 selectedFragment = new StatisticsFragment();
             } else if (itemId == R.id.nav_profile) {
-                selectedFragment = new ProfileFragment();
+                if (isAdmin) {
+                    selectedFragment = new AdminProfileFragment();
+                } else {
+                    selectedFragment = new ProfileFragment();
+                }
             }
 
             if (selectedFragment != null) {

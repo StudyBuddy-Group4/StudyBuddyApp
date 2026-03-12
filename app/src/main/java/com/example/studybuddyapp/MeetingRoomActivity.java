@@ -267,7 +267,13 @@ public class MeetingRoomActivity extends AppCompatActivity {
         }
         initRtcEngine();
         setupLocalPreview();
-        joinChannel();
+
+        SessionManager session = new SessionManager(this);
+        int agoraUid = 0;
+        if (session.isLoggedIn() && session.getUserId() > 0) {
+            agoraUid = (int) session.getUserId();
+        }
+        joinChannel(agoraUid);
     }
 
     private void initRtcEngine() {
@@ -304,7 +310,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         mainViewUid = 0;
     }
 
-    private void joinChannel() {
+    private void joinChannel(int uid) {
         String token = AgoraConfig.TEMP_TOKEN.isEmpty() ? null : AgoraConfig.TEMP_TOKEN;
 
         ChannelMediaOptions options = new ChannelMediaOptions();
@@ -315,7 +321,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         options.autoSubscribeAudio = true;
         options.autoSubscribeVideo = true;
 
-        int result = rtcEngine.joinChannel(token, channelName, 0, options);
+        int result = rtcEngine.joinChannel(token, channelName, uid, options);
         if (result != 0) {
             Log.e(TAG, "joinChannel failed: " + result);
             Toast.makeText(this, "Failed to join channel (code " + result + ")",

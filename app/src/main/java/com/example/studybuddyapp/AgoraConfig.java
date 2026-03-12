@@ -5,7 +5,7 @@ package com.example.studybuddyapp;
  *
  * HOW TO SET UP:
  * 1. Go to https://console.agora.io and sign in.
- * 2. Create a project (or open your existing one).
+ * 2. Create a project (or open existing one).
  * 3. Copy the App ID and paste it into APP_ID below.
  * 4. For testing: generate a temporary token in the Console
  *    using channel name "study_15" (or leave TEMP_TOKEN empty
@@ -13,11 +13,11 @@ package com.example.studybuddyapp;
  */
 public final class AgoraConfig {
 
-    // TODO: Paste your Agora App ID here
+    // Paste your Agora App ID here
     public static final String APP_ID = "19c0c9217e3c429c9a3ce1839f92d90d";
 
-    // TODO: Paste a temporary token here (leave empty for APP ID-only auth)
-    public static final String TEMP_TOKEN = "007eJxTYPCVroxae+Se6B/n2S77itcF9X1wd1WLKqg+U5XhWN6mY6zAYGiZbJBsaWRonmqcbGJkmWyZaJycamhhbJlmaZRiaZCyiHt9ZkMgI4PAzIVMjAwQCOJzMBSXlKZUxhuaMjAAAHTLH0o=";
+    // Paste a temporary token here (leave empty for APP ID-only auth)
+    public static final String TEMP_TOKEN = "007eJxTYIhizbnyqdJj8YRtE21bds4K7JEIqJ0m4e/u+cr/k1Y7E5MCg6FlskGypZGheapxsomRZbJlonFyqqGFsWWapVGKpUGKgvOmzIZARgbx7ydZGRkgEMTnYCguKU2pjDc0Y2AAAEucHvU=";
 
     private AgoraConfig() {}
 
