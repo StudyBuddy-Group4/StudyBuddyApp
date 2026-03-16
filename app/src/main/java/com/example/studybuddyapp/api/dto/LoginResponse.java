@@ -6,8 +6,9 @@ public class LoginResponse {
     private String token;
     private Long userId;
     private String username;
-    
-    
+
+
+    @SerializedName("admin")
     private boolean isAdmin;
 
     public String getToken() { return token; }
