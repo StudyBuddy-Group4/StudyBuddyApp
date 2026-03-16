@@ -33,7 +33,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/change_password"
+        android:text="@string/edit_my_profile"
         android:textColor="@color/white"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -63,98 +63,71 @@
             android:paddingBottom="24dp">
 
             <TextView
+                android:id="@+id/tvHeaderName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
-                android:text="@string/current_password"
+                android:text="@string/mock_user_name"
+                android:textColor="@color/dark_text"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvHeaderId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:text="@string/mock_user_id"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/account_settings"
+                android:textColor="@color/dark_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/username"
                 style="@style/FieldLabel" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
-
-                <EditText
-                    android:id="@+id/etCurrentPassword"
-                    style="@style/InputField"
-                    android:importantForAutofill="no"
-                    android:inputType="textPassword" />
-
-                <ImageView
-                    android:id="@+id/ivToggleCurrent"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="12dp"
-                    android:contentDescription="@string/password"
-                    android:src="@drawable/ic_visibility_off"
-                    app:tint="@color/hint_text" />
-            </FrameLayout>
+            <EditText
+                android:id="@+id/etUsername"
+                style="@style/InputField"
+                android:layout_marginTop="8dp"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:text="@string/mock_user_name" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/new_password"
+                android:text="@string/email_address"
                 style="@style/FieldLabel" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
-
-                <EditText
-                    android:id="@+id/etNewPassword"
-                    style="@style/InputField"
-                    android:importantForAutofill="no"
-                    android:inputType="textPassword" />
-
-                <ImageView
-                    android:id="@+id/ivToggleNew"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="12dp"
-                    android:contentDescription="@string/password"
-                    android:src="@drawable/ic_visibility_off"
-                    app:tint="@color/hint_text" />
-            </FrameLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/confirm_new_password"
-                style="@style/FieldLabel" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
-
-                <EditText
-                    android:id="@+id/etConfirmPassword"
-                    style="@style/InputField"
-                    android:importantForAutofill="no"
-                    android:inputType="textPassword" />
-
-                <ImageView
-                    android:id="@+id/ivToggleConfirm"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="12dp"
-                    android:contentDescription="@string/password"
-                    android:src="@drawable/ic_visibility_off"
-                    app:tint="@color/hint_text" />
-            </FrameLayout>
+            <EditText
+                android:id="@+id/etEmail"
+                style="@style/InputField"
+                android:layout_marginTop="8dp"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress"
+                android:text="@string/hint_email" />
 
             <Button
-                android:id="@+id/btnChangePassword"
+                android:id="@+id/btnUpdateProfile"
                 style="@style/PrimaryButton"
                 android:layout_width="match_parent"
                 android:layout_marginTop="32dp"
-                android:text="@string/btn_change_password" />
+                android:text="@string/btn_update_profile" />
 
         </LinearLayout>
     </ScrollView>
