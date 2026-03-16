@@ -16,6 +16,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.studybuddyapp.api.ApiClient;
+import com.example.studybuddyapp.api.ErrorUtils;
+import com.example.studybuddyapp.api.MatchingApi;
+import com.example.studybuddyapp.api.dto.JoinMeetingResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeFragment extends Fragment {
 
     private TextView chip15, chip30, chipCustom;
@@ -131,15 +140,33 @@ public class HomeFragment extends Fragment {
 
         dialogView.findViewById(R.id.btn_start_anyway).setOnClickListener(v -> {
             dialog.dismiss();
-            launchMeetingRoom();
+
+            MatchingApi api = ApiClient.getMatchingApi(getContext());
+            api.join(selectedDurationMinutes).enqueue(new Callback<>() {
+                @Override
+                public void onResponse(Call<JoinMeetingResponse> call, Response<JoinMeetingResponse> response) {
+                    JoinMeetingResponse body = response.body();
+                    if (response.isSuccessful() && response.body() != null) {
+                        Intent intent = new Intent(requireContext(), MeetingRoomActivity.class);
+                        intent.putExtra(MeetingRoomActivity.EXTRA_CHANNEL_NAME, body.getChannelName());
+                        intent.putExtra(MeetingRoomActivity.EXTRA_FOCUS_DURATION, selectedDurationMinutes);
+                        startActivity(intent);
+                    } else {
+                        String msg = ErrorUtils.parseError(response,
+                                "Matching failed");
+                        Toast.makeText(getContext(), msg,
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JoinMeetingResponse> call, Throwable throwable) {
+                    Toast.makeText(getContext(),
+                            "Network error. Is the backend running?", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         dialog.show();
-    }
-
-    private void launchMeetingRoom() {
-        Intent intent = new Intent(requireContext(), MeetingRoomActivity.class);
-        intent.putExtra(MeetingRoomActivity.EXTRA_FOCUS_DURATION, selectedDurationMinutes);
-        startActivity(intent);
     }
 }
