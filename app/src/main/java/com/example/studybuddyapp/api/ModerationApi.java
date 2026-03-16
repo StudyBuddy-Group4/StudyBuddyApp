@@ -1,8 +1,13 @@
 package com.example.studybuddyapp.api;
 
 import com.example.studybuddyapp.api.dto.ReportRequest;
+import com.example.studybuddyapp.api.dto.ReportResponse;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
