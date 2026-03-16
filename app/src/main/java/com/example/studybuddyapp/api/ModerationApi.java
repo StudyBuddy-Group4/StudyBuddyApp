@@ -33,5 +33,10 @@ public interface ModerationApi {
     @PUT("api/moderation/action/{userId}/{action}")
     Call<Void> applyAdminAction(@Path("userId") long reportedUserId, @Path("action") String action);
     
-    // Note: You will also need a @GET endpoint here to fetch the List of reports for HistoryReportsActivity.
+    /**
+     * Fetches all reports from the backend for the admin to review [MOD-6].
+     * @return A List of ReportResponse objects.
+     */
+    @GET("api/moderation/reports")
+    Call<List<ReportResponse>> getAllReports();
 }
