@@ -14,7 +14,8 @@ public final class ApiClient {
 
     private static Retrofit retrofit;
 
-    private ApiClient() {}
+    private ApiClient() {
+    }
 
     public static Retrofit getInstance(Context context) {
         if (retrofit == null) {
@@ -48,6 +49,10 @@ public final class ApiClient {
 
     public static UserApi getUserApi(Context context) {
         return getInstance(context).create(UserApi.class);
+    }
+
+    public static MatchingApi getMatchingApi(Context context) {
+        return getInstance(context).create(MatchingApi.class);
     }
 
     public static void resetInstance() {
