@@ -2,6 +2,7 @@ package com.example.studybuddyapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -66,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
                                 body.getUsername(),
                                 body.isAdmin()
                         );
+
+                        Log.d("Login", "onResponse: " + body.isAdmin());
                         Intent intent = new Intent(LoginActivity.this, MainHubActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(MainHubActivity.EXTRA_IS_ADMIN, body.isAdmin());

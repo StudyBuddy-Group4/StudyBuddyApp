@@ -59,7 +59,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp"
+            android:paddingStart="250dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="250dp"
+            android:paddingBottom="24dp"
             android:gravity="center_horizontal">
 
             <TextView
