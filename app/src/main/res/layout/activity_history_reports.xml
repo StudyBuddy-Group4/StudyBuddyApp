@@ -59,6 +59,7 @@
             android:padding="24dp">
 
             <TextView
+                android:id="@+id/tvAdminName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -78,6 +79,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tvAdminId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

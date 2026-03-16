@@ -28,7 +28,8 @@ import retrofit2.Response;
  */
 public class HistoryReportsActivity extends AppCompatActivity {
 
-    // The container where we will programmatically add the report items
+    private TextView tvAdminName;
+    private TextView tvAdminId;
     private LinearLayout reportsContainer;
 
     @Override
@@ -44,14 +45,33 @@ public class HistoryReportsActivity extends AppCompatActivity {
             return insets;
         });
 
+        tvAdminName = findViewById(R.id.tvAdminName);
+        tvAdminId = findViewById(R.id.tvAdminId);
+        reportsContainer = findViewById(R.id.reportsContainer);
+
         // Close activity on back arrow click
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
         
-        // Ensure your activity_history_reports.xml has a ScrollView wrapping a LinearLayout with id 'reportsContainer'
-        reportsContainer = findViewById(R.id.reportsContainer); 
+        displayAdminInfo();
         
         // Fetch the reports from the backend as soon as the screen opens
         fetchReportsFromBackend();
+    }
+
+    /**
+     * Retrieves admin info from SessionManager and displays it in the header.
+     */
+    private void displayAdminInfo() {
+        SessionManager session = new SessionManager(this);
+        String username = session.getUsername();
+        long userId = session.getUserId();
+
+        if (username != null && !username.isEmpty()) {
+            tvAdminName.setText(username);
+        }
+        if (userId > 0) {
+            tvAdminId.setText("ID: " + userId);
+        }
     }
 
     /**
@@ -81,7 +101,7 @@ public class HistoryReportsActivity extends AppCompatActivity {
     /**
      * Iterates through the list of reports and dynamically creates UI elements
      * to display them on the screen.
-     * * @param reports The list of reports retrieved from the database.
+     * @param reports The list of reports retrieved from the database.
      */
     private void populateReportsList(List<ReportResponse> reports) {
         // Clear any existing views before populating
