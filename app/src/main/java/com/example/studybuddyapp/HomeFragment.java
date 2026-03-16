@@ -204,17 +204,19 @@ public class HomeFragment extends Fragment {
      * moderation requirements [MOD-9] and [MOD-11].
      */
     private void checkUserStatusAndLaunch() {
-        UserApi api = ApiClient.getClient().create(UserApi.class);
-        
-        // Fetch the latest profile data from the backend
-        api.getCurrentUserProfile().enqueue(new Callback<UserProfileResponse>() {
+        UserApi api = ApiClient.getUserApi(requireContext());
+
+        // Fetch the latest profile data from the backend using getProfile()
+        api.getProfile().enqueue(new Callback<UserProfileResponse>() {
             @Override
             public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    String accountStatus = response.body().getStatus();
-                    
-                    // Block entry if the account is currently banned or temporarily restricted
-                    if ("BANNED".equals(accountStatus) || "RESTRICTED".equals(accountStatus)) {
+
+                    // Check if the user is banned using your isBanned() method
+                    boolean isUserBanned = response.body().isBanned();
+
+                    // Block entry if the account is currently banned
+                    if (isUserBanned) {
                         showBannedNotificationModal();
                     } else {
                         // User is in good standing, proceed to the meeting room

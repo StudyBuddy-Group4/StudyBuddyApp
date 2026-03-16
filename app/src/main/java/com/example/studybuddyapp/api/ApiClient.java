@@ -50,6 +50,10 @@ public final class ApiClient {
         return getInstance(context).create(UserApi.class);
     }
 
+    public static ModerationApi getModerationApi(Context context) {
+        return getInstance(context).create(ModerationApi.class);
+    }
+
     public static void resetInstance() {
         retrofit = null;
     }

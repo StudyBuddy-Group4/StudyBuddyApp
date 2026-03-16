@@ -123,7 +123,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
      */
     private void executeAdminAction(String actionType) {
         // Create the Moderation API service using the Retrofit client
-        ModerationApi api = ApiClient.getClient().create(ModerationApi.class);
+        ModerationApi api = ApiClient.getModerationApi(this);
         
         // Enqueue the asynchronous network request
         api.applyAdminAction(selectedUserId, actionType).enqueue(new Callback<Void>() {

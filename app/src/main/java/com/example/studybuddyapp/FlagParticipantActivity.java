@@ -109,8 +109,8 @@ public class FlagParticipantActivity extends AppCompatActivity {
         
         // Create the DTO with all required tracking information
         ReportRequest request = new ReportRequest(currentUserId, selectedReportedUserId, currentMeetingId, reason, timestamp);
-        
-        ModerationApi api = ApiClient.getClient().create(ModerationApi.class);
+
+        ModerationApi api = ApiClient.getModerationApi(this);
         api.submitReport(request).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
