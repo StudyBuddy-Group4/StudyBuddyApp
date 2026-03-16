@@ -66,10 +66,7 @@ public class MainHubActivity extends AppCompatActivity {
             if (getIntent().getBooleanExtra("navigate_to_tasks", false)) {
                 bottomNavigation.setSelectedItemId(R.id.nav_tasks);
             } else {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, new HomeFragment())
-                        .commit();
+                bottomNavigation.setSelectedItemId(R.id.nav_home);
             }
         }
     }
