@@ -405,15 +405,20 @@ public class MeetingRoomActivity extends AppCompatActivity {
     private void showRemovalNotification(UserProfileResponse profile) {
         if (isFinishing() || isDestroyed()) return;
 
+        String title = "You Have Been Removed";
         String message;
         if (profile.isBanned()) {
-            message = "Your Account Is Banned Permanently. Please Refrain From Conducting Inappropriate Behavior E.G. Nudity, Noise, Violence";
-        } else {
+            message = "Your Account Is Banned Permanently, Please Refrain From Conducting Inappropriate Behavior E.G. Nudity, Noise, Violence";
+        } else if (profile.getBannedUntil() != null && isLongTermBan(profile.getBannedUntil())) {
             message = "Your Account Is Banned For 3 Days, Please Refrain From Conducting Inappropriate Behavior E.G. Nudity, Noise, Violence";
+        } else {
+            message = "You Have Been Kicked Out Of This Meeting By The Administrator.";
         }
 
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_exit_warning, null);
-        ((TextView) view.findViewById(R.id.tvWarningMessage)).setText(message);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_user_removed, null);
+
+        ((TextView) view.findViewById(R.id.tvRemovedTitle)).setText(title);
+        ((TextView) view.findViewById(R.id.tvRemovedMessage)).setText(message);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(view)
@@ -424,16 +429,23 @@ public class MeetingRoomActivity extends AppCompatActivity {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        view.findViewById(R.id.btnContinueStudying).setOnClickListener(v -> {
+        view.findViewById(R.id.btnBack).setOnClickListener(v -> {
             dialog.dismiss();
             if (!isSessionCompleted) recordSessionIncomplete();
             leaveAndGoHome(false);
         });
 
-        View btnLeave = view.findViewById(R.id.btnLeaveSession);
-        if (btnLeave != null) btnLeave.setVisibility(View.GONE);
-
         dialog.show();
+    }
+
+    private boolean isLongTermBan(String bannedUntil) {
+        if (bannedUntil == null) return false;
+        try {
+            java.time.LocalDateTime until = java.time.LocalDateTime.parse(bannedUntil);
+            return until.isAfter(java.time.LocalDateTime.now().plusMinutes(1));
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     // Backend session recording
