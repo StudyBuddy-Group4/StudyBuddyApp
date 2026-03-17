@@ -25,6 +25,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.studybuddyapp.api.ApiClient;
+import com.example.studybuddyapp.api.MatchingApi;
+import com.example.studybuddyapp.api.dto.LeaveMeetingResponse;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +42,9 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MeetingRoomActivity extends AppCompatActivity {
 
@@ -66,6 +73,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
     private boolean isInChannel = false;
     private long focusDurationMs;
     private CountDownTimer focusTimer;
+    private boolean cleanupDone = false;
 
     // Participant tracking
     private final List<Integer> remoteUids = new ArrayList<>();
@@ -384,6 +392,22 @@ public class MeetingRoomActivity extends AppCompatActivity {
     }
 
     private void leaveAndCleanup() {
+        if (cleanupDone) return;
+        cleanupDone = true;
+
+        MatchingApi api = ApiClient.getMatchingApi(MeetingRoomActivity.this);
+        api.leave(channelName).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<LeaveMeetingResponse> call, Response<LeaveMeetingResponse> response) {
+                if (isDestroyed()) return;
+            }
+
+            @Override
+            public void onFailure(Call<LeaveMeetingResponse> call, Throwable throwable) {
+                if (isDestroyed()) return;
+            }
+        });
+
         isInChannel = false;
         if (rtcEngine != null) {
             rtcEngine.stopPreview();
