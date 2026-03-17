@@ -25,6 +25,8 @@ import androidx.core.content.ContextCompat;
 
 import com.example.studybuddyapp.api.ApiClient;
 import com.example.studybuddyapp.api.SessionApi;
+import com.example.studybuddyapp.api.TaskApi;
+import com.example.studybuddyapp.api.dto.AssignTasksRequest;
 import com.example.studybuddyapp.api.dto.StartSessionRequest;
 import com.example.studybuddyapp.api.dto.StartSessionResponse;
 
@@ -460,6 +462,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     backendSessionId = response.body().getSessionId();
                     Log.d(TAG, "Backend session started: " + backendSessionId);
+                    assignPendingTasks(backendSessionId);
                 }
             }
 
@@ -468,6 +471,22 @@ public class MeetingRoomActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to record session start", t);
             }
         });
+    }
+
+    private void assignPendingTasks(long sessionId) {
+        TaskApi taskApi = ApiClient.getTaskApi(this);
+        taskApi.assignTasksToSession(new AssignTasksRequest(sessionId))
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Log.d(TAG, "Tasks assigned to session " + sessionId);
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.w(TAG, "Failed to assign tasks", t);
+                    }
+                });
     }
 
     private void recordSessionComplete() {
@@ -725,7 +744,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
 
         view.findViewById(R.id.btnGoToTaskList).setOnClickListener(v -> {
             dialog.dismiss();
-            leaveAndGoHome(true);
+            leaveAndGoHome(true, backendSessionId);
         });
 
         dialog.show();
@@ -792,12 +811,21 @@ public class MeetingRoomActivity extends AppCompatActivity {
     // Navigation helpers
 
     private void leaveAndGoHome(boolean goToTasks) {
+        leaveAndGoHome(goToTasks, -1L);
+    }
+
+    private void leaveAndGoHome(boolean goToTasks, long sessionIdForReview) {
         if (focusTimer != null) focusTimer.cancel();
         leaveAndCleanup();
 
         Intent intent = new Intent(this, MainHubActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        if (goToTasks) intent.putExtra("navigate_to_tasks", true);
+        if (goToTasks) {
+            intent.putExtra("navigate_to_tasks", true);
+            if (sessionIdForReview > 0) {
+                intent.putExtra("review_session_id", sessionIdForReview);
+            }
+        }
         startActivity(intent);
         finish();
     }
