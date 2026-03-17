@@ -1,150 +1,336 @@
 package com.example.studybuddyapp;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.studybuddyapp.api.ApiClient;
 import com.example.studybuddyapp.api.ModerationApi;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import io.agora.rtc2.ChannelMediaOptions;
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.video.VideoCanvas;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Activity specifically designed for Administrators to monitor flagged meetings.
- * This class provides a grid view of participants with "prohibited" icons allowing
- * the admin to issue real-time punishments, fulfilling the moderation requirements.
- * * It connects to the backend ModerationApi to enforce rules and maintain a safe
- * study environment for all users.
- */
 public class AdminMeetingRoomActivity extends AppCompatActivity {
 
-    // Stores the ID of the user that the admin currently wants to penalize.
-    // In a fully dynamic implementation, this would be retrieved from the clicked view's tag.
-    private long selectedUserId = -1;
+    private static final String TAG = "AdminMeetingRoom";
+    private static final int PERMISSION_REQ_ID = 200;
 
-    /**
-     * Initializes the activity, sets up the edge-to-edge display, and binds
-     * the click listeners to the prohibition buttons.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     * previously being shut down then this Bundle contains the data it most
-     * recently supplied.
-     */
+    private RtcEngine rtcEngine;
+    private String channelName;
+    private long reportId = -1;
+    private long reportedUserId = -1;
+
+    private LinearLayout participantGrid;
+    private final List<Integer> remoteUids = new ArrayList<>();
+    private final Map<Integer, SurfaceView> remoteSurfaces = new HashMap<>();
+
+    private final IRtcEngineEventHandler rtcEventHandler = new IRtcEngineEventHandler() {
+        @Override
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
+            Log.d(TAG, "Admin joined channel: " + channel);
+        }
+
+        @Override
+        public void onUserJoined(int uid, int elapsed) {
+            runOnUiThread(() -> addParticipant(uid));
+        }
+
+        @Override
+        public void onUserOffline(int uid, int reason) {
+            runOnUiThread(() -> removeParticipant(uid));
+        }
+
+        @Override
+        public void onError(int err) {
+            Log.e(TAG, "Agora error: " + err);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_admin_meeting_room);
-        
-        // Apply window insets to avoid overlapping with system bars (status bar, navigation bar)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        channelName = getIntent().getStringExtra("channel_name");
+        reportId = getIntent().getLongExtra("report_id", -1);
+        reportedUserId = getIntent().getLongExtra("reported_user_id", -1);
+
+        participantGrid = findViewById(R.id.participantGrid);
+
+        findViewById(R.id.ivBack).setOnClickListener(v -> {
+            leaveAndCleanup();
+            finish();
         });
 
-        // Close the admin view and return to the previous screen
-        findViewById(R.id.ivBack).setOnClickListener(v -> finish());
+        if (channelName == null || channelName.isEmpty()) {
+            Toast.makeText(this, "No meeting channel specified.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
-        // Define a common click listener for all prohibit icons in the grid
-        View.OnClickListener prohibitClickListener = v -> {
-            // Assign a dummy user ID for demonstration. 
-            // In a real app, you would do: selectedUserId = (long) v.getTag();
-            selectedUserId = 12345L; 
-            showAdminDecisionDialog();
-        };
-        
-        // Attach the listener to the static buttons in the layout
-        findViewById(R.id.prohibitBtn1).setOnClickListener(prohibitClickListener);
-        findViewById(R.id.prohibitBtn2).setOnClickListener(prohibitClickListener);
-        findViewById(R.id.prohibitBtn3).setOnClickListener(prohibitClickListener);
-        findViewById(R.id.prohibitBtn4).setOnClickListener(prohibitClickListener);
-        findViewById(R.id.prohibitBtn5).setOnClickListener(prohibitClickListener);
+        if (checkPermissions()) {
+            initAndJoinAsSpectator();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA},
+                    PERMISSION_REQ_ID);
+        }
     }
 
-    /**
-     * Displays the dialog with moderation options for the selected account.
-     * This maps the admin's UI choice to a specific backend API action,
-     * fulfilling requirements MOD-5, MOD-7, and MOD-8.
-     */
-    private void showAdminDecisionDialog() {
-        // Inflate the custom dialog layout for admin decisions
+    @Override
+    protected void onDestroy() {
+        leaveAndCleanup();
+        super.onDestroy();
+    }
+
+    private boolean checkPermissions() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQ_ID && checkPermissions()) {
+            initAndJoinAsSpectator();
+        }
+    }
+
+    private void initAndJoinAsSpectator() {
+        try {
+            RtcEngineConfig config = new RtcEngineConfig();
+            config.mContext = getApplicationContext();
+            config.mAppId = AgoraConfig.APP_ID;
+            config.mEventHandler = rtcEventHandler;
+            rtcEngine = RtcEngine.create(config);
+            rtcEngine.enableVideo();
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to init RtcEngine", e);
+            finish();
+            return;
+        }
+
+        ChannelMediaOptions options = new ChannelMediaOptions();
+        options.channelProfile = Constants.CHANNEL_PROFILE_COMMUNICATION;
+        options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+        options.publishCameraTrack = false;
+        options.publishMicrophoneTrack = false;
+        options.autoSubscribeAudio = true;
+        options.autoSubscribeVideo = true;
+
+        SessionManager session = new SessionManager(this);
+        int uid = session.isLoggedIn() ? (int) session.getUserId() : 0;
+
+        String token = AgoraConfig.TEMP_TOKEN.isEmpty() ? null : AgoraConfig.TEMP_TOKEN;
+        rtcEngine.joinChannel(token, channelName, uid, options);
+    }
+
+    private void leaveAndCleanup() {
+        if (rtcEngine != null) {
+            rtcEngine.leaveChannel();
+            RtcEngine.destroy();
+            rtcEngine = null;
+        }
+    }
+
+    private void addParticipant(int uid) {
+        if (remoteUids.contains(uid)) return;
+        remoteUids.add(uid);
+        rebuildGrid();
+    }
+
+    private void removeParticipant(int uid) {
+        remoteUids.remove(Integer.valueOf(uid));
+        remoteSurfaces.remove(uid);
+        rebuildGrid();
+    }
+
+    private void rebuildGrid() {
+        participantGrid.removeAllViews();
+
+        LinearLayout currentRow = null;
+        int countInRow = 0;
+
+        for (int i = 0; i < remoteUids.size(); i++) {
+            if (countInRow == 0) {
+                currentRow = new LinearLayout(this);
+                currentRow.setOrientation(LinearLayout.HORIZONTAL);
+                currentRow.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams rowLp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                rowLp.bottomMargin = dpToPx(12);
+                participantGrid.addView(currentRow, rowLp);
+            }
+
+            int uid = remoteUids.get(i);
+            FrameLayout cell = createParticipantCell(uid);
+            LinearLayout.LayoutParams cellLp = new LinearLayout.LayoutParams(
+                    0, dpToPx(150), 1f);
+            cellLp.setMarginEnd(countInRow == 0 ? dpToPx(6) : 0);
+            cellLp.setMarginStart(countInRow == 1 ? dpToPx(6) : 0);
+            currentRow.addView(cell, cellLp);
+
+            countInRow++;
+            if (countInRow == 2) countInRow = 0;
+        }
+
+        if (countInRow == 1 && currentRow != null) {
+            View spacer = new View(this);
+            LinearLayout.LayoutParams spacerLp = new LinearLayout.LayoutParams(
+                    0, dpToPx(150), 1f);
+            spacerLp.setMarginStart(dpToPx(6));
+            currentRow.addView(spacer, spacerLp);
+        }
+    }
+
+    private FrameLayout createParticipantCell(int uid) {
+        FrameLayout frame = new FrameLayout(this);
+        frame.setBackgroundResource(R.drawable.bg_video_rounded);
+        frame.setClipToOutline(true);
+
+        SurfaceView surface = new SurfaceView(this);
+        surface.setZOrderMediaOverlay(true);
+        remoteSurfaces.put(uid, surface);
+        frame.addView(surface, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
+
+        if (rtcEngine != null) {
+            rtcEngine.setupRemoteVideo(new VideoCanvas(surface, VideoCanvas.RENDER_MODE_HIDDEN, uid));
+        }
+
+        TextView uidLabel = new TextView(this);
+        uidLabel.setText("ID: " + uid);
+        uidLabel.setTextColor(0xFFFFFFFF);
+        uidLabel.setTextSize(11);
+        uidLabel.setBackgroundColor(0x88000000);
+        uidLabel.setPadding(8, 2, 8, 2);
+        FrameLayout.LayoutParams labelLp = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        labelLp.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+        labelLp.topMargin = dpToPx(6);
+        frame.addView(uidLabel, labelLp);
+
+        ImageView prohibitBtn = new ImageView(this);
+        prohibitBtn.setImageResource(R.drawable.ic_prohibited);
+        prohibitBtn.setContentDescription("Take action");
+        FrameLayout.LayoutParams btnLp = new FrameLayout.LayoutParams(
+                dpToPx(40), dpToPx(40));
+        btnLp.gravity = Gravity.BOTTOM | Gravity.END;
+        btnLp.setMargins(0, 0, dpToPx(8), dpToPx(8));
+        frame.addView(prohibitBtn, btnLp);
+
+        prohibitBtn.setOnClickListener(v -> showAdminDecisionDialog(uid));
+
+        return frame;
+    }
+
+    private void showAdminDecisionDialog(int targetUid) {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_admin_decision, null);
 
-        // Build and configure the AlertDialog
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(dialogView)
                 .setCancelable(true)
                 .create();
 
-        // Make the dialog background transparent to match the UI design
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        // Instantly remove user from the meeting [MOD-5]
         dialogView.findViewById(R.id.btnKickOut).setOnClickListener(v -> {
-            executeAdminAction("KICK");
+            executeAdminAction(targetUid, "KICK");
             dialog.dismiss();
         });
 
-        // Temporarily ban the user for 3 days [MOD-7]
         dialogView.findViewById(R.id.btnBan3Days).setOnClickListener(v -> {
-            executeAdminAction("BAN_3_DAYS");
+            executeAdminAction(targetUid, "BAN_3_DAYS");
             dialog.dismiss();
         });
 
-        // Permanently ban the user [MOD-8]
         dialogView.findViewById(R.id.btnBanPermanently).setOnClickListener(v -> {
-            executeAdminAction("BAN_PERMANENT");
+            executeAdminAction(targetUid, "BAN_PERMANENT");
             dialog.dismiss();
         });
 
-        // Dismiss the dialog without taking any action
         dialogView.findViewById(R.id.btnBack).setOnClickListener(v -> dialog.dismiss());
 
-        // Display the dialog to the admin
         dialog.show();
     }
 
-    /**
-     * Executes the chosen administrative action via a network call to the backend.
-     * * @param actionType A string constant representing the type of punishment 
-     * (e.g., "KICK", "BAN_3_DAYS", "BAN_PERMANENT").
-     */
-    private void executeAdminAction(String actionType) {
-        // Create the Moderation API service using the Retrofit client
+    private void executeAdminAction(int targetUid, String actionType) {
         ModerationApi api = ApiClient.getModerationApi(this);
-        
-        // Enqueue the asynchronous network request
-        api.applyAdminAction(selectedUserId, actionType).enqueue(new Callback<Void>() {
+
+        api.applyAdminAction(targetUid, actionType).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                // Check if the backend successfully processed the punishment
-                if(response.isSuccessful()) {
-                    Toast.makeText(AdminMeetingRoomActivity.this, 
-                        "Action " + actionType + " applied.", Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful()) {
+                    Toast.makeText(AdminMeetingRoomActivity.this,
+                            "Action " + actionType + " applied to user " + targetUid,
+                            Toast.LENGTH_SHORT).show();
+                    if (reportId > 0) {
+                        markReportActioned();
+                    }
                 } else {
-                    Toast.makeText(AdminMeetingRoomActivity.this, 
-                        "Server rejected the action.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminMeetingRoomActivity.this,
+                            "Server rejected the action.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                // Handle network failures or serialization errors
-                Toast.makeText(AdminMeetingRoomActivity.this, 
-                    "Failed to apply action due to network error.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminMeetingRoomActivity.this,
+                        "Network error.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void markReportActioned() {
+        ModerationApi api = ApiClient.getModerationApi(this);
+        api.updateReportStatus(reportId, "ACTIONED").enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d(TAG, "Report marked as ACTIONED");
+            }
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) { }
+        });
+    }
+
+    private int dpToPx(int dp) {
+        return Math.round(dp * getResources().getDisplayMetrics().density);
     }
 }

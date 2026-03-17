@@ -35,6 +35,36 @@ public class MainHubActivity extends AppCompatActivity {
             return insets;
         });
 
+        if (isAdmin) {
+            setupAdminNavigation();
+        } else {
+            setupRegularNavigation(savedInstanceState);
+        }
+    }
+
+    private void setupAdminNavigation() {
+        bottomNavigation.getMenu().clear();
+        bottomNavigation.inflateMenu(R.menu.bottom_nav_menu_admin);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new AdminProfileFragment())
+                .commit();
+
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_profile) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new AdminProfileFragment())
+                        .commit();
+            }
+            return true;
+        });
+
+        bottomNavigation.setSelectedItemId(R.id.nav_profile);
+    }
+
+    private void setupRegularNavigation(Bundle savedInstanceState) {
         bottomNavigation.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
             int itemId = item.getItemId();
@@ -46,11 +76,7 @@ public class MainHubActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_statistics) {
                 selectedFragment = new StatisticsFragment();
             } else if (itemId == R.id.nav_profile) {
-                if (isAdmin) {
-                    selectedFragment = new AdminProfileFragment();
-                } else {
-                    selectedFragment = new ProfileFragment();
-                }
+                selectedFragment = new ProfileFragment();
             }
 
             if (selectedFragment != null) {
@@ -72,6 +98,8 @@ public class MainHubActivity extends AppCompatActivity {
     }
 
     public void switchToTasksTab() {
-        bottomNavigation.setSelectedItemId(R.id.nav_tasks);
+        if (!isAdmin) {
+            bottomNavigation.setSelectedItemId(R.id.nav_tasks);
+        }
     }
 }

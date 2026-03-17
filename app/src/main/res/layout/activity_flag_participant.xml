@@ -42,8 +42,20 @@
             android:layout_height="28dp" />
     </LinearLayout>
 
-    <!-- Grid of 4 participants (2 columns) -->
+    <TextView
+        android:id="@+id/tvNoParticipants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="48dp"
+        android:text="No other participants in this meeting."
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <!-- Dynamic participant list -->
     <LinearLayout
+        android:id="@+id/participantGrid"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -54,6 +66,7 @@
 
         <!-- Row 1 -->
         <LinearLayout
+            android:id="@+id/row1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
@@ -61,15 +74,31 @@
             android:orientation="horizontal">
 
             <FrameLayout
+                android:id="@+id/slot1"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
                 android:layout_marginEnd="6dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
+
+                <TextView
+                    android:id="@+id/tvUid1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:background="#88000000"
+                    android:paddingStart="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="2dp"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:id="@+id/flagBtn1"
@@ -85,15 +114,31 @@
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/slot2"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
                 android:layout_marginStart="6dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
+
+                <TextView
+                    android:id="@+id/tvUid2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:background="#88000000"
+                    android:paddingStart="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="2dp"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:id="@+id/flagBtn2"
@@ -111,21 +156,38 @@
 
         <!-- Row 2 -->
         <LinearLayout
+            android:id="@+id/row2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
 
             <FrameLayout
+                android:id="@+id/slot3"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
                 android:layout_marginEnd="6dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
+
+                <TextView
+                    android:id="@+id/tvUid3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:background="#88000000"
+                    android:paddingStart="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="2dp"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:id="@+id/flagBtn3"
@@ -141,15 +203,31 @@
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/slot4"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
                 android:layout_marginStart="6dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
+
+                <TextView
+                    android:id="@+id/tvUid4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:background="#88000000"
+                    android:paddingStart="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="2dp"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:id="@+id/flagBtn4"
