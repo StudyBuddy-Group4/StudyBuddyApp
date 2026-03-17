@@ -442,7 +442,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
         if (bannedUntil == null) return false;
         try {
             java.time.LocalDateTime until = java.time.LocalDateTime.parse(bannedUntil);
-            return until.isAfter(java.time.LocalDateTime.now().plusHours(1));
+            return until.isAfter(java.time.LocalDateTime.now().plusMinutes(1));
         } catch (Exception e) {
             return false;
         }

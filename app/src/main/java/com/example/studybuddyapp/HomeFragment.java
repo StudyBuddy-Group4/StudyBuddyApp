@@ -206,9 +206,8 @@ public class HomeFragment extends Fragment {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        android.widget.Button btnBack = dialogView.findViewById(R.id.btnContinueStudying);
+        View btnBack = dialogView.findViewById(R.id.btnContinueStudying);
         if (btnBack != null) {
-            btnBack.setText(R.string.btn_back);
             btnBack.setOnClickListener(v -> dialog.dismiss());
         }
 
