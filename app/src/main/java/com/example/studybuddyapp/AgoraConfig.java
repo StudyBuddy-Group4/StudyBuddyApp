@@ -6,7 +6,7 @@ public final class AgoraConfig {
     public static final String APP_ID = "19c0c9217e3c429c9a3ce1839f92d90d";
 
     // temporary token for 'study_15' channel (set the 'custom' focus time as 15 min)
-    public static final String TEMP_TOKEN = "007eJxTYHigk6e2K/iespOhwSNb25bn9/gb1VRd7PaqL2T7f7JQrVSBwdAy2SDZ0sjQPNU42cTIMtky0Tg51dDC2DLN0ijF0iDFfO/OzIZARoZX9U3MjAwQCOKzMxSXlKZUxhsyMAAAEeUfCw==";
+    public static final String TEMP_TOKEN = "007eJxTYDjtKDbt1Zq/uqvZfzZyRmo+yemWjVb948s8NeLVH61H9hsUGAwtkw2SLY0MzVONk02MLJMtE42TUw0tjC3TLI1SLA1SVG7vzmwIZGR4HPOXmZEBAkF8DobiktKUynhDUwYGAOybIa4=";
 
     private AgoraConfig() {}
 
