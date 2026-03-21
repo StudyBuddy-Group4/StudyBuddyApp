@@ -17,7 +17,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.studybuddyapp.api.ApiClient;
+import com.example.studybuddyapp.api.MatchingApi;
 import com.example.studybuddyapp.api.UserApi;
+import com.example.studybuddyapp.api.dto.JoinMeetingResponse;
 import com.example.studybuddyapp.api.dto.UserProfileResponse;
 
 import retrofit2.Call;
@@ -220,8 +222,33 @@ public class HomeFragment extends Fragment {
     }
 
     private void launchMeetingRoom() {
-        Intent intent = new Intent(requireContext(), MeetingRoomActivity.class);
-        intent.putExtra(MeetingRoomActivity.EXTRA_FOCUS_DURATION, selectedDurationMinutes);
-        startActivity(intent);
+        MatchingApi matchingApi = ApiClient.getMatchingApi(requireContext());
+        matchingApi.joinMeeting(selectedDurationMinutes).enqueue(new Callback<JoinMeetingResponse>() {
+            @Override
+            public void onResponse(Call<JoinMeetingResponse> call,
+                                   Response<JoinMeetingResponse> response) {
+                if (!isAdded()) return;
+
+                if (response.isSuccessful() && response.body() != null) {
+                    JoinMeetingResponse meeting = response.body();
+                    Intent intent = new Intent(requireContext(), MeetingRoomActivity.class);
+                    intent.putExtra(MeetingRoomActivity.EXTRA_FOCUS_DURATION, selectedDurationMinutes);
+                    intent.putExtra(MeetingRoomActivity.EXTRA_CHANNEL_NAME, meeting.getChannelName());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(requireContext(),
+                            "Failed to find a meeting. Please try again.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JoinMeetingResponse> call, Throwable t) {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(),
+                        "Network error. Please try again.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

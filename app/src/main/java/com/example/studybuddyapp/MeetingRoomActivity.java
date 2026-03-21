@@ -24,9 +24,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.studybuddyapp.api.ApiClient;
+import com.example.studybuddyapp.api.MatchingApi;
 import com.example.studybuddyapp.api.SessionApi;
 import com.example.studybuddyapp.api.TaskApi;
 import com.example.studybuddyapp.api.dto.AssignTasksRequest;
+import com.example.studybuddyapp.api.dto.LeaveMeetingResponse;
 import com.example.studybuddyapp.api.dto.StartSessionRequest;
 import com.example.studybuddyapp.api.dto.StartSessionResponse;
 
@@ -352,12 +354,30 @@ public class MeetingRoomActivity extends AppCompatActivity {
 
     private void leaveAndCleanup() {
         isInChannel = false;
+        notifyMatchingLeave();
         if (rtcEngine != null) {
             rtcEngine.stopPreview();
             rtcEngine.leaveChannel();
             RtcEngine.destroy();
             rtcEngine = null;
         }
+    }
+
+    private void notifyMatchingLeave() {
+        if (channelName == null || channelName.isEmpty()) return;
+        MatchingApi matchingApi = ApiClient.getMatchingApi(this);
+        matchingApi.leaveMeeting(channelName).enqueue(new Callback<LeaveMeetingResponse>() {
+            @Override
+            public void onResponse(Call<LeaveMeetingResponse> call,
+                                   Response<LeaveMeetingResponse> response) {
+                Log.d(TAG, "Notified matching engine of leave");
+            }
+
+            @Override
+            public void onFailure(Call<LeaveMeetingResponse> call, Throwable t) {
+                Log.w(TAG, "Failed to notify matching engine of leave", t);
+            }
+        });
     }
 
     // Ban polling -- force-remove user if admin bans them mid-meeting
