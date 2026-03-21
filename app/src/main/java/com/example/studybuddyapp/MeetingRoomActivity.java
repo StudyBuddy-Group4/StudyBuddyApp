@@ -352,6 +352,8 @@ public class MeetingRoomActivity extends AppCompatActivity {
         }
     }
 
+    private boolean matchingLeaveNotified = false;
+
     private void leaveAndCleanup() {
         isInChannel = false;
         notifyMatchingLeave();
@@ -364,7 +366,10 @@ public class MeetingRoomActivity extends AppCompatActivity {
     }
 
     private void notifyMatchingLeave() {
+        if (matchingLeaveNotified) return;
         if (channelName == null || channelName.isEmpty()) return;
+        matchingLeaveNotified = true;
+
         MatchingApi matchingApi = ApiClient.getMatchingApi(this);
         matchingApi.leaveMeeting(channelName).enqueue(new Callback<LeaveMeetingResponse>() {
             @Override
