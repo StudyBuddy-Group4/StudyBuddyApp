@@ -44,8 +44,10 @@ public class ChangePasswordActivity extends AppCompatActivity {
         toggle.setOnClickListener(v -> {
             if (editText.getTransformationMethod() instanceof PasswordTransformationMethod) {
                 editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                toggle.setImageResource(R.drawable.ic_visibility);
             } else {
                 editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                toggle.setImageResource(R.drawable.ic_visibility_off);
             }
             editText.setSelection(editText.length());
         });
