@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You Have Been Removed"
+        android:text="@string/you_have_been_removed"
         android:textColor="@color/dark_text"
         android:textSize="20sp"
         android:textStyle="bold" />

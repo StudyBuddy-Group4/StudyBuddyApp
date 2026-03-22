@@ -171,6 +171,10 @@
     <string name="btn_go_to_meeting">Go To The Meeting</string>
     <string name="btn_dismiss">Dismiss</string>
 
+    <!-- Empty State Messages -->
+    <string name="empty_sessions_message">No sessions yet. Start studying!</string>
+    <string name="empty_tasks_message">No tasks yet. Tap + to create one.</string>
+
     <!-- Bottom Navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_tasks">Tasks</string>
