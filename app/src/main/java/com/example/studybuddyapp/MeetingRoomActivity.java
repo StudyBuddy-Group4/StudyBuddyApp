@@ -15,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.res.Configuration;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.activity.OnBackPressedCallback;
@@ -166,59 +164,6 @@ public class MeetingRoomActivity extends AppCompatActivity {
         stopBanPolling();
         leaveAndCleanup();
         super.onDestroy();
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        setContentView(R.layout.activity_meeting_room);
-
-        mainVideoContainer = findViewById(R.id.mainVideoContainer);
-        thumbnailContainer = findViewById(R.id.thumbnailContainer);
-        tvTimer = findViewById(R.id.tvTimer);
-        btnSpeaker = findViewById(R.id.btnSpeaker);
-        btnCamera = findViewById(R.id.btnCamera);
-        btnHangUp = findViewById(R.id.btnHangUp);
-        btnMic = findViewById(R.id.btnMic);
-        btnFlag = findViewById(R.id.btnFlag);
-
-        wireControlButtons();
-
-        btnMic.setImageResource(isMicMuted ? R.drawable.ic_mic_off : R.drawable.ic_mic);
-        btnCamera.setImageResource(isCameraOff ? R.drawable.ic_videocam_off : R.drawable.ic_videocam);
-        btnSpeaker.setImageResource(isSpeakerOff ? R.drawable.ic_speaker_off : R.drawable.ic_speaker);
-
-        if (localSurface != null) {
-            if (localSurface.getParent() != null) {
-                ((ViewGroup) localSurface.getParent()).removeView(localSurface);
-            }
-            if (mainViewUid == 0) {
-                mainVideoContainer.addView(localSurface, 0,
-                        new FrameLayout.LayoutParams(
-                                FrameLayout.LayoutParams.MATCH_PARENT,
-                                FrameLayout.LayoutParams.MATCH_PARENT));
-            } else {
-                addThumbnailForLocal();
-            }
-            localSurface.setVisibility(isCameraOff ? View.GONE : View.VISIBLE);
-        }
-
-        for (int uid : remoteUids) {
-            SurfaceView surface = remoteSurfaces.get(uid);
-            if (surface == null) continue;
-            if (surface.getParent() != null) {
-                ((ViewGroup) surface.getParent()).removeView(surface);
-            }
-            if (uid == mainViewUid) {
-                mainVideoContainer.addView(surface, 0,
-                        new FrameLayout.LayoutParams(
-                                FrameLayout.LayoutParams.MATCH_PARENT,
-                                FrameLayout.LayoutParams.MATCH_PARENT));
-            } else {
-                addThumbnailForUid(uid, surface);
-            }
-        }
     }
 
     private void setupBackHandler() {

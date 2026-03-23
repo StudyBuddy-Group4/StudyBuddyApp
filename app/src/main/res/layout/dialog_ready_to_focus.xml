@@ -17,7 +17,6 @@
 
     <Button
         android:id="@+id/btn_add_task"
-        style="@style/PrimaryButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="24dp"
@@ -30,7 +29,6 @@
 
     <Button
         android:id="@+id/btn_start_anyway"
-        style="@style/SecondaryButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="12dp"
