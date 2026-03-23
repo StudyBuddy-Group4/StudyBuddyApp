@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                                 body.getUsername(),
                                 body.isAdmin()
                         );
+
                         Intent intent = new Intent(LoginActivity.this, MainHubActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(MainHubActivity.EXTRA_IS_ADMIN, body.isAdmin());
