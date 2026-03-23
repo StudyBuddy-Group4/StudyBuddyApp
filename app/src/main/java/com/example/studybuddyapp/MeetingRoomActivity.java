@@ -25,6 +25,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.studybuddyapp.api.ApiClient;
+import com.example.studybuddyapp.api.MatchingApi;
+import com.example.studybuddyapp.api.SessionApi;
+import com.example.studybuddyapp.api.TaskApi;
+import com.example.studybuddyapp.api.dto.AssignTasksRequest;
+import com.example.studybuddyapp.api.dto.LeaveMeetingResponse;
+import com.example.studybuddyapp.api.dto.StartSessionRequest;
+import com.example.studybuddyapp.api.dto.StartSessionResponse;
+
+import android.os.Handler;
+import android.os.Looper;
+
+import com.example.studybuddyapp.api.UserApi;
+import com.example.studybuddyapp.api.dto.UserProfileResponse;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +53,9 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MeetingRoomActivity extends AppCompatActivity {
 
@@ -47,33 +65,34 @@ public class MeetingRoomActivity extends AppCompatActivity {
     public static final String EXTRA_FOCUS_DURATION = "extra_focus_duration";
     public static final String EXTRA_CHANNEL_NAME = "extra_channel_name";
 
-    // Agora
     private RtcEngine rtcEngine;
     private String channelName;
+    private int focusDurationMinutes;
 
-    // UI
     private FrameLayout mainVideoContainer;
     private LinearLayout thumbnailContainer;
     private TextView tvTimer;
     private ImageView btnSpeaker, btnCamera, btnHangUp, btnMic, btnFlag;
 
-    // State
     private boolean isMicMuted = false;
     private boolean isCameraOff = false;
     private boolean isSpeakerOff = false;
     private boolean isSessionCompleted = false;
     private boolean userLeftForeground = false;
     private boolean isInChannel = false;
+    private boolean isNavigatingToChild = false;
     private long focusDurationMs;
     private CountDownTimer focusTimer;
 
-    // Participant tracking
+    private long backendSessionId = -1;
+    private Handler banCheckHandler;
+    private static final long BAN_CHECK_INTERVAL_MS = 5000;
+
     private final List<Integer> remoteUids = new ArrayList<>();
     private final Map<Integer, SurfaceView> remoteSurfaces = new HashMap<>();
-    private int mainViewUid = 0; // 0 = local user occupies main view
+    private int mainViewUid = 0;
     private SurfaceView localSurface;
 
-    // Agora event handler
     private final IRtcEngineEventHandler rtcEventHandler = new IRtcEngineEventHandler() {
 
         @Override
@@ -82,6 +101,8 @@ public class MeetingRoomActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 isInChannel = true;
                 startFocusTimer();
+                recordSessionStart();
+                startBanPolling();
             });
         }
 
@@ -102,8 +123,6 @@ public class MeetingRoomActivity extends AppCompatActivity {
             Log.e(TAG, "Agora error: " + err);
         }
     };
-
-    // Lifecycle
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,9 +145,10 @@ public class MeetingRoomActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (isInChannel && !isSessionCompleted && !isFinishing()) {
+        if (isInChannel && !isSessionCompleted && !isFinishing() && !isNavigatingToChild) {
             userLeftForeground = true;
         }
+        isNavigatingToChild = false;
     }
 
     @Override
@@ -143,6 +163,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         if (focusTimer != null) focusTimer.cancel();
+        stopBanPolling();
         leaveAndCleanup();
         super.onDestroy();
     }
@@ -214,14 +235,12 @@ public class MeetingRoomActivity extends AppCompatActivity {
         });
     }
 
-    // Init helpers
-
     private void parseIntentExtras() {
-        int durationMinutes = getIntent().getIntExtra(EXTRA_FOCUS_DURATION, 15);
-        focusDurationMs = durationMinutes * 60L * 1000L;
+        focusDurationMinutes = getIntent().getIntExtra(EXTRA_FOCUS_DURATION, 15);
+        focusDurationMs = focusDurationMinutes * 60L * 1000L;
         channelName = getIntent().getStringExtra(EXTRA_CHANNEL_NAME);
         if (channelName == null || channelName.isEmpty()) {
-            channelName = AgoraConfig.channelNameForDuration(durationMinutes);
+            channelName = AgoraConfig.channelNameForDuration(focusDurationMinutes);
         }
     }
 
@@ -260,8 +279,13 @@ public class MeetingRoomActivity extends AppCompatActivity {
             btnSpeaker.setImageResource(isSpeakerOff ? R.drawable.ic_speaker_off : R.drawable.ic_speaker);
         });
 
-        btnFlag.setOnClickListener(v ->
-                startActivity(new Intent(this, FlagParticipantActivity.class)));
+        btnFlag.setOnClickListener(v -> {
+            isNavigatingToChild = true;
+            Intent intent = new Intent(this, FlagParticipantActivity.class);
+            intent.putExtra(EXTRA_CHANNEL_NAME, channelName);
+            intent.putIntegerArrayListExtra("remote_uids", new ArrayList<>(remoteUids));
+            startActivity(intent);
+        });
     }
 
     // Permissions
@@ -383,14 +407,198 @@ public class MeetingRoomActivity extends AppCompatActivity {
         }
     }
 
+    private boolean matchingLeaveNotified = false;
+
     private void leaveAndCleanup() {
         isInChannel = false;
+        notifyMatchingLeave();
         if (rtcEngine != null) {
             rtcEngine.stopPreview();
             rtcEngine.leaveChannel();
             RtcEngine.destroy();
             rtcEngine = null;
         }
+    }
+
+    private void notifyMatchingLeave() {
+        if (matchingLeaveNotified) return;
+        if (channelName == null || channelName.isEmpty()) return;
+        matchingLeaveNotified = true;
+
+        MatchingApi matchingApi = ApiClient.getMatchingApi(this);
+        matchingApi.leaveMeeting(channelName).enqueue(new Callback<LeaveMeetingResponse>() {
+            @Override
+            public void onResponse(Call<LeaveMeetingResponse> call,
+                                   Response<LeaveMeetingResponse> response) {
+                Log.d(TAG, "Notified matching engine of leave");
+            }
+
+            @Override
+            public void onFailure(Call<LeaveMeetingResponse> call, Throwable t) {
+                Log.w(TAG, "Failed to notify matching engine of leave", t);
+            }
+        });
+    }
+
+    // Ban polling -- force-remove user if admin bans them mid-meeting
+
+    private void startBanPolling() {
+        banCheckHandler = new Handler(Looper.getMainLooper());
+        banCheckHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isInChannel || isFinishing() || isDestroyed()) return;
+                checkBanStatus();
+                banCheckHandler.postDelayed(this, BAN_CHECK_INTERVAL_MS);
+            }
+        }, BAN_CHECK_INTERVAL_MS);
+    }
+
+    private void stopBanPolling() {
+        if (banCheckHandler != null) {
+            banCheckHandler.removeCallbacksAndMessages(null);
+            banCheckHandler = null;
+        }
+    }
+
+    private void checkBanStatus() {
+        UserApi api = ApiClient.getUserApi(this);
+        api.getProfile().enqueue(new Callback<UserProfileResponse>() {
+            @Override
+            public void onResponse(Call<UserProfileResponse> call,
+                                   Response<UserProfileResponse> response) {
+                if (isFinishing() || isDestroyed() || !isInChannel) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    UserProfileResponse profile = response.body();
+                    if (profile.isCurrentlyRestricted()) {
+                        stopBanPolling();
+                        showRemovalNotification(profile);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                // Silently retry next interval
+            }
+        });
+    }
+
+    private void showRemovalNotification(UserProfileResponse profile) {
+        if (isFinishing() || isDestroyed()) return;
+
+        String title = "You Have Been Removed";
+        String message;
+        if (profile.isBanned()) {
+            message = "Your Account Is Banned Permanently, Please Refrain From Conducting Inappropriate Behavior E.G. Nudity, Noise, Violence";
+        } else if (profile.getBannedUntil() != null && isLongTermBan(profile.getBannedUntil())) {
+            message = "Your Account Is Banned For 3 Days, Please Refrain From Conducting Inappropriate Behavior E.G. Nudity, Noise, Violence";
+        } else {
+            message = "You Have Been Kicked Out Of This Meeting By The Administrator.";
+        }
+
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_user_removed, null);
+
+        ((TextView) view.findViewById(R.id.tvRemovedTitle)).setText(title);
+        ((TextView) view.findViewById(R.id.tvRemovedMessage)).setText(message);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .setCancelable(false)
+                .create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        view.findViewById(R.id.btnBack).setOnClickListener(v -> {
+            dialog.dismiss();
+            if (!isSessionCompleted) recordSessionIncomplete();
+            leaveAndGoHome(false);
+        });
+
+        dialog.show();
+    }
+
+    private boolean isLongTermBan(String bannedUntil) {
+        if (bannedUntil == null) return false;
+        try {
+            java.time.LocalDateTime until = java.time.LocalDateTime.parse(bannedUntil);
+            return until.isAfter(java.time.LocalDateTime.now().plusMinutes(1));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Backend session recording
+
+    private void recordSessionStart() {
+        SessionApi api = ApiClient.getSessionApi(this);
+        StartSessionRequest req = new StartSessionRequest(focusDurationMinutes, channelName);
+        api.startSession(req).enqueue(new Callback<StartSessionResponse>() {
+            @Override
+            public void onResponse(Call<StartSessionResponse> call,
+                                   Response<StartSessionResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    backendSessionId = response.body().getSessionId();
+                    Log.d(TAG, "Backend session started: " + backendSessionId);
+                    assignPendingTasks(backendSessionId);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StartSessionResponse> call, Throwable t) {
+                Log.w(TAG, "Failed to record session start", t);
+            }
+        });
+    }
+
+    private void assignPendingTasks(long sessionId) {
+        TaskApi taskApi = ApiClient.getTaskApi(this);
+        taskApi.assignTasksToSession(new AssignTasksRequest(sessionId))
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Log.d(TAG, "Tasks assigned to session " + sessionId);
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.w(TAG, "Failed to assign tasks", t);
+                    }
+                });
+    }
+
+    private void recordSessionComplete() {
+        if (backendSessionId < 0) return;
+        SessionApi api = ApiClient.getSessionApi(this);
+        api.completeSession(backendSessionId).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.d(TAG, "Session marked complete");
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.w(TAG, "Failed to mark session complete", t);
+            }
+        });
+    }
+
+    private void recordSessionIncomplete() {
+        if (backendSessionId < 0) return;
+        SessionApi api = ApiClient.getSessionApi(this);
+        api.incompleteSession(backendSessionId).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.d(TAG, "Session marked incomplete");
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.w(TAG, "Failed to mark session incomplete", t);
+            }
+        });
     }
 
     // Video layout management (Speaker layout)
@@ -471,7 +679,6 @@ public class MeetingRoomActivity extends AppCompatActivity {
         mainViewUid = 0;
     }
 
-    /** Creates a 70×70 dp thumbnail container and adds the surface to it. */
     private void addThumbnailForUid(int uid, SurfaceView surface) {
         int sizePx = dpToPx(70);
         int marginPx = dpToPx(6);
@@ -492,6 +699,18 @@ public class MeetingRoomActivity extends AppCompatActivity {
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
 
+        TextView uidLabel = new TextView(this);
+        uidLabel.setText("ID:" + uid);
+        uidLabel.setTextColor(0xFFFFFFFF);
+        uidLabel.setTextSize(9);
+        uidLabel.setBackgroundColor(0x88000000);
+        uidLabel.setPadding(4, 1, 4, 1);
+        FrameLayout.LayoutParams labelLp = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        labelLp.gravity = android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL;
+        frame.addView(uidLabel, labelLp);
+
         thumbnailContainer.addView(frame);
     }
 
@@ -511,6 +730,18 @@ public class MeetingRoomActivity extends AppCompatActivity {
         frame.addView(localSurface, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
+
+        TextView label = new TextView(this);
+        label.setText("You");
+        label.setTextColor(0xFFFFFFFF);
+        label.setTextSize(9);
+        label.setBackgroundColor(0x88000000);
+        label.setPadding(4, 1, 4, 1);
+        FrameLayout.LayoutParams labelLp = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        labelLp.gravity = android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL;
+        frame.addView(label, labelLp);
 
         thumbnailContainer.addView(frame, 0);
     }
@@ -550,6 +781,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
             public void onFinish() {
                 isSessionCompleted = true;
                 updateTimerText(0);
+                recordSessionComplete();
                 showSessionCompletedDialog();
             }
         }.start();
@@ -592,7 +824,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
 
         view.findViewById(R.id.btnGoToTaskList).setOnClickListener(v -> {
             dialog.dismiss();
-            leaveAndGoHome(true);
+            leaveAndGoHome(true, backendSessionId);
         });
 
         dialog.show();
@@ -620,6 +852,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
 
         view.findViewById(R.id.btnLeaveSession).setOnClickListener(v -> {
             dialog.dismiss();
+            if (!isSessionCompleted) recordSessionIncomplete();
             leaveAndGoHome(false);
         });
 
@@ -648,6 +881,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
 
         view.findViewById(R.id.btnLeaveSession).setOnClickListener(v -> {
             dialog.dismiss();
+            if (!isSessionCompleted) recordSessionIncomplete();
             leaveAndGoHome(false);
         });
 
@@ -657,23 +891,32 @@ public class MeetingRoomActivity extends AppCompatActivity {
     // Navigation helpers
 
     private void leaveAndGoHome(boolean goToTasks) {
+        leaveAndGoHome(goToTasks, -1L);
+    }
+
+    private void leaveAndGoHome(boolean goToTasks, long sessionIdForReview) {
         if (focusTimer != null) focusTimer.cancel();
         leaveAndCleanup();
 
         Intent intent = new Intent(this, MainHubActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        if (goToTasks) intent.putExtra("navigate_to_tasks", true);
+        if (goToTasks) {
+            intent.putExtra("navigate_to_tasks", true);
+            if (sessionIdForReview > 0) {
+                intent.putExtra("review_session_id", sessionIdForReview);
+            }
+        }
         startActivity(intent);
         finish();
     }
 
     private void restartFocusTimer() {
         isSessionCompleted = false;
+        backendSessionId = -1;
         if (focusTimer != null) focusTimer.cancel();
+        recordSessionStart();
         startFocusTimer();
     }
-
-    // Utility
 
     private int dpToPx(int dp) {
         return Math.round(dp * getResources().getDisplayMetrics().density);

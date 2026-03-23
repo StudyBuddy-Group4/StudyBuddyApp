@@ -25,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_card_white"
+            android:elevation="2dp"
             android:fillViewport="true">
 
             <LinearLayout
@@ -33,135 +34,22 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- Task 1 -->
+                <TextView
+                    android:id="@+id/tvEmptyTasks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/empty_tasks_message"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
+
                 <LinearLayout
+                    android:id="@+id/taskContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp">
-
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:contentDescription="@string/completed"
-                        android:src="@drawable/ic_check_circle" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/mock_task_1"
-                            android:textColor="@color/dark_text"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/mock_task_note_1"
-                            android:textColor="@color/secondary_text"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/input_field_bg" />
-
-                <!-- Task 2 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp">
-
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:contentDescription="@string/completed"
-                        android:src="@drawable/ic_check_circle" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/mock_task_2"
-                            android:textColor="@color/dark_text"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/mock_task_note_2"
-                            android:textColor="@color/secondary_text"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/input_field_bg" />
-
-                <!-- Task 3 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp">
-
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:contentDescription="@string/uncompleted"
-                        android:src="@drawable/ic_unchecked_circle" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/mock_task_3"
-                            android:textColor="@color/dark_text"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/mock_task_note_3"
-                            android:textColor="@color/secondary_text"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-                </LinearLayout>
+                    android:orientation="vertical" />
 
             </LinearLayout>
         </ScrollView>
@@ -176,6 +64,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/bg_fab_green"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:elevation="6dp"
         android:focusable="true">

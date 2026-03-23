@@ -41,6 +41,7 @@
         android:background="@drawable/bg_button_secondary"
         android:stateListAnimator="@null"
         android:text="@string/btn_start_new_session"
+        android:textColor="@color/primary_green"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -53,7 +54,7 @@
         android:background="@drawable/bg_button_secondary"
         android:stateListAnimator="@null"
         android:text="@string/btn_go_to_task_list"
-
+        android:textColor="@color/primary_green"
         android:textSize="16sp"
         android:textStyle="bold" />
 

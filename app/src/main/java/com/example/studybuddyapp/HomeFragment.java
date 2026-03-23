@@ -16,6 +16,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.studybuddyapp.api.ApiClient;
+import com.example.studybuddyapp.api.MatchingApi;
+import com.example.studybuddyapp.api.UserApi;
+import com.example.studybuddyapp.api.dto.JoinMeetingResponse;
+import com.example.studybuddyapp.api.dto.UserProfileResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeFragment extends Fragment {
 
     private TextView chip15, chip30, chipCustom;
@@ -94,12 +104,14 @@ public class HomeFragment extends Fragment {
                                 "Please enter a number.", Toast.LENGTH_SHORT).show();
                         return;
                     }
+
                     int minutes = Integer.parseInt(value);
                     if (minutes <= 0) {
                         Toast.makeText(requireContext(),
                                 "Minutes must be greater than 0.", Toast.LENGTH_SHORT).show();
                         return;
                     }
+
                     selectedDurationMinutes = minutes;
                     isCustomSelected = true;
                     chipCustom.setText(minutes + " min");
@@ -131,15 +143,112 @@ public class HomeFragment extends Fragment {
 
         dialogView.findViewById(R.id.btn_start_anyway).setOnClickListener(v -> {
             dialog.dismiss();
-            launchMeetingRoom();
+            checkUserStatusAndLaunch();
         });
 
         dialog.show();
     }
 
+    private void checkUserStatusAndLaunch() {
+        UserApi api = ApiClient.getUserApi(requireContext());
+
+        api.getProfile().enqueue(new Callback<UserProfileResponse>() {
+            @Override
+            public void onResponse(Call<UserProfileResponse> call,
+                                   Response<UserProfileResponse> response) {
+                if (!isAdded()) return;
+
+                if (response.isSuccessful() && response.body() != null) {
+                    UserProfileResponse profile = response.body();
+
+                    if (profile.isCurrentlyRestricted()) {
+                        showBannedNotificationModal(profile);
+                    } else {
+                        launchMeetingRoom();
+                    }
+                } else {
+                    Toast.makeText(requireContext(),
+                            "Failed to verify account status.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(),
+                        "Network error checking status.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showBannedNotificationModal(UserProfileResponse profile) {
+        String message;
+        if (profile.isBanned()) {
+            message = "Your account has been permanently banned due to inappropriate behavior.";
+        } else {
+            message = "Your account is temporarily restricted until "
+                    + (profile.getBannedUntil() != null ? profile.getBannedUntil() : "unknown")
+                    + " due to inappropriate behavior.";
+        }
+
+        View dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_exit_warning, null);
+
+        TextView tvMessage = dialogView.findViewById(R.id.tvWarningMessage);
+        if (tvMessage != null) {
+            tvMessage.setText(message);
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        View btnBack = dialogView.findViewById(R.id.btnContinueStudying);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> dialog.dismiss());
+        }
+
+        View btnLeave = dialogView.findViewById(R.id.btnLeaveSession);
+        if (btnLeave != null) {
+            btnLeave.setVisibility(View.GONE);
+        }
+
+        dialog.show();
+    }
+
     private void launchMeetingRoom() {
-        Intent intent = new Intent(requireContext(), MeetingRoomActivity.class);
-        intent.putExtra(MeetingRoomActivity.EXTRA_FOCUS_DURATION, selectedDurationMinutes);
-        startActivity(intent);
+        MatchingApi matchingApi = ApiClient.getMatchingApi(requireContext());
+        matchingApi.joinMeeting(selectedDurationMinutes).enqueue(new Callback<JoinMeetingResponse>() {
+            @Override
+            public void onResponse(Call<JoinMeetingResponse> call,
+                                   Response<JoinMeetingResponse> response) {
+                if (!isAdded()) return;
+
+                if (response.isSuccessful() && response.body() != null) {
+                    JoinMeetingResponse meeting = response.body();
+                    Intent intent = new Intent(requireContext(), MeetingRoomActivity.class);
+                    intent.putExtra(MeetingRoomActivity.EXTRA_FOCUS_DURATION, selectedDurationMinutes);
+                    intent.putExtra(MeetingRoomActivity.EXTRA_CHANNEL_NAME, meeting.getChannelName());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(requireContext(),
+                            "Failed to find a meeting. Please try again.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JoinMeetingResponse> call, Throwable t) {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(),
+                        "Network error. Please try again.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -74,6 +74,7 @@
                 android:id="@+id/menu_edit_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_ripple_item"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -110,6 +111,7 @@
                 android:id="@+id/menu_security"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_ripple_item"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -146,6 +148,7 @@
                 android:id="@+id/menu_history_reports"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_ripple_item"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -177,47 +180,12 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Simulate Flag Alert -->
-            <LinearLayout
-                android:id="@+id/menu_simulate_alert"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingTop="14dp"
-                android:paddingBottom="14dp">
-
-                <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/bg_circle_red">
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="@string/flag_notification_title"
-                        android:src="@drawable/ic_flag"
-                        app:tint="@color/white" />
-                </FrameLayout>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:text="Simulate Flag Alert"
-                    android:textColor="@color/dark_text"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
             <!-- Logout -->
             <LinearLayout
                 android:id="@+id/menu_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_ripple_item"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"

@@ -17,6 +17,7 @@ public class MainHubActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
     private boolean isAdmin = false;
+    private long reviewSessionId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class MainHubActivity extends AppCompatActivity {
 
         SessionManager session = new SessionManager(this);
         isAdmin = session.isAdmin() || getIntent().getBooleanExtra(EXTRA_IS_ADMIN, false);
+        reviewSessionId = getIntent().getLongExtra("review_session_id", -1);
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
@@ -35,6 +37,36 @@ public class MainHubActivity extends AppCompatActivity {
             return insets;
         });
 
+        if (isAdmin) {
+            setupAdminNavigation();
+        } else {
+            setupRegularNavigation(savedInstanceState);
+        }
+    }
+
+    private void setupAdminNavigation() {
+        bottomNavigation.getMenu().clear();
+        bottomNavigation.inflateMenu(R.menu.bottom_nav_menu_admin);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new AdminProfileFragment())
+                .commit();
+
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_profile) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new AdminProfileFragment())
+                        .commit();
+            }
+            return true;
+        });
+
+        bottomNavigation.setSelectedItemId(R.id.nav_profile);
+    }
+
+    private void setupRegularNavigation(Bundle savedInstanceState) {
         bottomNavigation.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
             int itemId = item.getItemId();
@@ -42,15 +74,16 @@ public class MainHubActivity extends AppCompatActivity {
             if (itemId == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
             } else if (itemId == R.id.nav_tasks) {
-                selectedFragment = new TaskListFragment();
+                if (reviewSessionId > 0) {
+                    selectedFragment = TaskListFragment.newInstance(reviewSessionId);
+                    reviewSessionId = -1;
+                } else {
+                    selectedFragment = new TaskListFragment();
+                }
             } else if (itemId == R.id.nav_statistics) {
                 selectedFragment = new StatisticsFragment();
             } else if (itemId == R.id.nav_profile) {
-                if (isAdmin) {
-                    selectedFragment = new AdminProfileFragment();
-                } else {
-                    selectedFragment = new ProfileFragment();
-                }
+                selectedFragment = new ProfileFragment();
             }
 
             if (selectedFragment != null) {
@@ -72,6 +105,8 @@ public class MainHubActivity extends AppCompatActivity {
     }
 
     public void switchToTasksTab() {
-        bottomNavigation.setSelectedItemId(R.id.nav_tasks);
+        if (!isAdmin) {
+            bottomNavigation.setSelectedItemId(R.id.nav_tasks);
+        }
     }
 }

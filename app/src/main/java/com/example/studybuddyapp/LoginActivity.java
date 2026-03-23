@@ -2,8 +2,11 @@ package com.example.studybuddyapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
         Button btnLogIn = findViewById(R.id.btnLogIn);
         TextView tvSignUp = findViewById(R.id.tvSignUp);
         TextView tvForgotPassword = findViewById(R.id.tvForgotPassword);
+
+        setupPasswordToggle(findViewById(R.id.ivTogglePassword), etPassword);
 
         btnLogIn.setOnClickListener(v -> {
             String usernameOrEmail = etEmail.getText().toString().trim();
@@ -93,5 +98,18 @@ public class LoginActivity extends AppCompatActivity {
 
         tvForgotPassword.setOnClickListener(v ->
                 startActivity(new Intent(this, ForgotPasswordActivity.class)));
+    }
+
+    private void setupPasswordToggle(ImageView toggle, EditText editText) {
+        toggle.setOnClickListener(v -> {
+            if (editText.getTransformationMethod() instanceof PasswordTransformationMethod) {
+                editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                toggle.setImageResource(R.drawable.ic_visibility);
+            } else {
+                editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                toggle.setImageResource(R.drawable.ic_visibility_off);
+            }
+            editText.setSelection(editText.length());
+        });
     }
 }

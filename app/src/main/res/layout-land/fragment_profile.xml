@@ -6,7 +6,7 @@
     android:background="@drawable/bg_gradient_top"
     android:orientation="vertical">
 
-    <!-- 固定标题区域（不随滚动移动） -->
+    <!-- Fixed header area (does not move with scrolling) -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <!-- 可滚动区域 -->
+    <!-- Scrollable area -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -21,6 +21,7 @@
     <color name="overlay_dark">#80000000</color>
     <color name="icon_blue">#FF4A90D9</color>
     <color name="transparent">#00000000</color>
+    <color name="timer_bubble_bg">#80FFFFFF</color>
     <color name="gradient_start">#FF00C9A7</color>
     <color name="gradient_end">#FF00E6B8</color>
 </resources>
