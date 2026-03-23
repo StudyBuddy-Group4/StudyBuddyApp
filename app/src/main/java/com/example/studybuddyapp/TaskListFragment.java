@@ -29,22 +29,9 @@ import retrofit2.Response;
 
 public class TaskListFragment extends Fragment {
 
-    private static final String ARG_SESSION_ID = "review_session_id";
-
     private LinearLayout taskContainer;
     private TextView tvEmptyTasks;
-    private View fabAddTask;
-
-    private long reviewSessionId = -1;
     private final List<TaskItem> currentTasks = new ArrayList<>();
-
-    public static TaskListFragment newInstance(long sessionId) {
-        TaskListFragment fragment = new TaskListFragment();
-        Bundle args = new Bundle();
-        args.putLong(ARG_SESSION_ID, sessionId);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Nullable
     @Override
@@ -59,18 +46,8 @@ public class TaskListFragment extends Fragment {
 
         taskContainer = view.findViewById(R.id.taskContainer);
         tvEmptyTasks = view.findViewById(R.id.tvEmptyTasks);
-        fabAddTask = view.findViewById(R.id.fab_add_task);
 
-        if (getArguments() != null) {
-            reviewSessionId = getArguments().getLong(ARG_SESSION_ID, -1);
-        }
-
-        if (reviewSessionId > 0) {
-            fabAddTask.setVisibility(View.GONE);
-            tvEmptyTasks.setText("No tasks were associated with this session.");
-        } else {
-            fabAddTask.setOnClickListener(v -> showCreateTaskDialog());
-        }
+        view.findViewById(R.id.fab_add_task).setOnClickListener(v -> showCreateTaskDialog());
     }
 
     @Override
@@ -81,15 +58,7 @@ public class TaskListFragment extends Fragment {
 
     private void loadTasks() {
         TaskApi api = ApiClient.getTaskApi(requireContext());
-
-        Call<List<TaskItem>> call;
-        if (reviewSessionId > 0) {
-            call = api.getTasksForSession(reviewSessionId);
-        } else {
-            call = api.getPendingTasks();
-        }
-
-        call.enqueue(new Callback<List<TaskItem>>() {
+        api.getPendingTasks().enqueue(new Callback<List<TaskItem>>() {
             @Override
             public void onResponse(Call<List<TaskItem>> c, Response<List<TaskItem>> response) {
                 if (!isAdded()) return;
@@ -118,8 +87,6 @@ public class TaskListFragment extends Fragment {
         }
         tvEmptyTasks.setVisibility(View.GONE);
 
-        boolean isReviewMode = reviewSessionId > 0;
-
         for (int i = 0; i < currentTasks.size(); i++) {
             TaskItem task = currentTasks.get(i);
 
@@ -138,18 +105,14 @@ public class TaskListFragment extends Fragment {
                 tvNote.setVisibility(View.VISIBLE);
             }
 
-            if (isReviewMode) {
-                boolean completed = Boolean.TRUE.equals(task.getCompleted());
-                ivStatus.setImageResource(completed
-                        ? R.drawable.ic_check_circle : R.drawable.ic_unchecked_circle);
+            boolean completed = Boolean.TRUE.equals(task.getCompleted());
+            ivStatus.setImageResource(completed
+                    ? R.drawable.ic_check_circle : R.drawable.ic_unchecked_circle);
 
-                ivStatus.setOnClickListener(v -> toggleTaskCompletion(task, ivStatus));
-                ivDelete.setVisibility(View.GONE);
-            } else {
-                ivStatus.setImageResource(R.drawable.ic_unchecked_circle);
-                ivDelete.setVisibility(View.VISIBLE);
-                ivDelete.setOnClickListener(v -> deleteTask(task));
-            }
+            ivStatus.setOnClickListener(v -> toggleTaskCompletion(task, ivStatus));
+
+            ivDelete.setVisibility(View.VISIBLE);
+            ivDelete.setOnClickListener(v -> deleteTask(task));
 
             taskContainer.addView(row);
 
@@ -201,9 +164,6 @@ public class TaskListFragment extends Fragment {
                 if (response.isSuccessful()) {
                     currentTasks.remove(task);
                     renderTasks();
-                } else {
-                    Toast.makeText(requireContext(),
-                            "Failed to delete task", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -262,9 +222,6 @@ public class TaskListFragment extends Fragment {
                             Toast.makeText(requireContext(),
                                     "Task created!", Toast.LENGTH_SHORT).show();
                             loadTasks();
-                        } else {
-                            Toast.makeText(requireContext(),
-                                    "Failed to create task", Toast.LENGTH_SHORT).show();
                         }
                     }
 

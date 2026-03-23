@@ -487,7 +487,6 @@ public class MeetingRoomActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     backendSessionId = response.body().getSessionId();
                     Log.d(TAG, "Backend session started: " + backendSessionId);
-                    assignPendingTasks(backendSessionId);
                 }
             }
 
@@ -769,7 +768,7 @@ public class MeetingRoomActivity extends AppCompatActivity {
 
         view.findViewById(R.id.btnGoToTaskList).setOnClickListener(v -> {
             dialog.dismiss();
-            leaveAndGoHome(true, backendSessionId);
+            leaveAndGoHome(true);
         });
 
         dialog.show();

@@ -17,7 +17,6 @@ public class MainHubActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
     private boolean isAdmin = false;
-    private long reviewSessionId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,6 @@ public class MainHubActivity extends AppCompatActivity {
 
         SessionManager session = new SessionManager(this);
         isAdmin = session.isAdmin() || getIntent().getBooleanExtra(EXTRA_IS_ADMIN, false);
-        reviewSessionId = getIntent().getLongExtra("review_session_id", -1);
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
@@ -74,12 +72,7 @@ public class MainHubActivity extends AppCompatActivity {
             if (itemId == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
             } else if (itemId == R.id.nav_tasks) {
-                if (reviewSessionId > 0) {
-                    selectedFragment = TaskListFragment.newInstance(reviewSessionId);
-                    reviewSessionId = -1;
-                } else {
-                    selectedFragment = new TaskListFragment();
-                }
+                selectedFragment = new TaskListFragment();
             } else if (itemId == R.id.nav_statistics) {
                 selectedFragment = new StatisticsFragment();
             } else if (itemId == R.id.nav_profile) {

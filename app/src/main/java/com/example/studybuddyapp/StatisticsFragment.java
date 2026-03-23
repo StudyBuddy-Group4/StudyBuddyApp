@@ -137,14 +137,12 @@ public class StatisticsFragment extends Fragment {
 
             if (item.getTasks() != null && !item.getTasks().isEmpty()) {
                 for (SessionHistoryItem.TaskSummary task : item.getTasks()) {
+                    if (!Boolean.TRUE.equals(task.getCompleted())) continue;
                     TextView taskLine = new TextView(requireContext());
-                    boolean taskDone = Boolean.TRUE.equals(task.getCompleted());
-                    String prefix = taskDone ? "\u2713 " : "\u2717 ";
-                    taskLine.setText(prefix + task.getTitle());
+                    taskLine.setText("\u2713 " + task.getTitle());
                     taskLine.setTextSize(13);
                     taskLine.setPadding(dpToPx(40), dpToPx(2), 0, dpToPx(2));
-                    taskLine.setTextColor(requireContext().getColor(
-                            taskDone ? R.color.primary_green : R.color.secondary_text));
+                    taskLine.setTextColor(requireContext().getColor(R.color.primary_green));
                     sessionHistoryContainer.addView(taskLine);
                 }
             }
