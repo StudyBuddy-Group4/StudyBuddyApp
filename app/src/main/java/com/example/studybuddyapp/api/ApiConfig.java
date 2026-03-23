@@ -2,7 +2,7 @@ package com.example.studybuddyapp.api;
 
 public final class ApiConfig {
 
-    // Railway remote server:
+    // Railway remote server (for remote testing):
     public static final String BASE_URL = "https://studybuddy-backend-deploy-production.up.railway.app/";
 
     // Local development (emulator → host machine):

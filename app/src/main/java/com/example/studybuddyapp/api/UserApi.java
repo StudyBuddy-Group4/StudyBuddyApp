@@ -19,6 +19,9 @@ public interface UserApi {
     @PUT("api/user/update")
     Call<String> updateProfile(@Body UpdateProfileRequest request);
 
+    @PUT("api/user/change-password")
+    Call<String> changePassword(@Body java.util.Map<String, String> request);
+
     @HTTP(method = "DELETE", path = "api/user/delete", hasBody = true)
     Call<String> deleteAccount(@Body DeleteAccountRequest request);
 }
