@@ -41,6 +41,7 @@
 
         <Button
             android:id="@+id/btnDismiss"
+            style="@style/SecondaryButton"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginEnd="8dp"
@@ -49,11 +50,12 @@
             android:paddingEnd="12dp"
             android:stateListAnimator="@null"
             android:text="Dismiss"
-            android:textColor="@color/secondary_text"
+            android:textColor="@color/primary_green"
             android:textSize="12sp" />
 
         <Button
             android:id="@+id/btnBan3Days"
+            style="@style/PrimaryButton"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginEnd="8dp"
@@ -67,6 +69,7 @@
 
         <Button
             android:id="@+id/btnBanPerm"
+            style="@style/PrimaryButton"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:background="@drawable/bg_button_primary"
