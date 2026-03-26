@@ -282,24 +282,26 @@ class MeetingRoomVideoCallManager {
     }
 
     private void addThumbnailForUid(int uid, SurfaceView surface) {
-        FrameLayout frame = createThumbnailFrame(uid, "ID:" + uid);
+        FrameLayout frame = createThumbnailFrame(uid);
         detachSurface(surface);
         frame.addView(surface, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
+        addLabelToFrame(frame, "ID:" + uid);
         thumbnailContainer.addView(frame);
     }
 
     private void addThumbnailForLocal() {
-        FrameLayout frame = createThumbnailFrame("local", "You");
+        FrameLayout frame = createThumbnailFrame("local");
         detachSurface(localSurface);
         frame.addView(localSurface, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
+        addLabelToFrame(frame, "You");
         thumbnailContainer.addView(frame, 0);
     }
 
-    private FrameLayout createThumbnailFrame(Object tag, String labelText) {
+    private FrameLayout createThumbnailFrame(Object tag) {
         int sizePx = dpToPx(70);
         int marginPx = dpToPx(6);
 
@@ -311,7 +313,10 @@ class MeetingRoomVideoCallManager {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(sizePx, sizePx);
         lp.setMarginEnd(marginPx);
         frame.setLayoutParams(lp);
+        return frame;
+    }
 
+    private void addLabelToFrame(FrameLayout frame, String labelText) {
         TextView label = new TextView(activity);
         label.setText(labelText);
         label.setTextColor(0xFFFFFFFF);
@@ -323,7 +328,6 @@ class MeetingRoomVideoCallManager {
                 FrameLayout.LayoutParams.WRAP_CONTENT);
         labelLp.gravity = android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL;
         frame.addView(label, labelLp);
-        return frame;
     }
 
     private void removeThumbnailForUid(int uid) {
