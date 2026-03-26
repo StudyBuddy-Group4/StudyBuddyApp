@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 public class SessionManager {
 
+    // SharedPreferences file used for the current login session.
     private static final String PREF_NAME = "studybuddy_session";
     private static final String KEY_TOKEN = "jwt_token";
     private static final String KEY_USER_ID = "user_id";
@@ -18,6 +19,7 @@ public class SessionManager {
                 .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
+    // Stores the values we need to restore the signed-in user later.
     public void saveLoginSession(String token, long userId, String username, boolean isAdmin) {
         prefs.edit()
                 .putString(KEY_TOKEN, token)
@@ -48,6 +50,7 @@ public class SessionManager {
         return token != null && !token.isEmpty();
     }
 
+    // Clears every stored session field during logout or account removal.
     public void clearSession() {
         prefs.edit().clear().apply();
     }
