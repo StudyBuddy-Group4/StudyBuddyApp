@@ -20,22 +20,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Main / speaker video container -->
     <FrameLayout
         android:id="@+id/mainVideoContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="28dp"
         android:background="@drawable/bg_video_rounded"
         android:clipToOutline="true"
+        android:maxHeight="420dp"
         app:layout_constraintBottom_toTopOf="@id/thumbnailScroll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
-        <!-- Timer bubble overlaid on the main video -->
         <TextView
             android:id="@+id/tvTimer"
             android:layout_width="wrap_content"
@@ -54,14 +53,14 @@
             android:textStyle="bold" />
     </FrameLayout>
 
-    <!-- Horizontal scroll for thumbnail videos -->
     <HorizontalScrollView
         android:id="@+id/thumbnailScroll"
         android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="112dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="12dp"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@id/controlBar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,12 +74,11 @@
             android:orientation="horizontal" />
     </HorizontalScrollView>
 
-    <!-- Bottom control bar -->
     <LinearLayout
         android:id="@+id/controlBar"
         android:layout_width="wrap_content"
         android:layout_height="62dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/bg_meeting_control"
         android:gravity="center"
         android:orientation="horizontal"
