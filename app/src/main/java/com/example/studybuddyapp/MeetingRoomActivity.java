@@ -40,7 +40,7 @@ public class MeetingRoomActivity extends AppCompatActivity
     private long currentTimerMs;
     private FrameLayout mainVideoContainer;
     private LinearLayout thumbnailContainer;
-    private TextView tvTimer;
+    private TextView tvTimer, tvSpeakerId;
     private ImageView btnSpeaker, btnCamera, btnHangUp, btnMic, btnFlag;
     private boolean isMicMuted = false, isCameraOff = false, isSpeakerOff = false;
     private boolean isSessionCompleted = false, userLeftForeground = false, isNavigatingToChild = false;
@@ -108,6 +108,18 @@ public class MeetingRoomActivity extends AppCompatActivity
     }
 
     @Override
+    public void onMainViewChanged(int uid) {
+        if (tvSpeakerId == null) return;
+        if (uid == 0) {
+            tvSpeakerId.setText("You");
+            tvSpeakerId.setVisibility(View.GONE);
+        } else {
+            tvSpeakerId.setText("ID: " + uid);
+            tvSpeakerId.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     public boolean shouldHandleCallbacks() {
         return !isFinishing() && !isDestroyed();
     }
@@ -129,6 +141,7 @@ public class MeetingRoomActivity extends AppCompatActivity
         mainVideoContainer = findViewById(R.id.mainVideoContainer);
         thumbnailContainer = findViewById(R.id.thumbnailContainer);
         tvTimer = findViewById(R.id.tvTimer);
+        tvSpeakerId = findViewById(R.id.tvSpeakerId);
         btnSpeaker = findViewById(R.id.btnSpeaker);
         btnCamera = findViewById(R.id.btnCamera);
         btnHangUp = findViewById(R.id.btnHangUp);

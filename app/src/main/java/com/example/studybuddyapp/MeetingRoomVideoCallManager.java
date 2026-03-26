@@ -29,6 +29,7 @@ class MeetingRoomVideoCallManager {
 
     interface Callbacks {
         void onChannelJoined();
+        void onMainViewChanged(int uid);
     }
 
     private static final String TAG = "MeetingRoom";
@@ -256,6 +257,7 @@ class MeetingRoomVideoCallManager {
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
         mainViewUid = uid;
+        callbacks.onMainViewChanged(uid);
     }
 
     private void clearMainView() {
@@ -276,6 +278,7 @@ class MeetingRoomVideoCallManager {
         removeLocalThumbnail();
         attachLocalSurfaceToMain();
         mainViewUid = 0;
+        callbacks.onMainViewChanged(0);
     }
 
     private void addThumbnailForUid(int uid, SurfaceView surface) {
