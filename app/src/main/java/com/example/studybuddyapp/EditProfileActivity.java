@@ -21,6 +21,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Lets the user review and update their profile details.
+ */
 public class EditProfileActivity extends AppCompatActivity {
 
     private EditText etUsername;
@@ -33,24 +36,33 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_profile);
+
+        // Apply system bar insets so the profile form stays readable on different devices.
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Bind the editable profile fields and header summary views.
         etUsername = findViewById(R.id.etUsername);
         etEmail = findViewById(R.id.etEmail);
         tvHeaderName = findViewById(R.id.tvHeaderName);
         tvHeaderId = findViewById(R.id.tvHeaderId);
 
+        // The back arrow closes this screen and returns to the previous profile screen.
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
 
+        // Load the latest profile values as soon as the screen opens.
         loadProfile();
 
+        // The update button submits the current field values.
         findViewById(R.id.btnUpdateProfile).setOnClickListener(v -> updateProfile());
     }
 
+    /**
+     * Loads the latest profile values from the backend and falls back to cached session data if needed.
+     */
     private void loadProfile() {
         UserApi api = ApiClient.getUserApi(this);
         api.getProfile().enqueue(new Callback<UserProfileResponse>() {
@@ -58,6 +70,7 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onResponse(Call<UserProfileResponse> call,
                                    Response<UserProfileResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    // A successful profile response refreshes both the editable fields and header.
                     UserProfileResponse profile = response.body();
                     etUsername.setText(profile.getUsername());
                     etEmail.setText(profile.getEmail());
@@ -68,6 +81,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                // If the backend cannot be reached, keep the screen usable with cached session data.
                 SessionManager session = new SessionManager(EditProfileActivity.this);
                 etUsername.setText(session.getUsername());
                 tvHeaderName.setText(session.getUsername());
@@ -77,10 +91,15 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Validates the form and sends the updated profile values to the backend.
+     */
     private void updateProfile() {
+        // Read the latest values entered by the user.
         String username = etUsername.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
 
+        // Basic validation avoids sending incomplete profile updates.
         if (username.isEmpty() || email.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
@@ -91,14 +110,18 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
+                    // Keep the locally cached session aligned with the updated username.
                     SessionManager session = new SessionManager(EditProfileActivity.this);
                     session.saveLoginSession(session.getToken(), session.getUserId(),
                             username, session.isAdmin());
+
+                    // Refresh the header immediately so the user sees the new name right away.
                     tvHeaderName.setText(username);
                     Toast.makeText(EditProfileActivity.this,
                             "Profile Updated", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
+                    // Show the clearest backend error we can extract from the response.
                     String msg = ErrorUtils.parseError(response, "Update failed");
                     Toast.makeText(EditProfileActivity.this, msg,
                             Toast.LENGTH_LONG).show();
@@ -107,6 +130,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
+                // Network failures keep the user on this screen so they can retry later.
                 Toast.makeText(EditProfileActivity.this,
                         "Network error", Toast.LENGTH_SHORT).show();
             }

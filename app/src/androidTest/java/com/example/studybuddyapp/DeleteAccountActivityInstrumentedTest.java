@@ -1,7 +1,7 @@
 package com.example.studybuddyapp;
 
 import android.text.method.PasswordTransformationMethod;
-import android.widget.Button;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -17,13 +17,24 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class CreateAccountActivityInstrumentedTest {
+public class DeleteAccountActivityInstrumentedTest {
 
     @Rule
-    public ActivityScenarioRule<CreateAccountActivity> activityRule =
-            new ActivityScenarioRule<>(CreateAccountActivity.class);
+    public ActivityScenarioRule<DeleteAccountActivity> activityRule =
+            new ActivityScenarioRule<>(DeleteAccountActivity.class);
 
     @Test
+    // test that submitting deletion without a password keeps the user on the same screen
+    public void deleteAccount_withEmptyPassword_keepsActivityActive() {
+        activityRule.getScenario().onActivity(activity -> {
+            activity.findViewById(R.id.btnDeleteAccount).performClick();
+
+            assertFalse(activity.isFinishing());
+        });
+    }
+
+    @Test
+    // test that the password field becomes visible when its toggle is pressed
     public void passwordToggle_showsPasswordTextWhenClicked() {
         activityRule.getScenario().onActivity(activity -> {
             EditText password = activity.findViewById(R.id.etPassword);
@@ -39,6 +50,7 @@ public class CreateAccountActivityInstrumentedTest {
     }
 
     @Test
+    // test that the password field becomes hidden again after pressing the toggle twice
     public void passwordToggle_hidesPasswordAgainWhenClickedTwice() {
         activityRule.getScenario().onActivity(activity -> {
             EditText password = activity.findViewById(R.id.etPassword);
@@ -53,17 +65,26 @@ public class CreateAccountActivityInstrumentedTest {
     }
 
     @Test
-    public void confirmPasswordToggle_showsAndHidesPassword() {
+    // test that tapping cancel closes the activity without deleting the account
+    public void cancelButton_finishesActivity() {
         activityRule.getScenario().onActivity(activity -> {
-            EditText confirmPassword = activity.findViewById(R.id.etConfirmPassword);
-            ImageView toggle = activity.findViewById(R.id.ivToggleConfirmPassword);
+            View cancelButton = activity.findViewById(R.id.btnCancel);
 
-            confirmPassword.setText("secret");
-            toggle.performClick();
-            assertFalse(confirmPassword.getTransformationMethod() instanceof PasswordTransformationMethod);
+            cancelButton.performClick();
 
-            toggle.performClick();
-            assertTrue(confirmPassword.getTransformationMethod() instanceof PasswordTransformationMethod);
+            assertTrue(activity.isFinishing());
+        });
+    }
+
+    @Test
+    // test that tapping the back button closes the activity
+    public void backButton_finishesActivity() {
+        activityRule.getScenario().onActivity(activity -> {
+            View backButton = activity.findViewById(R.id.ivBack);
+
+            backButton.performClick();
+
+            assertTrue(activity.isFinishing());
         });
     }
 }

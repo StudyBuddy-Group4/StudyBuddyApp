@@ -1,7 +1,6 @@
 package com.example.studybuddyapp;
 
 import android.text.method.PasswordTransformationMethod;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -17,11 +16,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class CreateAccountActivityInstrumentedTest {
+public class LoginActivityInstrumentedTest {
 
     @Rule
-    public ActivityScenarioRule<CreateAccountActivity> activityRule =
-            new ActivityScenarioRule<>(CreateAccountActivity.class);
+    public ActivityScenarioRule<LoginActivity> activityRule =
+            new ActivityScenarioRule<>(LoginActivity.class);
 
     @Test
     public void passwordToggle_showsPasswordTextWhenClicked() {
@@ -49,21 +48,6 @@ public class CreateAccountActivityInstrumentedTest {
             toggle.performClick();
 
             assertTrue(password.getTransformationMethod() instanceof PasswordTransformationMethod);
-        });
-    }
-
-    @Test
-    public void confirmPasswordToggle_showsAndHidesPassword() {
-        activityRule.getScenario().onActivity(activity -> {
-            EditText confirmPassword = activity.findViewById(R.id.etConfirmPassword);
-            ImageView toggle = activity.findViewById(R.id.ivToggleConfirmPassword);
-
-            confirmPassword.setText("secret");
-            toggle.performClick();
-            assertFalse(confirmPassword.getTransformationMethod() instanceof PasswordTransformationMethod);
-
-            toggle.performClick();
-            assertTrue(confirmPassword.getTransformationMethod() instanceof PasswordTransformationMethod);
         });
     }
 }

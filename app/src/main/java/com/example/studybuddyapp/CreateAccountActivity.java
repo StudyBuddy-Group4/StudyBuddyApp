@@ -36,12 +36,15 @@ public class CreateAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_create_account);
+
+        // Apply system bar insets so the header and form stay readable on different devices.
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Bind the form fields and actions used throughout the registration flow.
         ImageView ivBack = findViewById(R.id.ivBack);
         EditText etUsername = findViewById(R.id.etUsername);
         EditText etEmail = findViewById(R.id.etEmail);
@@ -50,8 +53,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         Button btnSignUp = findViewById(R.id.btnSignUp);
         TextView tvLogIn = findViewById(R.id.tvLogIn);
 
+        // The back arrow simply closes this screen and returns to the previous step.
         ivBack.setOnClickListener(v -> finish());
 
+        // Both password fields share the same visibility toggle behaviour.
         setupPasswordToggle(findViewById(R.id.ivTogglePassword), etPassword);
         setupPasswordToggle(findViewById(R.id.ivToggleConfirmPassword), etConfirmPassword);
 
@@ -63,10 +68,12 @@ public class CreateAccountActivity extends AppCompatActivity {
             String confirmPassword = etConfirmPassword.getText().toString().trim();
 
             // Basic client-side validation avoids unnecessary backend requests.
+            // The backend still validates again, but this gives the user faster feedback.
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
+            // The confirmation field must match before we send anything to the backend.
             if (!password.equals(confirmPassword)) {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                 return;
@@ -80,6 +87,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                 public void onResponse(Call<String> call, Response<String> response) {
                     // Re-enable the button no matter how the backend responds.
                     btnSignUp.setEnabled(true);
+
+                    // A successful response means the account exists and the user can go sign in.
                     if (response.isSuccessful()) {
                         // A successful registration returns the user to the login flow.
                         new AlertDialog.Builder(CreateAccountActivity.this)
@@ -97,6 +106,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 .show();
                     } else {
                         // Show the clearest backend error we can extract from the response.
+                        // This keeps server-side validation messages visible without extra parsing here.
                         String msg = ErrorUtils.parseError(response,
                                 "Registration failed. Check your input.");
                         Toast.makeText(CreateAccountActivity.this, msg,
@@ -107,6 +117,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     // Network failures also need to unlock the button for another attempt.
+                    // We keep the message simple here because the common fix is to retry later.
                     btnSignUp.setEnabled(true);
                     Toast.makeText(CreateAccountActivity.this,
                             "Network error. Is the backend running?", Toast.LENGTH_SHORT).show();
@@ -123,13 +134,17 @@ public class CreateAccountActivity extends AppCompatActivity {
      */
     private void setupPasswordToggle(ImageView toggle, EditText editText) {
         toggle.setOnClickListener(v -> {
+            // Swap the transformation method so the user can quickly verify typed passwords.
             if (editText.getTransformationMethod() instanceof PasswordTransformationMethod) {
                 editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                // Match the icon to the visible-text state.
                 toggle.setImageResource(R.drawable.ic_visibility);
             } else {
                 editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                // Switch back to the hidden-password icon when masking the field again.
                 toggle.setImageResource(R.drawable.ic_visibility_off);
             }
+            // Keep the cursor at the end after changing the transformation method.
             editText.setSelection(editText.length());
         });
     }
