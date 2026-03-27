@@ -334,6 +334,9 @@ public class MeetingRoomActivity extends AppCompatActivity
         dialog.show();
     }
 
+    /**
+     * Builds the removal message based on whether the user was kicked or restricted.
+     */
     private String getRemovalMessage(UserProfileResponse profile) {
         if (profile.isBanned()) {
             return "Your Account Is Banned Permanently, Please Refrain From Conducting Inappropriate Behavior E.G. Nudity, Noise, Violence";
@@ -344,6 +347,9 @@ public class MeetingRoomActivity extends AppCompatActivity
         return "You Have Been Kicked Out Of This Meeting By The Administrator.";
     }
 
+    /**
+     * Treats bans that still end well in the future as long-term restrictions.
+     */
     private boolean isLongTermBan(String bannedUntil) {
         if (bannedUntil == null) return false;
         try {

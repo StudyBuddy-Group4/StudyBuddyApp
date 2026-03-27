@@ -26,6 +26,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Handles account creation input, validation, and navigation back to login.
+ */
 public class CreateAccountActivity extends AppCompatActivity {
 
     @Override
@@ -53,11 +56,13 @@ public class CreateAccountActivity extends AppCompatActivity {
         setupPasswordToggle(findViewById(R.id.ivToggleConfirmPassword), etConfirmPassword);
 
         btnSignUp.setOnClickListener(v -> {
+            // Read the latest form values when the user submits the sign-up form.
             String username = etUsername.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
             String confirmPassword = etConfirmPassword.getText().toString().trim();
 
+            // Basic client-side validation avoids unnecessary backend requests.
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 return;
@@ -67,13 +72,16 @@ public class CreateAccountActivity extends AppCompatActivity {
                 return;
             }
 
+            // Lock the button while the registration request is in progress.
             btnSignUp.setEnabled(false);
             AuthApi api = ApiClient.getAuthApi(this);
             api.register(new RegisterRequest(username, email, password)).enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
+                    // Re-enable the button no matter how the backend responds.
                     btnSignUp.setEnabled(true);
                     if (response.isSuccessful()) {
+                        // A successful registration returns the user to the login flow.
                         new AlertDialog.Builder(CreateAccountActivity.this)
                                 .setTitle(R.string.congratulations)
                                 .setMessage(R.string.account_created_msg)
@@ -88,6 +96,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 .setCancelable(false)
                                 .show();
                     } else {
+                        // Show the clearest backend error we can extract from the response.
                         String msg = ErrorUtils.parseError(response,
                                 "Registration failed. Check your input.");
                         Toast.makeText(CreateAccountActivity.this, msg,
@@ -97,6 +106,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
+                    // Network failures also need to unlock the button for another attempt.
                     btnSignUp.setEnabled(true);
                     Toast.makeText(CreateAccountActivity.this,
                             "Network error. Is the backend running?", Toast.LENGTH_SHORT).show();
@@ -104,9 +114,13 @@ public class CreateAccountActivity extends AppCompatActivity {
             });
         });
 
+        // The footer text is a shortcut back to the existing login screen.
         tvLogIn.setOnClickListener(v -> finish());
     }
 
+    /**
+     * Toggles a password field between hidden and visible text.
+     */
     private void setupPasswordToggle(ImageView toggle, EditText editText) {
         toggle.setOnClickListener(v -> {
             if (editText.getTransformationMethod() instanceof PasswordTransformationMethod) {

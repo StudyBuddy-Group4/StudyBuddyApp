@@ -26,6 +26,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Lets the user choose a focus duration and start the matching flow.
+ */
 public class HomeFragment extends Fragment {
 
     private TextView chip15, chip30, chipCustom;
@@ -74,6 +77,9 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * Updates the selected time chip so only one option appears active.
+     */
     private void selectChip(TextView selected) {
         TextView[] chips = {chip15, chip30, chipCustom};
         for (TextView chip : chips) {
@@ -87,6 +93,9 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    /**
+     * Opens a dialog for entering a custom focus duration.
+     */
     private void showCustomMinutesDialog() {
         final EditText input = new EditText(requireContext());
         input.setHint("Enter minutes");
@@ -99,6 +108,8 @@ public class HomeFragment extends Fragment {
                 .setView(input)
                 .setPositiveButton("OK", (dialog, which) -> {
                     String value = input.getText().toString().trim();
+
+                    // Stop early when the user closes the dialog without entering a number.
                     if (value.isEmpty()) {
                         Toast.makeText(requireContext(),
                                 "Please enter a number.", Toast.LENGTH_SHORT).show();
@@ -106,12 +117,15 @@ public class HomeFragment extends Fragment {
                     }
 
                     int minutes = Integer.parseInt(value);
+
+                    // Custom durations still need to be positive before we update the UI.
                     if (minutes <= 0) {
                         Toast.makeText(requireContext(),
                                 "Minutes must be greater than 0.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
+                    // Save the custom value and make the custom chip look selected.
                     selectedDurationMinutes = minutes;
                     isCustomSelected = true;
                     chipCustom.setText(minutes + " min");
@@ -121,6 +135,9 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Shows the confirmation dialog before entering a focus session.
+     */
     private void showReadyToFocusDialog() {
         View dialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.dialog_ready_to_focus, null);
@@ -136,6 +153,8 @@ public class HomeFragment extends Fragment {
 
         dialogView.findViewById(R.id.btn_add_task).setOnClickListener(v -> {
             dialog.dismiss();
+
+            // Reuse the existing tasks tab instead of opening a separate screen.
             if (getActivity() instanceof MainHubActivity) {
                 ((MainHubActivity) getActivity()).switchToTasksTab();
             }
@@ -149,6 +168,9 @@ public class HomeFragment extends Fragment {
         dialog.show();
     }
 
+    /**
+     * Checks whether the user is allowed to join a session before matching them.
+     */
     private void checkUserStatusAndLaunch() {
         UserApi api = ApiClient.getUserApi(requireContext());
 
@@ -181,6 +203,9 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * Explains why the user cannot start a focus session right now.
+     */
     private void showBannedNotificationModal(UserProfileResponse profile) {
         String message;
         if (profile.isBanned()) {
@@ -208,6 +233,7 @@ public class HomeFragment extends Fragment {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
+        // This dialog only warns the user, so the leave-session action is hidden.
         View btnBack = dialogView.findViewById(R.id.btnContinueStudying);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> dialog.dismiss());
@@ -221,6 +247,9 @@ public class HomeFragment extends Fragment {
         dialog.show();
     }
 
+    /**
+     * Starts the meeting flow with the currently selected focus duration.
+     */
     private void launchMeetingRoom() {
         MatchingApi matchingApi = ApiClient.getMatchingApi(requireContext());
         matchingApi.joinMeeting(selectedDurationMinutes).enqueue(new Callback<JoinMeetingResponse>() {
@@ -232,6 +261,8 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     JoinMeetingResponse meeting = response.body();
                     Intent intent = new Intent(requireContext(), MeetingRoomActivity.class);
+
+                    // Pass the duration and backend-provided channel into the meeting screen.
                     intent.putExtra(MeetingRoomActivity.EXTRA_FOCUS_DURATION, selectedDurationMinutes);
                     intent.putExtra(MeetingRoomActivity.EXTRA_CHANNEL_NAME, meeting.getChannelName());
                     startActivity(intent);

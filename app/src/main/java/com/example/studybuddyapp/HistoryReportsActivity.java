@@ -140,6 +140,9 @@ public class HistoryReportsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Maps backend report states to the shorter labels shown in the UI.
+     */
     private String mapStatusToLabel(String status) {
         switch (status) {
             case "ACTIONED":
@@ -153,6 +156,9 @@ public class HistoryReportsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Converts an ISO date string into the report history display format.
+     */
     private String formatDate(String isoDate) {
         if (isoDate == null || isoDate.length() < 10) return "";
         try {

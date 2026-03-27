@@ -27,6 +27,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Displays the user's pending tasks and allows basic task management actions.
+ */
 public class TaskListFragment extends Fragment {
 
     private LinearLayout taskContainer;
@@ -56,6 +59,9 @@ public class TaskListFragment extends Fragment {
         loadTasks();
     }
 
+    /**
+     * Loads the latest pending tasks from the backend whenever the fragment becomes active.
+     */
     private void loadTasks() {
         TaskApi api = ApiClient.getTaskApi(requireContext());
         api.getPendingTasks().enqueue(new Callback<List<TaskItem>>() {
@@ -78,9 +84,13 @@ public class TaskListFragment extends Fragment {
         });
     }
 
+    /**
+     * Rebuilds the task list from the current in-memory task data.
+     */
     private void renderTasks() {
         taskContainer.removeAllViews();
 
+        // Show the empty-state message when there are no tasks to render.
         if (currentTasks.isEmpty()) {
             tvEmptyTasks.setVisibility(View.VISIBLE);
             return;
@@ -100,6 +110,7 @@ public class TaskListFragment extends Fragment {
 
             tvTitle.setText(task.getTitle());
 
+            // Only show the note field when the task actually has extra text.
             if (task.getNote() != null && !task.getNote().isEmpty()) {
                 tvNote.setText("Note: " + task.getNote());
                 tvNote.setVisibility(View.VISIBLE);
@@ -111,11 +122,13 @@ public class TaskListFragment extends Fragment {
 
             ivStatus.setOnClickListener(v -> toggleTaskCompletion(task, ivStatus));
 
+            // Every rendered row can be deleted directly from the list.
             ivDelete.setVisibility(View.VISIBLE);
             ivDelete.setOnClickListener(v -> deleteTask(task));
 
             taskContainer.addView(row);
 
+            // Add a divider between rows so multiple tasks stay visually separated.
             if (i < currentTasks.size() - 1) {
                 View divider = new View(requireContext());
                 divider.setLayoutParams(new LinearLayout.LayoutParams(
@@ -126,6 +139,9 @@ public class TaskListFragment extends Fragment {
         }
     }
 
+    /**
+     * Toggles a task between complete and incomplete after the backend confirms the change.
+     */
     private void toggleTaskCompletion(TaskItem task, ImageView ivStatus) {
         TaskApi api = ApiClient.getTaskApi(requireContext());
         boolean currentlyCompleted = Boolean.TRUE.equals(task.getCompleted());
@@ -139,6 +155,7 @@ public class TaskListFragment extends Fragment {
             public void onResponse(Call<String> c, Response<String> response) {
                 if (!isAdded()) return;
                 if (response.isSuccessful()) {
+                    // Keep the local task state and icon in sync with the confirmed backend result.
                     boolean newState = !currentlyCompleted;
                     task.setCompleted(newState);
                     ivStatus.setImageResource(newState
@@ -155,6 +172,9 @@ public class TaskListFragment extends Fragment {
         });
     }
 
+    /**
+     * Deletes a task and refreshes the rendered list when the backend accepts the request.
+     */
     private void deleteTask(TaskItem task) {
         TaskApi api = ApiClient.getTaskApi(requireContext());
         api.deleteTask(task.getId()).enqueue(new Callback<String>() {
@@ -176,6 +196,9 @@ public class TaskListFragment extends Fragment {
         });
     }
 
+    /**
+     * Opens the create-task dialog and validates the required task title field.
+     */
     private void showCreateTaskDialog() {
         View dialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.dialog_create_task, null);
@@ -198,6 +221,7 @@ public class TaskListFragment extends Fragment {
             String title = etTask.getText().toString().trim();
             String note = etNote.getText().toString().trim();
 
+            // A task without a title is not useful, so stop here before making a request.
             if (title.isEmpty()) {
                 Toast.makeText(requireContext(),
                         "Please enter a task name.", Toast.LENGTH_SHORT).show();
@@ -211,6 +235,9 @@ public class TaskListFragment extends Fragment {
         dialog.show();
     }
 
+    /**
+     * Creates a new task and reloads the list so the screen reflects the backend state.
+     */
     private void createTask(String title, String note) {
         TaskApi api = ApiClient.getTaskApi(requireContext());
         api.createTask(new CreateTaskRequest(title, note.isEmpty() ? null : note))
@@ -234,6 +261,9 @@ public class TaskListFragment extends Fragment {
                 });
     }
 
+    /**
+     * Converts density-independent pixels to actual pixels for runtime-created views.
+     */
     private int dpToPx(int dp) {
         return Math.round(dp * getResources().getDisplayMetrics().density);
     }

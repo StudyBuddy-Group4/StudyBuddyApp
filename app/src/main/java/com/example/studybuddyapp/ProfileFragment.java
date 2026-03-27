@@ -19,6 +19,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Shows the user's profile details and links to profile-related actions.
+ */
 public class ProfileFragment extends Fragment {
 
     private TextView tvName;
@@ -64,6 +67,9 @@ public class ProfileFragment extends Fragment {
         loadProfileFromBackend();
     }
 
+    /**
+     * Displays any profile data that is already stored locally in the session.
+     */
     private void showCachedData() {
         SessionManager session = new SessionManager(requireContext());
         String username = session.getUsername();
@@ -76,6 +82,9 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Refreshes the profile from the backend and updates the cached session values.
+     */
     private void loadProfileFromBackend() {
         UserApi api = ApiClient.getUserApi(requireContext());
         api.getProfile().enqueue(new Callback<UserProfileResponse>() {
@@ -88,6 +97,7 @@ public class ProfileFragment extends Fragment {
                     tvName.setText(profile.getUsername());
                     tvId.setText("ID: " + profile.getId());
 
+                    // Keep the local session in sync with the latest backend profile data.
                     SessionManager session = new SessionManager(requireContext());
                     session.saveLoginSession(session.getToken(), profile.getId(),
                             profile.getUsername(), profile.isAdmin());
