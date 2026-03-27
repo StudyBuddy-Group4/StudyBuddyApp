@@ -20,6 +20,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Coordinates backend session tracking, task assignment, leave notifications, and restriction polling.
+ */
 class MeetingRoomSessionCoordinator {
 
     interface Callbacks {
@@ -50,18 +53,27 @@ class MeetingRoomSessionCoordinator {
         this.callbacks = callbacks;
     }
 
+    /**
+     * Starts backend tracking after Agora confirms that the user joined the channel.
+     */
     void onChannelJoined() {
         isInChannel = true;
         recordSessionStart();
         startBanPolling();
     }
 
+    /**
+     * Stops backend polling and notifies the matching service when the meeting is over.
+     */
     void onMeetingEnded() {
         isInChannel = false;
         stopBanPolling();
         notifyMatchingLeave();
     }
 
+    /**
+     * Marks the current backend session as completed when the focus timer finishes.
+     */
     void recordSessionComplete() {
         if (backendSessionId < 0) {
             return;
@@ -80,6 +92,9 @@ class MeetingRoomSessionCoordinator {
         });
     }
 
+    /**
+     * Marks the current backend session as incomplete when the user leaves early.
+     */
     void recordSessionIncomplete() {
         if (backendSessionId < 0) {
             return;
@@ -98,11 +113,17 @@ class MeetingRoomSessionCoordinator {
         });
     }
 
+    /**
+     * Starts a fresh backend session record for another focus round in the same room.
+     */
     void restartSession() {
         backendSessionId = -1;
         recordSessionStart();
     }
 
+    /**
+     * Polls the backend for restriction updates while the user remains in the meeting.
+     */
     private void startBanPolling() {
         stopBanPolling();
         banCheckHandler = new Handler(Looper.getMainLooper());
@@ -112,6 +133,7 @@ class MeetingRoomSessionCoordinator {
                 if (!isInChannel) {
                     return;
                 }
+                // Polling stays lightweight and repeats on a fixed interval until the meeting ends.
                 checkBanStatus();
                 if (banCheckHandler != null) {
                     banCheckHandler.postDelayed(this, BAN_CHECK_INTERVAL_MS);
@@ -120,6 +142,9 @@ class MeetingRoomSessionCoordinator {
         }, BAN_CHECK_INTERVAL_MS);
     }
 
+    /**
+     * Cancels any pending restriction checks.
+     */
     private void stopBanPolling() {
         if (banCheckHandler != null) {
             banCheckHandler.removeCallbacksAndMessages(null);
@@ -127,17 +152,22 @@ class MeetingRoomSessionCoordinator {
         }
     }
 
+    /**
+     * Checks whether the backend has restricted the user during the active session.
+     */
     private void checkBanStatus() {
         UserApi api = ApiClient.getUserApi(appContext);
         api.getProfile().enqueue(new Callback<UserProfileResponse>() {
             @Override
             public void onResponse(Call<UserProfileResponse> call,
                                    Response<UserProfileResponse> response) {
+                // Ignore late callbacks when the room has already ended or the activity is gone.
                 if (!isInChannel || !callbacks.shouldHandleCallbacks()) {
                     return;
                 }
                 UserProfileResponse profile = response.body();
                 if (response.isSuccessful() && profile != null && profile.isCurrentlyRestricted()) {
+                    // Once restricted, stop polling and let the activity decide how to remove the user.
                     stopBanPolling();
                     callbacks.onUserRestricted(profile);
                 }
@@ -150,6 +180,9 @@ class MeetingRoomSessionCoordinator {
         });
     }
 
+    /**
+     * Creates the backend session record used for completion tracking and task assignment.
+     */
     private void recordSessionStart() {
         SessionApi api = ApiClient.getSessionApi(appContext);
         StartSessionRequest request = new StartSessionRequest(focusDurationMinutes, channelName);
@@ -161,6 +194,7 @@ class MeetingRoomSessionCoordinator {
                 if (response.isSuccessful() && body != null) {
                     backendSessionId = body.getSessionId();
                     Log.d(TAG, "Backend session started: " + backendSessionId);
+                    // Task assignment only happens after the backend has created a concrete session id.
                     assignPendingTasks(backendSessionId);
                 }
             }
@@ -172,6 +206,9 @@ class MeetingRoomSessionCoordinator {
         });
     }
 
+    /**
+     * Associates any pending tasks with the current backend session.
+     */
     private void assignPendingTasks(long sessionId) {
         TaskApi taskApi = ApiClient.getTaskApi(appContext);
         taskApi.assignTasksToSession(new AssignTasksRequest(sessionId))
@@ -188,6 +225,9 @@ class MeetingRoomSessionCoordinator {
                 });
     }
 
+    /**
+     * Tells the matching service that this user has left the room.
+     */
     private void notifyMatchingLeave() {
         if (matchingLeaveNotified || channelName == null || channelName.isEmpty()) {
             return;

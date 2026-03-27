@@ -64,11 +64,13 @@ public class EditProfileActivity extends AppCompatActivity {
      * Loads the latest profile values from the backend and falls back to cached session data if needed.
      */
     private void loadProfile() {
+        // Prefer fresh backend data so the form reflects the server's current profile values.
         UserApi api = ApiClient.getUserApi(this);
         api.getProfile().enqueue(new Callback<UserProfileResponse>() {
             @Override
             public void onResponse(Call<UserProfileResponse> call,
                                    Response<UserProfileResponse> response) {
+                // Only update the UI when the backend returns a complete profile object.
                 if (response.isSuccessful() && response.body() != null) {
                     // A successful profile response refreshes both the editable fields and header.
                     UserProfileResponse profile = response.body();
@@ -83,9 +85,13 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
                 // If the backend cannot be reached, keep the screen usable with cached session data.
                 SessionManager session = new SessionManager(EditProfileActivity.this);
+
+                // The cached username is still useful for both the header and the editable field.
                 etUsername.setText(session.getUsername());
                 tvHeaderName.setText(session.getUsername());
                 long uid = session.getUserId();
+
+                // Only show the numeric id header when the session actually has one stored.
                 if (uid > 0) tvHeaderId.setText("ID: " + uid);
             }
         });
@@ -105,10 +111,13 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
 
+        // Send the latest username and email as a profile update request.
+        // The backend remains the source of truth, but the screen updates immediately after success.
         UserApi api = ApiClient.getUserApi(this);
         api.updateProfile(new UpdateProfileRequest(username, email)).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                // A successful update should be reflected immediately in both the session and header.
                 if (response.isSuccessful()) {
                     // Keep the locally cached session aligned with the updated username.
                     SessionManager session = new SessionManager(EditProfileActivity.this);
@@ -122,6 +131,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     finish();
                 } else {
                     // Show the clearest backend error we can extract from the response.
+                    // This keeps validation errors visible without duplicating parsing logic here.
                     String msg = ErrorUtils.parseError(response, "Update failed");
                     Toast.makeText(EditProfileActivity.this, msg,
                             Toast.LENGTH_LONG).show();
@@ -131,6 +141,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 // Network failures keep the user on this screen so they can retry later.
+                // The current field values stay in place so the user does not lose their edits.
                 Toast.makeText(EditProfileActivity.this,
                         "Network error", Toast.LENGTH_SHORT).show();
             }

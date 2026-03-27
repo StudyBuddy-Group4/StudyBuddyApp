@@ -69,6 +69,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             }
 
             // The confirmation password must match before we attempt an update.
+            // This prevents sending obviously invalid password combinations to the backend.
             if (!newPw.equals(confirm)) {
                 Toast.makeText(this, "New passwords do not match", Toast.LENGTH_SHORT).show();
                 return;
@@ -86,10 +87,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
             body.put("currentPassword", current);
             body.put("newPassword", newPw);
 
+            // The backend validates the current password and applies the update if allowed.
+            // Local validation only handles the obvious cases before the request is sent.
             UserApi api = ApiClient.getUserApi(this);
             api.changePassword(body).enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
+                    // A successful password change moves the user into the confirmation screen.
                     if (response.isSuccessful()) {
                         // A successful change sends the user to the confirmation screen.
                         startActivity(new Intent(ChangePasswordActivity.this,
@@ -97,6 +101,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         finish();
                     } else {
                         // Surface the clearest backend error message we can extract.
+                        // This keeps server-side validation messages readable without extra parsing here.
                         String msg = ErrorUtils.parseError(response,
                                 "Failed to change password.");
                         Toast.makeText(ChangePasswordActivity.this, msg,
@@ -107,6 +112,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     // Network failures keep the user on this form so they can try again later.
+                    // Leaving the screen open also preserves the current field values for a retry.
                     Toast.makeText(ChangePasswordActivity.this,
                             "Network error. Please try again.", Toast.LENGTH_SHORT).show();
                 }

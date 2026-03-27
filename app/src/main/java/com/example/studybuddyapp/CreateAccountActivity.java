@@ -81,6 +81,9 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             // Lock the button while the registration request is in progress.
             btnSignUp.setEnabled(false);
+
+            // Send the form values as a registration request to the backend.
+            // The backend still owns duplicate-email checks and final account creation.
             AuthApi api = ApiClient.getAuthApi(this);
             api.register(new RegisterRequest(username, email, password)).enqueue(new Callback<String>() {
                 @Override
@@ -95,6 +98,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 .setTitle(R.string.congratulations)
                                 .setMessage(R.string.account_created_msg)
                                 .setPositiveButton(R.string.btn_back, (dialog, which) -> {
+                                    // Reuse the existing login screen instead of stacking another auth flow.
                                     Intent intent = new Intent(
                                             CreateAccountActivity.this, LoginActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -118,6 +122,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 public void onFailure(Call<String> call, Throwable t) {
                     // Network failures also need to unlock the button for another attempt.
                     // We keep the message simple here because the common fix is to retry later.
+                    // The typed values stay in the form so the user does not have to re-enter them.
                     btnSignUp.setEnabled(true);
                     Toast.makeText(CreateAccountActivity.this,
                             "Network error. Is the backend running?", Toast.LENGTH_SHORT).show();

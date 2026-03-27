@@ -39,6 +39,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Lets an administrator observe a reported meeting room and apply moderation actions to participants.
+ */
 public class AdminMeetingRoomActivity extends AppCompatActivity {
 
     private static final String TAG = "AdminMeetingRoom";
@@ -61,11 +64,13 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
 
         @Override
         public void onUserJoined(int uid, int elapsed) {
+            // Agora callbacks are marshalled back to the UI thread before touching the participant grid.
             runOnUiThread(() -> addParticipant(uid));
         }
 
         @Override
         public void onUserOffline(int uid, int reason) {
+            // Participant removal can change the grid structure, so it also runs on the UI thread.
             runOnUiThread(() -> removeParticipant(uid));
         }
 
@@ -78,9 +83,11 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Keep the moderation screen awake while the admin is reviewing a live meeting.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_admin_meeting_room);
 
+        // Read the room and report metadata passed from the moderation flow.
         channelName = getIntent().getStringExtra("channel_name");
         reportId = getIntent().getLongExtra("report_id", -1);
         reportedUserId = getIntent().getLongExtra("reported_user_id", -1);
@@ -88,6 +95,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         participantGrid = findViewById(R.id.participantGrid);
 
         findViewById(R.id.ivBack).setOnClickListener(v -> {
+            // Leaving this screen should always clean up the Agora spectator connection first.
             leaveAndCleanup();
             finish();
         });
@@ -101,6 +109,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         if (checkPermissions()) {
             initAndJoinAsSpectator();
         } else {
+            // Admin review still needs camera permission because Agora requires the same join prerequisites.
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA},
                     PERMISSION_REQ_ID);
@@ -109,10 +118,14 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        // Ensure Agora resources are released even if the activity is closed abruptly.
         leaveAndCleanup();
         super.onDestroy();
     }
 
+    /**
+     * Checks whether the minimum permissions needed for the spectator join flow are present.
+     */
     private boolean checkPermissions() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED;
@@ -128,6 +141,9 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Joins the reported meeting in a passive spectator configuration.
+     */
     private void initAndJoinAsSpectator() {
         try {
             RtcEngineConfig config = new RtcEngineConfig();
@@ -144,6 +160,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
 
         ChannelMediaOptions options = new ChannelMediaOptions();
         options.channelProfile = Constants.CHANNEL_PROFILE_COMMUNICATION;
+        // The admin joins as a silent participant who only observes audio and video.
         options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
         options.publishCameraTrack = false;
         options.publishMicrophoneTrack = false;
@@ -157,6 +174,9 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         rtcEngine.joinChannel(token, channelName, uid, options);
     }
 
+    /**
+     * Leaves the Agora channel and destroys the engine instance.
+     */
     private void leaveAndCleanup() {
         if (rtcEngine != null) {
             rtcEngine.leaveChannel();
@@ -165,18 +185,27 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Adds a remote participant to the local list and rebuilds the grid layout.
+     */
     private void addParticipant(int uid) {
         if (remoteUids.contains(uid)) return;
         remoteUids.add(uid);
         rebuildGrid();
     }
 
+    /**
+     * Removes a participant from the grid and surface cache.
+     */
     private void removeParticipant(int uid) {
         remoteUids.remove(Integer.valueOf(uid));
         remoteSurfaces.remove(uid);
         rebuildGrid();
     }
 
+    /**
+     * Recreates the two-column participant grid shown to the moderator.
+     */
     private void rebuildGrid() {
         participantGrid.removeAllViews();
 
@@ -185,6 +214,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
 
         for (int i = 0; i < remoteUids.size(); i++) {
             if (countInRow == 0) {
+                // Start a new horizontal row every two participants.
                 currentRow = new LinearLayout(this);
                 currentRow.setOrientation(LinearLayout.HORIZONTAL);
                 currentRow.setGravity(Gravity.CENTER);
@@ -208,6 +238,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         }
 
         if (countInRow == 1 && currentRow != null) {
+            // Pad out the last row so a single participant still aligns like a two-column grid.
             View spacer = new View(this);
             LinearLayout.LayoutParams spacerLp = new LinearLayout.LayoutParams(
                     0, dpToPx(150), 1f);
@@ -216,6 +247,9 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Builds a single participant card with video, uid label, and moderation action button.
+     */
     private FrameLayout createParticipantCell(int uid) {
         FrameLayout frame = new FrameLayout(this);
         frame.setBackgroundResource(R.drawable.bg_video_rounded);
@@ -229,6 +263,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
                 FrameLayout.LayoutParams.MATCH_PARENT));
 
         if (rtcEngine != null) {
+            // Remote video is rebound whenever the grid is rebuilt.
             rtcEngine.setupRemoteVideo(new VideoCanvas(surface, VideoCanvas.RENDER_MODE_HIDDEN, uid));
         }
 
@@ -254,11 +289,15 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         btnLp.setMargins(0, 0, dpToPx(8), dpToPx(8));
         frame.addView(prohibitBtn, btnLp);
 
+        // Each participant card opens the same decision dialog with the selected target uid.
         prohibitBtn.setOnClickListener(v -> showAdminDecisionDialog(uid));
 
         return frame;
     }
 
+    /**
+     * Shows the moderation decision dialog for a selected participant.
+     */
     private void showAdminDecisionDialog(int targetUid) {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_admin_decision, null);
 
@@ -277,6 +316,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         });
 
         dialogView.findViewById(R.id.btnBan3Days).setOnClickListener(v -> {
+            // Temporary bans and permanent bans share the same backend action endpoint.
             executeAdminAction(targetUid, "BAN_3_DAYS");
             dialog.dismiss();
         });
@@ -291,6 +331,9 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * Sends the selected moderation action to the backend.
+     */
     private void executeAdminAction(int targetUid, String actionType) {
         ModerationApi api = ApiClient.getModerationApi(this);
 
@@ -298,6 +341,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+                    // Successful actions optionally mark the linked report as resolved.
                     Toast.makeText(AdminMeetingRoomActivity.this,
                             "Action " + actionType + " applied to user " + targetUid,
                             Toast.LENGTH_SHORT).show();
@@ -305,6 +349,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
                         markReportActioned();
                     }
                 } else {
+                    // Backend rejection usually indicates an invalid state or already-handled participant.
                     Toast.makeText(AdminMeetingRoomActivity.this,
                             "Server rejected the action.", Toast.LENGTH_SHORT).show();
                 }
@@ -312,12 +357,16 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                // Network errors leave the admin on the same room so they can retry the action.
                 Toast.makeText(AdminMeetingRoomActivity.this,
                         "Network error.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    /**
+     * Marks the originating moderation report as actioned after a successful admin action.
+     */
     private void markReportActioned() {
         ModerationApi api = ApiClient.getModerationApi(this);
         api.updateReportStatus(reportId, "ACTIONED").enqueue(new Callback<Void>() {
@@ -330,6 +379,9 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Converts dp units for the runtime-generated participant grid.
+     */
     private int dpToPx(int dp) {
         return Math.round(dp * getResources().getDisplayMetrics().density);
     }

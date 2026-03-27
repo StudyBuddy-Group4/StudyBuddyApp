@@ -64,15 +64,19 @@ public class DeleteAccountActivity extends AppCompatActivity {
             String password = etPassword.getText().toString().trim();
 
             // Require the password before making a destructive backend request.
+            // This keeps accidental empty submissions away from the server.
             if (password.isEmpty()) {
                 Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            // Only the password is needed for the backend delete-account endpoint.
+            // The server still performs the final credential check before deleting the account.
             UserApi api = ApiClient.getUserApi(this);
             api.deleteAccount(new DeleteAccountRequest(password)).enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
+                    // A successful backend response means the account no longer exists.
                     if (response.isSuccessful()) {
                         // A successful deletion also removes the local session and API client state.
                         SessionManager session = new SessionManager(DeleteAccountActivity.this);
@@ -82,6 +86,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
                                 "Account Deleted", Toast.LENGTH_SHORT).show();
 
                         // Clear the task stack so the user cannot navigate back into the account.
+                        // The launch screen becomes the new entry point after deletion.
                         Intent intent = new Intent(
                                 DeleteAccountActivity.this, LaunchOptionsActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -89,6 +94,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         // Show the clearest backend error message available for the failed deletion.
+                        // The common failure case is a wrong password, but we still parse the response first.
                         String msg = ErrorUtils.parseError(response, "Incorrect password");
                         Toast.makeText(DeleteAccountActivity.this, msg,
                                 Toast.LENGTH_LONG).show();
@@ -98,6 +104,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     // Network failures keep the user on this screen so they can retry later.
+                    // Nothing local is cleared until the backend confirms deletion.
                     Toast.makeText(DeleteAccountActivity.this,
                             "Network error", Toast.LENGTH_SHORT).show();
                 }

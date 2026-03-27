@@ -31,8 +31,11 @@ import retrofit2.Response;
  */
 public class HomeFragment extends Fragment {
 
+    // These three chips mirror the available focus-time choices shown on the home screen.
     private TextView chip15, chip30, chipCustom;
+    // Keep the selected duration in memory so the same value can be reused by dialogs and matching.
     private int selectedDurationMinutes = 15;
+    // Track whether the custom chip currently represents a user-entered duration.
     private boolean isCustomSelected = false;
 
     @Nullable
@@ -46,12 +49,14 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Bind the selectable time chips and the primary action button for this screen.
         chip15 = view.findViewById(R.id.chip_15_min);
         chip30 = view.findViewById(R.id.chip_30_min);
         chipCustom = view.findViewById(R.id.chip_custom);
         Button btnStart = view.findViewById(R.id.btn_start);
 
         chip15.setOnClickListener(v -> {
+            // Reset back to the default preset when the user chooses 15 minutes again.
             selectedDurationMinutes = 15;
             isCustomSelected = false;
             chipCustom.setText(getString(R.string.time_custom));
@@ -59,20 +64,24 @@ public class HomeFragment extends Fragment {
         });
 
         chip30.setOnClickListener(v -> {
+            // Reset back to the second preset and clear any previous custom label.
             selectedDurationMinutes = 30;
             isCustomSelected = false;
             chipCustom.setText(getString(R.string.time_custom));
             selectChip(chip30);
         });
 
+        // Custom duration entry is handled in a dialog so the main screen stays simple.
         chipCustom.setOnClickListener(v -> showCustomMinutesDialog());
 
         btnStart.setOnClickListener(v -> {
+            // Guard against invalid state before the user enters the matching flow.
             if (selectedDurationMinutes <= 0) {
                 Toast.makeText(requireContext(),
                         "Please enter a valid number of minutes.", Toast.LENGTH_SHORT).show();
                 return;
             }
+            // The confirmation step gives the user one last chance to add tasks first.
             showReadyToFocusDialog();
         });
     }
@@ -84,9 +93,11 @@ public class HomeFragment extends Fragment {
         TextView[] chips = {chip15, chip30, chipCustom};
         for (TextView chip : chips) {
             if (chip == selected) {
+                // Highlight only the active chip so the current duration is obvious.
                 chip.setBackgroundResource(R.drawable.bg_time_chip_selected);
                 chip.setTextColor(getResources().getColor(R.color.white, null));
             } else {
+                // Reset all non-selected chips back to the default appearance.
                 chip.setBackgroundResource(R.drawable.bg_time_chip);
                 chip.setTextColor(getResources().getColor(R.color.dark_text, null));
             }
@@ -102,6 +113,7 @@ public class HomeFragment extends Fragment {
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         input.setPadding(50, 30, 50, 30);
 
+        // Keep custom duration entry in a simple modal instead of crowding the home screen layout.
         new AlertDialog.Builder(requireContext())
                 .setTitle("Custom focus time")
                 .setMessage("Enter the number of minutes:")
@@ -131,6 +143,7 @@ public class HomeFragment extends Fragment {
                     chipCustom.setText(minutes + " min");
                     selectChip(chipCustom);
                 })
+                // Cancel leaves the previous duration untouched.
                 .setNegativeButton("Cancel", null)
                 .show();
     }
@@ -142,12 +155,14 @@ public class HomeFragment extends Fragment {
         View dialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.dialog_ready_to_focus, null);
 
+        // This modal mirrors the actual user decision point before matchmaking begins.
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
                 .setCancelable(true)
                 .create();
 
         if (dialog.getWindow() != null) {
+            // The layout already contains its own rounded background.
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
@@ -161,6 +176,7 @@ public class HomeFragment extends Fragment {
         });
 
         dialogView.findViewById(R.id.btn_start_anyway).setOnClickListener(v -> {
+            // Starting anyway continues into the account-status check and matching flow.
             dialog.dismiss();
             checkUserStatusAndLaunch();
         });
@@ -172,23 +188,28 @@ public class HomeFragment extends Fragment {
      * Checks whether the user is allowed to join a session before matching them.
      */
     private void checkUserStatusAndLaunch() {
+        // Always verify the latest restriction state before sending the user into a meeting room.
         UserApi api = ApiClient.getUserApi(requireContext());
 
         api.getProfile().enqueue(new Callback<UserProfileResponse>() {
             @Override
             public void onResponse(Call<UserProfileResponse> call,
                                    Response<UserProfileResponse> response) {
+                // Stop if the fragment is no longer attached to a valid activity.
                 if (!isAdded()) return;
 
                 if (response.isSuccessful() && response.body() != null) {
                     UserProfileResponse profile = response.body();
 
+                    // Restricted users get a warning modal instead of entering the matching queue.
                     if (profile.isCurrentlyRestricted()) {
                         showBannedNotificationModal(profile);
                     } else {
+                        // Only unrestricted users continue into the actual meeting lookup.
                         launchMeetingRoom();
                     }
                 } else {
+                    // A failed profile lookup blocks the flow because restriction status is unknown.
                     Toast.makeText(requireContext(),
                             "Failed to verify account status.", Toast.LENGTH_SHORT).show();
                 }
@@ -196,6 +217,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                // Network failures also block the flow because the restriction check could not finish.
                 if (!isAdded()) return;
                 Toast.makeText(requireContext(),
                         "Network error checking status.", Toast.LENGTH_SHORT).show();
@@ -209,8 +231,10 @@ public class HomeFragment extends Fragment {
     private void showBannedNotificationModal(UserProfileResponse profile) {
         String message;
         if (profile.isBanned()) {
+            // Permanent bans use a fixed explanation because there is no end date to show.
             message = "Your account has been permanently banned due to inappropriate behavior.";
         } else {
+            // Temporary restrictions include the backend expiry value when it is available.
             message = "Your account is temporarily restricted until "
                     + (profile.getBannedUntil() != null ? profile.getBannedUntil() : "unknown")
                     + " due to inappropriate behavior.";
@@ -221,6 +245,7 @@ public class HomeFragment extends Fragment {
 
         TextView tvMessage = dialogView.findViewById(R.id.tvWarningMessage);
         if (tvMessage != null) {
+            // Reuse the shared warning dialog and swap in the account-specific restriction message.
             tvMessage.setText(message);
         }
 
@@ -236,6 +261,7 @@ public class HomeFragment extends Fragment {
         // This dialog only warns the user, so the leave-session action is hidden.
         View btnBack = dialogView.findViewById(R.id.btnContinueStudying);
         if (btnBack != null) {
+            // The only action available here is dismissing the warning.
             btnBack.setOnClickListener(v -> dialog.dismiss());
         }
 
@@ -251,11 +277,13 @@ public class HomeFragment extends Fragment {
      * Starts the meeting flow with the currently selected focus duration.
      */
     private void launchMeetingRoom() {
+        // Ask the backend for a room that matches the selected focus duration.
         MatchingApi matchingApi = ApiClient.getMatchingApi(requireContext());
         matchingApi.joinMeeting(selectedDurationMinutes).enqueue(new Callback<JoinMeetingResponse>() {
             @Override
             public void onResponse(Call<JoinMeetingResponse> call,
                                    Response<JoinMeetingResponse> response) {
+                // Ignore late callbacks after the fragment has been detached.
                 if (!isAdded()) return;
 
                 if (response.isSuccessful() && response.body() != null) {
@@ -267,6 +295,7 @@ public class HomeFragment extends Fragment {
                     intent.putExtra(MeetingRoomActivity.EXTRA_CHANNEL_NAME, meeting.getChannelName());
                     startActivity(intent);
                 } else {
+                    // Keep the failure message simple so the user can retry immediately.
                     Toast.makeText(requireContext(),
                             "Failed to find a meeting. Please try again.",
                             Toast.LENGTH_SHORT).show();
@@ -275,6 +304,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<JoinMeetingResponse> call, Throwable t) {
+                // Transport errors leave the user on the home screen with their chosen duration intact.
                 if (!isAdded()) return;
                 Toast.makeText(requireContext(),
                         "Network error. Please try again.",
