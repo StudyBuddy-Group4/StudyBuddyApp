@@ -1,5 +1,8 @@
 package com.example.studybuddyapp;
 
+/**
+ * Stores Agora-related constants and fallback channel naming logic.
+ */
 public final class AgoraConfig {
 
     // Agora App ID 

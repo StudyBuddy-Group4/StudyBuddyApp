@@ -25,6 +25,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Displays the user's focus statistics and session history.
+ */
 public class StatisticsFragment extends Fragment {
 
     private TextView tvRating;
@@ -58,6 +61,9 @@ public class StatisticsFragment extends Fragment {
         loadHistory();
     }
 
+    /**
+     * Loads the current rating and total focus time from the backend.
+     */
     private void loadStatistics() {
         SessionApi api = ApiClient.getSessionApi(requireContext());
         api.getStatistics().enqueue(new Callback<SessionStatistics>() {
@@ -83,6 +89,9 @@ public class StatisticsFragment extends Fragment {
         });
     }
 
+    /**
+     * Loads the user's previous sessions and displays them in the history section.
+     */
     private void loadHistory() {
         SessionApi api = ApiClient.getSessionApi(requireContext());
         api.getHistory().enqueue(new Callback<List<SessionHistoryItem>>() {
@@ -102,6 +111,9 @@ public class StatisticsFragment extends Fragment {
         });
     }
 
+    /**
+     * Renders each session row and any completed tasks that belong to that session.
+     */
     private void populateHistory(List<SessionHistoryItem> sessions) {
         sessionHistoryContainer.removeAllViews();
 
@@ -155,6 +167,9 @@ public class StatisticsFragment extends Fragment {
         }
     }
 
+    /**
+     * Converts an ISO date string into the format shown in the history list.
+     */
     private String formatDate(String isoDate) {
         if (isoDate == null || isoDate.length() < 10) return "";
         try {
@@ -170,6 +185,9 @@ public class StatisticsFragment extends Fragment {
         }
     }
 
+    /**
+     * Shows a short explanation of how the rating is calculated.
+     */
     private void showRatingExplanation() {
         new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.how_rating_calculated)
@@ -178,6 +196,9 @@ public class StatisticsFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Converts density-independent pixels to actual pixels for runtime views.
+     */
     private int dpToPx(int dp) {
         return Math.round(dp * getResources().getDisplayMetrics().density);
     }
