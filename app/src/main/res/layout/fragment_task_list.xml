@@ -5,11 +5,15 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient_top">
 
+    <!-- Task list page -->
+    <!-- Shows the task list and the add-task button -->
+    <!-- Main content stack -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- Screen title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,6 +25,8 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <!-- White content card -->
+        <!-- Scrolls when the task list gets long -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -28,12 +34,16 @@
             android:elevation="2dp"
             android:fillViewport="true">
 
+            <!-- Page content -->
+            <!-- Holds the empty state and the generated task rows -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="20dp">
 
+                <!-- Empty state -->
+                <!-- Shown when there are no tasks -->
                 <TextView
                     android:id="@+id/tvEmptyTasks"
                     android:layout_width="wrap_content"
@@ -45,6 +55,8 @@
                     android:textSize="15sp"
                     android:visibility="gone" />
 
+                <!-- Task list container -->
+                <!-- Task rows are added here at runtime -->
                 <LinearLayout
                     android:id="@+id/taskContainer"
                     android:layout_width="match_parent"
@@ -55,7 +67,8 @@
         </ScrollView>
     </LinearLayout>
 
-    <!-- FAB -->
+    <!-- Add-task button -->
+    <!-- Floating action button -->
     <FrameLayout
         android:id="@+id/fab_add_task"
         android:layout_width="56dp"
@@ -69,6 +82,7 @@
         android:elevation="6dp"
         android:focusable="true">
 
+        <!-- Plus icon -->
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"

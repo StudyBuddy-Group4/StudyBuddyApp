@@ -7,6 +7,8 @@
     android:orientation="vertical"
     android:padding="24dp">
 
+    <!-- Admin decision dialog -->
+    <!-- Dialog title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,6 +18,8 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
+    <!-- Kick-out button -->
+    <!-- Removes the participant without a ban -->
     <Button
         android:id="@+id/btnKickOut"
         style="@style/PrimaryButton"
@@ -29,6 +33,8 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <!-- Temporary ban button -->
+    <!-- Applies a three-day ban -->
     <Button
         android:id="@+id/btnBan3Days"
         style="@style/PrimaryButton"
@@ -42,6 +48,8 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <!-- Permanent ban button -->
+    <!-- Applies permanent ban -->
     <Button
         android:id="@+id/btnBanPermanently"
         style="@style/PrimaryButton"
@@ -55,6 +63,8 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <!-- Back button -->
+    <!-- Closes the dialog without taking action -->
     <Button
         android:id="@+id/btnBack"
         style="@style/SecondaryButton"

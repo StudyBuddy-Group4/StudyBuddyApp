@@ -10,6 +10,8 @@
     android:paddingEnd="28dp"
     android:paddingBottom="28dp">
 
+    <!-- Session completed dialog -->
+    <!-- Completion message -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,6 +21,8 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <!-- Home button -->
+    <!-- Returns to the home page -->
     <Button
         android:id="@+id/btnHome"
         style="@style/PrimaryButton"
@@ -32,6 +36,8 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <!-- New-session button -->
+    <!-- Starts another focus session -->
     <Button
         android:id="@+id/btnStartNewSession"
         style="@style/SecondaryButton"
@@ -45,6 +51,8 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <!-- Task-list button -->
+    <!-- Opens the task list after the session -->
     <Button
         android:id="@+id/btnGoToTaskList"
         style="@style/SecondaryButton"

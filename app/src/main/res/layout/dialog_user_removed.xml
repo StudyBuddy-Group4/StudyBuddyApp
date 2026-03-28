@@ -10,6 +10,8 @@
     android:paddingEnd="28dp"
     android:paddingBottom="28dp">
 
+    <!-- User removed dialog -->
+    <!-- Removal title -->
     <TextView
         android:id="@+id/tvRemovedTitle"
         android:layout_width="wrap_content"
@@ -20,6 +22,8 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <!-- Removal message -->
+    <!-- Filled with the reason text at runtime -->
     <TextView
         android:id="@+id/tvRemovedMessage"
         android:layout_width="wrap_content"
@@ -29,6 +33,8 @@
         android:textColor="@color/dark_text"
         android:textSize="15sp" />
 
+    <!-- Back button -->
+    <!-- Closes the dialog and returns -->
     <Button
         android:id="@+id/btnBack"
         style="@style/SecondaryButton"

@@ -10,6 +10,8 @@
     android:paddingEnd="28dp"
     android:paddingBottom="28dp">
 
+    <!-- Exit warning dialog -->
+    <!-- Warning message -->
     <TextView
         android:id="@+id/tvWarningMessage"
         android:layout_width="wrap_content"
@@ -20,6 +22,8 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <!-- Continue button -->
+    <!-- Keeps the user in the session -->
     <Button
         android:id="@+id/btnContinueStudying"
         style="@style/PrimaryButton"
@@ -33,6 +37,8 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <!-- Leave button -->
+    <!-- Ends the current session -->
     <Button
         android:id="@+id/btnLeaveSession"
         style="@style/SecondaryButton"

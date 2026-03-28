@@ -7,6 +7,9 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
+    <!-- History reports page -->
+    <!-- Shows the admin header and the report list -->
+    <!-- Green header area -->
     <View
         android:id="@+id/headerBackground"
         android:layout_width="0dp"
@@ -17,6 +20,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Back button -->
+    <!-- Returns to the admin profile flow -->
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="28dp"
@@ -29,6 +34,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />
 
+    <!-- Screen title -->
+    <!-- Centered inside the green header -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -42,6 +49,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/headerBackground" />
 
+    <!-- White content card -->
+    <!-- Scrolls when the report list gets long -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -52,12 +61,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerBackground">
 
+        <!-- Page content -->
+        <!-- Holds the admin header and the generated report rows -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp">
 
+            <!-- Admin name -->
+            <!-- Shown above the report list -->
             <TextView
                 android:id="@+id/tvAdminName"
                 android:layout_width="wrap_content"
@@ -69,6 +82,8 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <!-- Role label -->
+            <!-- Keeps the admin role visible under the name -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -78,6 +93,8 @@
                 android:textColor="@color/secondary_text"
                 android:textSize="14sp" />
 
+            <!-- Admin id -->
+            <!-- Secondary identity line -->
             <TextView
                 android:id="@+id/tvAdminId"
                 android:layout_width="wrap_content"
@@ -88,6 +105,8 @@
                 android:textColor="@color/secondary_text"
                 android:textSize="14sp" />
 
+            <!-- Divider -->
+            <!-- Separates the admin header from the list content -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -95,6 +114,9 @@
                 android:layout_marginBottom="16dp"
                 android:background="@color/input_field_bg" />
 
+            <!-- Report list container -->
+            <!-- Rows are added here at runtime -->
+            <!-- Starts empty in the layout file -->
             <LinearLayout
                 android:id="@+id/reportsContainer"
                 android:layout_width="match_parent"

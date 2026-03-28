@@ -7,6 +7,8 @@
     android:paddingTop="12dp"
     android:paddingBottom="12dp">
 
+    <!-- Task row -->
+    <!-- Task status icon -->
     <ImageView
         android:id="@+id/ivTaskStatus"
         android:layout_width="28dp"
@@ -14,6 +16,8 @@
         android:contentDescription="Task status"
         android:src="@drawable/ic_unchecked_circle" />
 
+    <!-- Text block -->
+    <!-- Holds the task title and optional note -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -21,6 +25,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
+        <!-- Task title -->
         <TextView
             android:id="@+id/tvTaskTitle"
             android:layout_width="wrap_content"
@@ -29,6 +34,8 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+        <!-- Task note -->
+        <!-- Hidden when the task has no note -->
         <TextView
             android:id="@+id/tvTaskNote"
             android:layout_width="wrap_content"
@@ -39,6 +46,8 @@
             android:visibility="gone" />
     </LinearLayout>
 
+    <!-- Delete icon -->
+    <!-- Hidden until delete is allowed -->
     <ImageView
         android:id="@+id/ivDeleteTask"
         android:layout_width="24dp"

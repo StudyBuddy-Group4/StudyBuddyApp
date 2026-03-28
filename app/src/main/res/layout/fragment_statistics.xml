@@ -5,6 +5,9 @@
     android:background="@drawable/bg_gradient_top"
     android:orientation="vertical">
 
+    <!-- Statistics page -->
+    <!-- Shows rating, focus time, and session history -->
+    <!-- Screen title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,6 +19,8 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <!-- White content card -->
+    <!-- Scrolls when the history list gets long -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,6 +28,8 @@
         android:elevation="2dp"
         android:fillViewport="true">
 
+        <!-- Page content -->
+        <!-- Keeps all statistics in one vertical column -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,12 +38,15 @@
             android:padding="24dp">
 
             <!-- Personal Rating -->
+            <!-- Rating row -->
+            <!-- Places the score beside the help icon -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+                <!-- Rating value -->
                 <TextView
                     android:id="@+id/tvRating"
                     android:layout_width="wrap_content"
@@ -46,6 +56,8 @@
                     android:textSize="48sp"
                     android:textStyle="bold" />
 
+                <!-- Rating help icon -->
+                <!-- Opens the explanation dialog -->
                 <ImageView
                     android:id="@+id/ic_question"
                     android:layout_width="22dp"
@@ -58,6 +70,7 @@
                     android:src="@drawable/ic_question_mark" />
             </LinearLayout>
 
+            <!-- Rating label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -66,6 +79,7 @@
                 android:textSize="14sp" />
 
             <!-- Accumulated Focus Time -->
+            <!-- Focus time value -->
             <TextView
                 android:id="@+id/tvFocusTime"
                 android:layout_width="wrap_content"
@@ -76,6 +90,7 @@
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
+            <!-- Focus time label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,6 +99,7 @@
                 android:textSize="14sp" />
 
             <!-- Divider -->
+            <!-- Separates the summary from the history list -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -92,12 +108,15 @@
                 android:background="@color/input_field_bg" />
 
             <!-- Dynamic session history container -->
+            <!-- History rows are added here at runtime -->
             <LinearLayout
                 android:id="@+id/sessionHistoryContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
+            <!-- Empty state -->
+            <!-- Shown when there are no session history rows -->
             <TextView
                 android:id="@+id/tvEmptyHistory"
                 android:layout_width="wrap_content"

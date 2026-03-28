@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
+    <!-- Notification settings page -->
+    <!-- Green header area -->
     <View
         android:id="@+id/headerBackground"
         android:layout_width="0dp"
@@ -17,6 +19,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Back button -->
+    <!-- Returns to the settings flow -->
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="28dp"
@@ -29,6 +33,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />
 
+    <!-- Screen title -->
+    <!-- Centered in the header -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -42,6 +48,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/headerBackground" />
 
+    <!-- White settings card -->
+    <!-- Holds the available notification options -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -53,6 +61,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerBackground">
 
+        <!-- Notification row -->
+        <!-- Label on the left, switch on the right -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,6 +71,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="16dp">
 
+            <!-- Setting label -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -70,6 +81,8 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <!-- Notification toggle -->
+            <!-- Enabled by default in the layout -->
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switchNotification"
                 android:layout_width="wrap_content"

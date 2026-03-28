@@ -7,6 +7,8 @@
     android:orientation="vertical"
     android:padding="24dp">
 
+    <!-- Ready-to-focus dialog -->
+    <!-- Dialog title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,6 +17,8 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <!-- Add-task button -->
+    <!-- Opens task creation before the session starts -->
     <Button
         android:id="@+id/btn_add_task"
         style="@style/PrimaryButton"
@@ -28,6 +32,8 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <!-- Start-anyway button -->
+    <!-- Lets the user continue without adding a task -->
     <Button
         android:id="@+id/btn_start_anyway"
         style="@style/SecondaryButton"

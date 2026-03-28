@@ -6,12 +6,19 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <!-- Main hub page -->
+    <!-- Hosts the active fragment and bottom navigation -->
+    <!-- Fragment container -->
+    <!-- Replaced when tabs change -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_navigation" />
 
+    <!-- Bottom navigation -->
+    <!-- Stays pinned to the bottom edge -->
+    <!-- Uses the shared bottom-nav menu -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"

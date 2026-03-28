@@ -7,6 +7,8 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Pending report row -->
+    <!-- Report header -->
     <TextView
         android:id="@+id/tvReportHeader"
         android:layout_width="match_parent"
@@ -15,6 +17,8 @@
         android:textSize="15sp"
         android:textStyle="bold" />
 
+    <!-- Report details -->
+    <!-- Shows the reason or extra report text -->
     <TextView
         android:id="@+id/tvReportDetails"
         android:layout_width="match_parent"
@@ -23,6 +27,8 @@
         android:textColor="@color/secondary_text"
         android:textSize="13sp" />
 
+    <!-- Report status -->
+    <!-- Color and text are set from code -->
     <TextView
         android:id="@+id/tvReportStatus"
         android:layout_width="wrap_content"
@@ -31,6 +37,8 @@
         android:textSize="12sp"
         android:textStyle="bold" />
 
+    <!-- Action row -->
+    <!-- Contains the moderation buttons -->
     <LinearLayout
         android:id="@+id/actionButtons"
         android:layout_width="match_parent"
@@ -39,6 +47,7 @@
         android:orientation="horizontal"
         android:gravity="end">
 
+        <!-- Dismiss button -->
         <Button
             android:id="@+id/btnDismiss"
             style="@style/SecondaryButton"
@@ -53,6 +62,7 @@
             android:textColor="@color/primary_green"
             android:textSize="12sp" />
 
+        <!-- Ban 3 days button -->
         <Button
             android:id="@+id/btnBan3Days"
             style="@style/PrimaryButton"
@@ -67,6 +77,7 @@
             android:textColor="@color/white"
             android:textSize="12sp" />
 
+        <!-- Permanent ban button -->
         <Button
             android:id="@+id/btnBanPerm"
             style="@style/PrimaryButton"
