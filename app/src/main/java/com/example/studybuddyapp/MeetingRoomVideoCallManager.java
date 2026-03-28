@@ -28,6 +28,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * Encapsulates Agora setup and the local/remote video layout logic used inside the meeting room.
  */
 class MeetingRoomVideoCallManager {
+    // Shared render mode for local and remote video
     private static final int VIDEO_RENDER_MODE = VideoCanvas.RENDER_MODE_FIT;
 
     /**
@@ -40,17 +41,21 @@ class MeetingRoomVideoCallManager {
 
     private static final String TAG = "MeetingRoom";
 
+    // Hosting activity and current containers
     private final AppCompatActivity activity;
     private FrameLayout mainVideoContainer;
     private LinearLayout thumbnailContainer;
     private final Callbacks callbacks;
 
+    // Current remote users and their surfaces
     private final List<Integer> remoteUids = new ArrayList<>();
     private final Map<Integer, SurfaceView> remoteSurfaces = new HashMap<>();
 
+    // Agora engine and local surface
     private RtcEngine rtcEngine;
     private SurfaceView localSurface;
     private boolean isInChannel = false;
+    // Uid currently shown in the main view
     private int mainViewUid = 0;
 
     private final IRtcEngineEventHandler rtcEventHandler = new IRtcEngineEventHandler() {
@@ -113,6 +118,7 @@ class MeetingRoomVideoCallManager {
 
         // Show the local preview before the remote join completes so the screen feels responsive.
         setupLocalPreview();
+        // Agora join starts after the preview surface is ready.
         joinChannel(channelName, uid);
         return true;
     }
@@ -155,9 +161,11 @@ class MeetingRoomVideoCallManager {
      */
     void setCameraOff(boolean isCameraOff) {
         if (rtcEngine != null) {
+            // Agora stops publishing local video while this flag is true.
             rtcEngine.muteLocalVideoStream(isCameraOff);
         }
         if (localSurface != null) {
+            // Hide the preview as well so the UI matches the stream state.
             localSurface.setVisibility(isCameraOff ? View.GONE : View.VISIBLE);
         }
     }
@@ -187,6 +195,8 @@ class MeetingRoomVideoCallManager {
             RtcEngine.destroy();
             rtcEngine = null;
         }
+        // The local surface will be recreated on the next join.
+        localSurface = null;
     }
 
     /**
@@ -257,6 +267,7 @@ class MeetingRoomVideoCallManager {
         // A null token is valid for the temporary setup used by this project configuration.
         String token = AgoraConfig.TEMP_TOKEN.isEmpty() ? null : AgoraConfig.TEMP_TOKEN;
 
+        // Publish local media and subscribe to remote media in the same room.
         ChannelMediaOptions options = new ChannelMediaOptions();
         options.channelProfile = Constants.CHANNEL_PROFILE_COMMUNICATION;
         options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
@@ -302,6 +313,7 @@ class MeetingRoomVideoCallManager {
     private void removeRemoteUser(int uid) {
         remoteUids.remove(Integer.valueOf(uid));
         remoteSurfaces.remove(uid);
+        // Remove the thumbnail before deciding who should own the main view next.
         removeThumbnailForUid(uid);
 
         if (mainViewUid != uid) {
@@ -355,6 +367,7 @@ class MeetingRoomVideoCallManager {
      * Moves the local preview into the thumbnail strip.
      */
     private void moveLocalToThumbnail() {
+        // The local preview moves aside once a remote participant takes the main view.
         detachSurface(localSurface);
         addThumbnailForLocal();
     }
@@ -363,6 +376,7 @@ class MeetingRoomVideoCallManager {
      * Restores the local preview to the main view when no remote user should occupy it.
      */
     private void moveLocalToMainView() {
+        // Remove any leftover local thumbnail before restoring the large preview.
         removeLocalThumbnail();
         attachLocalSurfaceToMain();
         mainViewUid = 0;
@@ -422,6 +436,7 @@ class MeetingRoomVideoCallManager {
      * Adds a small text label so thumbnails still identify the local user or remote uid.
      */
     private void addLabelToFrame(FrameLayout frame, String labelText) {
+        // Labels live inside the same frame as the video surface.
         TextView label = new TextView(activity);
         label.setText(labelText);
         label.setTextColor(0xFFFFFFFF);
@@ -468,6 +483,7 @@ class MeetingRoomVideoCallManager {
      */
     private void detachSurface(SurfaceView surface) {
         if (surface != null && surface.getParent() instanceof ViewGroup) {
+            // SurfaceViews can only belong to one parent at a time.
             ((ViewGroup) surface.getParent()).removeView(surface);
         }
     }

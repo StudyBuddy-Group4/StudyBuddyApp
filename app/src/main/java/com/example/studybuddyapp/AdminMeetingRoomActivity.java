@@ -44,14 +44,19 @@ import retrofit2.Response;
  */
 public class AdminMeetingRoomActivity extends AppCompatActivity {
 
+    // Log tag
     private static final String TAG = "AdminMeetingRoom";
+    // Permission request code
     private static final int PERMISSION_REQ_ID = 200;
 
+    // Agora spectator engine
     private RtcEngine rtcEngine;
+    // Room and moderation metadata
     private String channelName;
     private long reportId = -1;
     private long reportedUserId = -1;
 
+    // Participant grid and cached remote surfaces
     private LinearLayout participantGrid;
     private final List<Integer> remoteUids = new ArrayList<>();
     private final Map<Integer, SurfaceView> remoteSurfaces = new HashMap<>();
@@ -92,6 +97,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         reportId = getIntent().getLongExtra("report_id", -1);
         reportedUserId = getIntent().getLongExtra("reported_user_id", -1);
 
+        // Root container for runtime-generated participant cards
         participantGrid = findViewById(R.id.participantGrid);
 
         findViewById(R.id.ivBack).setOnClickListener(v -> {
@@ -149,6 +155,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
      */
     private void initAndJoinAsSpectator() {
         try {
+            // Build a lightweight Agora engine for observation only.
             RtcEngineConfig config = new RtcEngineConfig();
             config.mContext = getApplicationContext();
             config.mAppId = AgoraConfig.APP_ID;
@@ -175,6 +182,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         // Reuse the logged-in admin id as the Agora uid when available.
         int uid = session.isLoggedIn() ? (int) session.getUserId() : 0;
 
+        // Join the reported room with the shared temporary token setup.
         String token = AgoraConfig.TEMP_TOKEN.isEmpty() ? null : AgoraConfig.TEMP_TOKEN;
         rtcEngine.joinChannel(token, channelName, uid, options);
     }
@@ -218,6 +226,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         // Rebuild from scratch because participant cards are created dynamically in code.
         participantGrid.removeAllViews();
 
+        // Two cards are placed in each horizontal row.
         LinearLayout currentRow = null;
         int countInRow = 0;
 
@@ -261,6 +270,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
      */
     private FrameLayout createParticipantCell(int uid) {
         FrameLayout frame = new FrameLayout(this);
+        // Reuse the rounded video background from the regular meeting UI.
         frame.setBackgroundResource(R.drawable.bg_video_rounded);
         frame.setClipToOutline(true);
 
@@ -292,6 +302,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         frame.addView(uidLabel, labelLp);
 
         ImageView prohibitBtn = new ImageView(this);
+        // The same action icon is reused for all moderation choices.
         prohibitBtn.setImageResource(R.drawable.ic_prohibited);
         prohibitBtn.setContentDescription("Take action");
         FrameLayout.LayoutParams btnLp = new FrameLayout.LayoutParams(
@@ -353,6 +364,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
     private void executeAdminAction(int targetUid, String actionType) {
         ModerationApi api = ApiClient.getModerationApi(this);
 
+        // Apply the chosen moderation action first.
         api.applyAdminAction(targetUid, actionType).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

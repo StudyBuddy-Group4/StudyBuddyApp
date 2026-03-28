@@ -34,16 +34,20 @@ class MeetingRoomSessionCoordinator {
     }
 
     private static final String TAG = "MeetingRoom";
+    // Restriction poll interval
     private static final long BAN_CHECK_INTERVAL_MS = 5000L;
 
+    // Stable room/session inputs
     private final Context appContext;
     private final String channelName;
     private final int focusDurationMinutes;
     private final Callbacks callbacks;
 
+    // Backend session state
     private long backendSessionId = -1;
     private boolean isInChannel = false;
     private boolean matchingLeaveNotified = false;
+    // Main-thread poll handler
     private Handler banCheckHandler;
 
     MeetingRoomSessionCoordinator(Context context,
@@ -63,6 +67,7 @@ class MeetingRoomSessionCoordinator {
         // Joining the room is the point where backend session bookkeeping should begin.
         isInChannel = true;
         recordSessionStart();
+        // Restriction checks begin only after the room is live.
         startBanPolling();
     }
 
@@ -128,6 +133,7 @@ class MeetingRoomSessionCoordinator {
     void restartSession() {
         // Clearing the previous id forces the next start call to register a brand-new backend session.
         backendSessionId = -1;
+        // A new backend session is created for the next focus round.
         recordSessionStart();
     }
 
@@ -142,10 +148,12 @@ class MeetingRoomSessionCoordinator {
             @Override
             public void run() {
                 if (!isInChannel) {
+                    // Stop scheduling once the room has ended.
                     return;
                 }
                 checkBanStatus();
                 if (banCheckHandler != null) {
+                    // Keep the same runnable alive for the next cycle.
                     banCheckHandler.postDelayed(this, BAN_CHECK_INTERVAL_MS);
                 }
             }
@@ -176,6 +184,7 @@ class MeetingRoomSessionCoordinator {
                 if (!isInChannel || !callbacks.shouldHandleCallbacks()) {
                     return;
                 }
+                // The current profile is enough to detect new bans or temporary restrictions.
                 UserProfileResponse profile = response.body();
                 if (response.isSuccessful() && profile != null && profile.isCurrentlyRestricted()) {
                     // Once restricted, stop polling and let the activity decide how to remove the user.
@@ -206,6 +215,7 @@ class MeetingRoomSessionCoordinator {
                                    Response<StartSessionResponse> response) {
                 StartSessionResponse body = response.body();
                 if (response.isSuccessful() && body != null) {
+                    // Store the backend id for later complete/incomplete calls.
                     backendSessionId = body.getSessionId();
                     Log.d(TAG, "Backend session started: " + backendSessionId);
                     // Task assignment only happens after the backend has created a concrete session id.
@@ -252,6 +262,7 @@ class MeetingRoomSessionCoordinator {
             // Skip duplicate notifications and invalid channel names.
             return;
         }
+        // Mark it early so repeated cleanup paths cannot send duplicates.
         matchingLeaveNotified = true;
 
         MatchingApi matchingApi = ApiClient.getMatchingApi(appContext);

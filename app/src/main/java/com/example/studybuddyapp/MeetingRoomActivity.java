@@ -32,8 +32,10 @@ import java.util.Locale;
 public class MeetingRoomActivity extends AppCompatActivity
         implements MeetingRoomVideoCallManager.Callbacks, MeetingRoomSessionCoordinator.Callbacks {
 
+    // Permission request code
     private static final int PERMISSION_REQ_ID = 100;
 
+    // Intent extras
     public static final String EXTRA_FOCUS_DURATION = "extra_focus_duration";
     public static final String EXTRA_CHANNEL_NAME = "extra_channel_name";
 
@@ -104,6 +106,7 @@ public class MeetingRoomActivity extends AppCompatActivity
     protected void onDestroy() {
         // Tear down timers and backend/Agora state even when the activity is destroyed unexpectedly.
         cancelFocusTimer();
+        // Leave the room before the activity instance is discarded.
         leaveMeeting();
         super.onDestroy();
     }
@@ -116,7 +119,9 @@ public class MeetingRoomActivity extends AppCompatActivity
         bindViews();
         // The video manager rebuilds surfaces into the new layout hierarchy.
         videoCallManager.rebindContainers(mainVideoContainer, thumbnailContainer);
+        // Reconnect listeners to the new button instances.
         wireControlButtons();
+        // Repaint the restored timer and toggle state.
         refreshUiState();
     }
 
@@ -158,10 +163,12 @@ public class MeetingRoomActivity extends AppCompatActivity
      * Reads the duration and channel values used to configure the meeting room.
      */
     private void parseIntentExtras() {
+        // Focus duration comes from matchmaking or the home screen selection.
         focusDurationMinutes = getIntent().getIntExtra(EXTRA_FOCUS_DURATION, 15);
         focusDurationMs = focusDurationMinutes * 60L * 1000L;
         // currentTimerMs starts at the full duration and is updated on each timer tick.
         currentTimerMs = focusDurationMs;
+        // Matching may provide a backend-created room name.
         channelName = getIntent().getStringExtra(EXTRA_CHANNEL_NAME);
         // Fall back to the deterministic channel name helper when the matching backend did not supply one.
         if (channelName == null || channelName.isEmpty()) channelName = AgoraConfig.channelNameForDuration(focusDurationMinutes);
@@ -264,6 +271,7 @@ public class MeetingRoomActivity extends AppCompatActivity
      * Checks whether the call permissions have already been granted.
      */
     private boolean checkPermissions() {
+        // Every required permission must be granted before Agora can start.
         for (String permission : getRequiredPermissions()) {
             if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) return false;
         }
@@ -285,6 +293,7 @@ public class MeetingRoomActivity extends AppCompatActivity
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode != PERMISSION_REQ_ID) return;
         if (checkPermissions()) {
+            // Retry setup once the missing permissions are granted.
             initAndJoin();
         } else {
             // The room cannot function without microphone and camera access.
@@ -308,6 +317,7 @@ public class MeetingRoomActivity extends AppCompatActivity
      * Starts or restarts the countdown shown during the focus session.
      */
     private void startFocusTimer() {
+        // Reset the visible timer before starting a new countdown.
         updateTimerText(focusDurationMs);
         focusTimer = new CountDownTimer(focusDurationMs, 1000) {
             @Override
@@ -322,6 +332,7 @@ public class MeetingRoomActivity extends AppCompatActivity
                 updateTimerText(0);
                 // Completing the full timer marks the session as finished before the next dialog appears.
                 sessionCoordinator.recordSessionComplete();
+                // The completion dialog decides whether to leave or start another round.
                 showSessionCompletedDialog();
             }
         }.start();
@@ -363,6 +374,7 @@ public class MeetingRoomActivity extends AppCompatActivity
         videoCallManager.setMicMuted(isMicMuted);
         videoCallManager.setCameraOff(isCameraOff);
         videoCallManager.setSpeakerOff(isSpeakerOff);
+        // Speaker labels are refreshed separately through the video-manager callback.
     }
 
     /**
@@ -370,6 +382,7 @@ public class MeetingRoomActivity extends AppCompatActivity
      */
     private void showSessionCompletedDialog() {
         if (isFinishing() || isDestroyed()) return;
+        // Reuse the shared completion layout at the end of a focus round.
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_session_completed, null);
         AlertDialog dialog = createDialog(view, false);
         view.findViewById(R.id.btnHome).setOnClickListener(v -> {
@@ -387,6 +400,7 @@ public class MeetingRoomActivity extends AppCompatActivity
             // The task-list shortcut reuses the existing MainHubActivity entry point.
             leaveAndGoHome(true);
         });
+        // Users must choose one of the completion actions before leaving this dialog.
         dialog.show();
     }
 
@@ -486,6 +500,7 @@ public class MeetingRoomActivity extends AppCompatActivity
      * Leaves the current meeting and returns to the main hub, optionally opening the tasks tab.
      */
     private void leaveAndGoHome(boolean goToTasks) {
+        // Stop local timer state before leaving the room.
         cancelFocusTimer();
         leaveMeeting();
         Intent intent = new Intent(this, MainHubActivity.class);
