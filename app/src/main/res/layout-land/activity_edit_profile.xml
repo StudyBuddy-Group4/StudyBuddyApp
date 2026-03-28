@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
+    <!-- Top header background -->
     <View
         android:id="@+id/headerBackground"
         android:layout_width="0dp"
@@ -17,6 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Back action -->
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="28dp"
@@ -29,6 +31,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />
 
+    <!-- Screen title -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -42,6 +45,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/headerBackground" />
 
+    <!-- Scrollable white card -->
+    <!-- Holds the profile summary and edit form -->
     <ScrollView
         android:id="@+id/cardContainer"
         android:layout_width="0dp"
@@ -53,6 +58,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerBackground">
 
+        <!-- Form content -->
+        <!-- Wide side padding keeps the landscape form narrow -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,6 +69,7 @@
             android:paddingEnd="250dp"
             android:paddingBottom="24dp">
 
+            <!-- Profile name in the card header -->
             <TextView
                 android:id="@+id/tvHeaderName"
                 android:layout_width="wrap_content"
@@ -73,6 +81,7 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
+            <!-- Profile id under the name -->
             <TextView
                 android:id="@+id/tvHeaderId"
                 android:layout_width="wrap_content"
@@ -83,6 +92,7 @@
                 android:textColor="@color/secondary_text"
                 android:textSize="14sp" />
 
+            <!-- Account settings section title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -92,6 +102,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <!-- Username label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -99,6 +110,7 @@
                 android:text="@string/username"
                 style="@style/FieldLabel" />
 
+            <!-- Username input -->
             <EditText
                 android:id="@+id/etUsername"
                 style="@style/InputField"
@@ -107,6 +119,7 @@
                 android:inputType="text"
                 android:text="@string/mock_user_name" />
 
+            <!-- Email label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,6 +127,7 @@
                 android:text="@string/email_address"
                 style="@style/FieldLabel" />
 
+            <!-- Email input -->
             <EditText
                 android:id="@+id/etEmail"
                 style="@style/InputField"
@@ -122,6 +136,7 @@
                 android:inputType="textEmailAddress"
                 android:text="@string/hint_email" />
 
+            <!-- Primary update action -->
             <Button
                 android:id="@+id/btnUpdateProfile"
                 style="@style/PrimaryButton"

@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <!-- Top bar -->
+    <!-- Back and title row -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +20,7 @@
         android:paddingEnd="16dp"
         android:paddingBottom="12dp">
 
+        <!-- Back action -->
         <ImageView
             android:id="@+id/ivBack"
             android:layout_width="28dp"
@@ -27,6 +29,7 @@
             android:src="@drawable/ic_arrow_back"
             app:tint="@color/white" />
 
+        <!-- Screen title -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -37,11 +40,13 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <!-- Right spacer for title centering -->
         <View
             android:layout_width="28dp"
             android:layout_height="28dp" />
     </LinearLayout>
 
+    <!-- Empty state message -->
     <TextView
         android:id="@+id/tvNoParticipants"
         android:layout_width="wrap_content"
@@ -53,7 +58,8 @@
         android:textSize="16sp"
         android:visibility="gone" />
 
-    <!-- Dynamic participant list -->
+    <!-- Participant grid area -->
+    <!-- Filled with the visible participant slots -->
     <LinearLayout
         android:id="@+id/participantGrid"
         android:layout_width="match_parent"
@@ -64,7 +70,7 @@
         android:paddingStart="24dp"
         android:paddingEnd="24dp">
 
-        <!-- Row 1 -->
+        <!-- First participant row -->
         <LinearLayout
             android:id="@+id/row1"
             android:layout_width="match_parent"
@@ -73,6 +79,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <!-- Participant slot 1 -->
             <FrameLayout
                 android:id="@+id/slot1"
                 android:layout_width="0dp"
@@ -81,11 +88,13 @@
                 android:layout_weight="1"
                 android:visibility="gone">
 
+                <!-- Rounded video placeholder -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
 
+                <!-- Participant label -->
                 <TextView
                     android:id="@+id/tvUid1"
                     android:layout_width="wrap_content"
@@ -100,6 +109,7 @@
                     android:textColor="@color/white"
                     android:textSize="13sp" />
 
+                <!-- Flag action -->
                 <ImageView
                     android:id="@+id/flagBtn1"
                     android:layout_width="36dp"
@@ -113,6 +123,7 @@
                     app:tint="@color/white" />
             </FrameLayout>
 
+            <!-- Participant slot 2 -->
             <FrameLayout
                 android:id="@+id/slot2"
                 android:layout_width="0dp"
@@ -126,6 +137,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
 
+                <!-- Participant label -->
                 <TextView
                     android:id="@+id/tvUid2"
                     android:layout_width="wrap_content"
@@ -140,6 +152,7 @@
                     android:textColor="@color/white"
                     android:textSize="13sp" />
 
+                <!-- Flag action -->
                 <ImageView
                     android:id="@+id/flagBtn2"
                     android:layout_width="36dp"
@@ -154,7 +167,7 @@
             </FrameLayout>
         </LinearLayout>
 
-        <!-- Row 2 -->
+        <!-- Second participant row -->
         <LinearLayout
             android:id="@+id/row2"
             android:layout_width="match_parent"
@@ -162,6 +175,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <!-- Participant slot 3 -->
             <FrameLayout
                 android:id="@+id/slot3"
                 android:layout_width="0dp"
@@ -175,6 +189,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
 
+                <!-- Participant label -->
                 <TextView
                     android:id="@+id/tvUid3"
                     android:layout_width="wrap_content"
@@ -189,6 +204,7 @@
                     android:textColor="@color/white"
                     android:textSize="13sp" />
 
+                <!-- Flag action -->
                 <ImageView
                     android:id="@+id/flagBtn3"
                     android:layout_width="36dp"
@@ -202,6 +218,7 @@
                     app:tint="@color/white" />
             </FrameLayout>
 
+            <!-- Participant slot 4 -->
             <FrameLayout
                 android:id="@+id/slot4"
                 android:layout_width="0dp"
@@ -215,6 +232,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
 
+                <!-- Participant label -->
                 <TextView
                     android:id="@+id/tvUid4"
                     android:layout_width="wrap_content"
@@ -229,6 +247,7 @@
                     android:textColor="@color/white"
                     android:textSize="13sp" />
 
+                <!-- Flag action -->
                 <ImageView
                     android:id="@+id/flagBtn4"
                     android:layout_width="36dp"

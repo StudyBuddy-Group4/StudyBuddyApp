@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     android:background="@color/very_light_mint">
 
+    <!-- Left branding column -->
+    <!-- App logo -->
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="72dp"
@@ -21,6 +23,7 @@
         app:layout_constraintVertical_chainStyle="packed"
         android:layout_marginBottom="12dp" />
 
+    <!-- App name -->
     <TextView
         android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
@@ -35,6 +38,7 @@
         app:layout_constraintBottom_toTopOf="@id/tvTagline"
         android:layout_marginBottom="10dp" />
 
+    <!-- Tagline text -->
     <TextView
         android:id="@+id/tvTagline"
         android:layout_width="0dp"
@@ -50,6 +54,8 @@
         app:layout_constraintTop_toBottomOf="@id/tvAppName"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+    <!-- Right action column -->
+    <!-- Primary login action -->
     <Button
         android:id="@+id/btnLogIn"
         style="@style/PrimaryButton"
@@ -65,6 +71,7 @@
         app:layout_constraintVertical_chainStyle="packed"
         android:layout_marginBottom="16dp" />
 
+    <!-- Secondary sign-up action -->
     <Button
         android:id="@+id/btnSignUp"
         style="@style/SecondaryButton"
@@ -79,6 +86,7 @@
         app:layout_constraintBottom_toTopOf="@id/tvForgotPassword"
         android:layout_marginBottom="20dp" />
 
+    <!-- Forgot-password -->
     <TextView
         android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
@@ -92,6 +100,7 @@
         app:layout_constraintTop_toBottomOf="@id/btnSignUp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+    <!-- Split point between branding and actions -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineCenter"
         android:layout_width="wrap_content"

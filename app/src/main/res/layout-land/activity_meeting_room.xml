@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
-    <!-- Title -->
+    <!-- Screen title -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -21,7 +21,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Main video: 16:9 ratio, centered -->
+    <!-- Main video area -->
+    <!-- Uses a 16:9 ratio to stay wide in landscape -->
     <FrameLayout
         android:id="@+id/mainVideoContainer"
         android:layout_width="0dp"
@@ -39,6 +40,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintVertical_bias="0.5">
 
+        <!-- Speaker label -->
         <TextView
             android:id="@+id/tvSpeakerId"
             android:layout_width="wrap_content"
@@ -55,6 +57,7 @@
             android:textStyle="bold"
             android:visibility="gone" />
 
+        <!-- Timer bubble -->
         <TextView
             android:id="@+id/tvTimer"
             android:layout_width="wrap_content"
@@ -73,7 +76,8 @@
             android:textStyle="bold" />
     </FrameLayout>
 
-    <!-- Thumbnail scroll row -->
+    <!-- Thumbnail strip -->
+    <!-- Shorter row keeps more space for the main video -->
     <HorizontalScrollView
         android:id="@+id/thumbnailScroll"
         android:layout_width="0dp"
@@ -86,6 +90,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <!-- Runtime thumbnail container -->
         <LinearLayout
             android:id="@+id/thumbnailContainer"
             android:layout_width="wrap_content"
@@ -94,7 +99,8 @@
             android:orientation="horizontal" />
     </HorizontalScrollView>
 
-    <!-- Control bar: centered with max width so buttons don't stretch -->
+    <!-- Bottom control bar -->
+    <!-- Centered so the buttons stay compact in landscape -->
     <LinearLayout
         android:id="@+id/controlBar"
         android:layout_width="wrap_content"
@@ -109,6 +115,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <!-- Speaker toggle -->
         <ImageView
             android:id="@+id/btnSpeaker"
             android:layout_width="44dp"
@@ -119,6 +126,7 @@
             android:padding="11dp"
             android:src="@drawable/ic_speaker" />
 
+        <!-- Camera toggle -->
         <ImageView
             android:id="@+id/btnCamera"
             android:layout_width="44dp"
@@ -129,6 +137,7 @@
             android:padding="11dp"
             android:src="@drawable/ic_videocam" />
 
+        <!-- Hang-up action -->
         <ImageView
             android:id="@+id/btnHangUp"
             android:layout_width="44dp"
@@ -139,6 +148,7 @@
             android:padding="11dp"
             android:src="@drawable/ic_call_end" />
 
+        <!-- Microphone toggle -->
         <ImageView
             android:id="@+id/btnMic"
             android:layout_width="44dp"
@@ -149,6 +159,7 @@
             android:padding="11dp"
             android:src="@drawable/ic_mic" />
 
+        <!-- Flag-participant action -->
         <ImageView
             android:id="@+id/btnFlag"
             android:layout_width="44dp"

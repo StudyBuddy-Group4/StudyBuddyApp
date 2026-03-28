@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
+    <!-- Top header background -->
     <View
         android:id="@+id/headerBackground"
         android:layout_width="0dp"
@@ -17,6 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Back action -->
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="28dp"
@@ -29,6 +31,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />
 
+    <!-- Screen title -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -42,6 +45,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/headerBackground" />
 
+    <!-- Scrollable white card -->
+    <!-- Holds the warning and confirmation form -->
     <ScrollView
         android:id="@+id/cardContainer"
         android:layout_width="0dp"
@@ -53,12 +58,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerBackground">
 
+        <!-- Form content -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp">
 
+            <!-- Main warning question -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,6 +76,7 @@
                 android:textStyle="bold" />
 
             <!-- Warning box -->
+            <!-- Lists the account deletion consequences -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,6 +85,7 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <!-- Warning summary -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -84,6 +93,7 @@
                     android:textColor="@color/secondary_text"
                     android:textSize="13sp" />
 
+                <!-- Consequence item -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -92,6 +102,7 @@
                     android:textColor="@color/secondary_text"
                     android:textSize="13sp" />
 
+                <!-- Consequence item -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -100,6 +111,7 @@
                     android:textColor="@color/secondary_text"
                     android:textSize="13sp" />
 
+                <!-- Consequence item -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -109,6 +121,7 @@
                     android:textSize="13sp" />
             </LinearLayout>
 
+            <!-- Password confirmation prompt -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -117,11 +130,14 @@
                 android:textColor="@color/dark_text"
                 android:textSize="14sp" />
 
+            <!-- Password field row -->
+            <!-- Keeps the eye icon over the input -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp">
 
+                <!-- Password input -->
                 <EditText
                     android:id="@+id/etPassword"
                     style="@style/InputField"
@@ -129,6 +145,7 @@
                     android:importantForAutofill="no"
                     android:inputType="textPassword" />
 
+                <!-- Password visibility toggle -->
                 <ImageView
                     android:id="@+id/ivTogglePassword"
                     android:layout_width="24dp"
@@ -140,6 +157,7 @@
                     app:tint="@color/hint_text" />
             </FrameLayout>
 
+            <!-- Primary delete action -->
             <Button
                 android:id="@+id/btnDeleteAccount"
                 style="@style/PrimaryButton"
@@ -147,6 +165,7 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/btn_yes_delete" />
 
+            <!-- Secondary cancel action -->
             <Button
                 android:id="@+id/btnCancel"
                 style="@style/SecondaryButton"
