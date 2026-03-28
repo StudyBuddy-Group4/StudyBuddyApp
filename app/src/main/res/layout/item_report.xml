@@ -8,6 +8,7 @@
     android:padding="16dp">
 
     <!-- Pending report row -->
+    <!-- One moderation card per report -->
     <!-- Report header -->
     <TextView
         android:id="@+id/tvReportHeader"
@@ -19,6 +20,7 @@
 
     <!-- Report details -->
     <!-- Shows the reason or extra report text -->
+    <!-- Filled with the report body from code -->
     <TextView
         android:id="@+id/tvReportDetails"
         android:layout_width="match_parent"
@@ -29,6 +31,7 @@
 
     <!-- Report status -->
     <!-- Color and text are set from code -->
+    <!-- Sits above the action buttons -->
     <TextView
         android:id="@+id/tvReportStatus"
         android:layout_width="wrap_content"
@@ -39,6 +42,7 @@
 
     <!-- Action row -->
     <!-- Contains the moderation buttons -->
+    <!-- Right-aligned to keep the text block clear -->
     <LinearLayout
         android:id="@+id/actionButtons"
         android:layout_width="match_parent"
@@ -48,6 +52,7 @@
         android:gravity="end">
 
         <!-- Dismiss button -->
+        <!-- Marks the report as reviewed without a ban -->
         <Button
             android:id="@+id/btnDismiss"
             style="@style/SecondaryButton"
@@ -63,6 +68,7 @@
             android:textSize="12sp" />
 
         <!-- Ban 3 days button -->
+        <!-- Applies a temporary ban -->
         <Button
             android:id="@+id/btnBan3Days"
             style="@style/PrimaryButton"
@@ -78,6 +84,7 @@
             android:textSize="12sp" />
 
         <!-- Permanent ban button -->
+        <!-- Applies the strongest moderation action -->
         <Button
             android:id="@+id/btnBanPerm"
             style="@style/PrimaryButton"

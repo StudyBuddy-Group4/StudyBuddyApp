@@ -9,6 +9,7 @@
     android:paddingBottom="12dp">
 
     <!-- Report history row -->
+    <!-- One past moderation decision -->
     <!-- Status icon -->
     <ImageView
         android:id="@+id/ivReportIcon"
@@ -19,6 +20,7 @@
 
     <!-- Text block -->
     <!-- Holds the user and action text -->
+    <!-- Expands so the date can stay on the right -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -27,6 +29,7 @@
         android:orientation="vertical">
 
         <!-- Reported user -->
+        <!-- Main line of the row -->
         <TextView
             android:id="@+id/tvReportUser"
             android:layout_width="wrap_content"
@@ -36,6 +39,7 @@
             android:textStyle="bold" />
 
         <!-- Report action -->
+        <!-- Describes what the admin did -->
         <TextView
             android:id="@+id/tvReportAction"
             android:layout_width="wrap_content"
@@ -45,6 +49,7 @@
     </LinearLayout>
 
     <!-- Report date -->
+    <!-- Right-side timestamp -->
     <TextView
         android:id="@+id/tvReportDate"
         android:layout_width="wrap_content"

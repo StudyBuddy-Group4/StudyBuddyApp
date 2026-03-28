@@ -7,6 +7,10 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
+    <!-- Meeting room page -->
+    <!-- Tablet layout -->
+    <!-- Uses larger spacing for wider screens -->
+
     <!-- Screen title -->
     <TextView
         android:id="@+id/tvTitle"
@@ -23,6 +27,7 @@
 
     <!-- Main video area -->
     <!-- Larger margins and a max height keep the tablet layout balanced -->
+    <!-- Main stream container -->
     <FrameLayout
         android:id="@+id/mainVideoContainer"
         android:layout_width="0dp"
@@ -39,6 +44,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
         <!-- Timer bubble -->
+        <!-- Floats over the top-right corner -->
         <TextView
             android:id="@+id/tvTimer"
             android:layout_width="wrap_content"
@@ -59,6 +65,7 @@
 
     <!-- Thumbnail strip -->
     <!-- Taller to fit larger preview cards -->
+    <!-- Sits between the main video and the controls -->
     <HorizontalScrollView
         android:id="@+id/thumbnailScroll"
         android:layout_width="0dp"
@@ -73,6 +80,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <!-- Runtime thumbnail container -->
+        <!-- Preview cards are added here from code -->
         <LinearLayout
             android:id="@+id/thumbnailContainer"
             android:layout_width="wrap_content"
@@ -83,6 +91,7 @@
 
     <!-- Bottom control bar -->
     <!-- Leaves extra room on larger screens -->
+    <!-- Groups the in-call actions -->
     <LinearLayout
         android:id="@+id/controlBar"
         android:layout_width="wrap_content"
@@ -98,6 +107,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <!-- Speaker toggle -->
+        <!-- Speaker output button -->
         <ImageView
             android:id="@+id/btnSpeaker"
             android:layout_width="44dp"
@@ -109,6 +119,7 @@
             android:src="@drawable/ic_speaker" />
 
         <!-- Camera toggle -->
+        <!-- Camera on or off -->
         <ImageView
             android:id="@+id/btnCamera"
             android:layout_width="44dp"
@@ -120,6 +131,7 @@
             android:src="@drawable/ic_videocam" />
 
         <!-- Hang-up action -->
+        <!-- Ends the current room -->
         <ImageView
             android:id="@+id/btnHangUp"
             android:layout_width="44dp"
@@ -131,6 +143,7 @@
             android:src="@drawable/ic_call_end" />
 
         <!-- Microphone toggle -->
+        <!-- Microphone on or off -->
         <ImageView
             android:id="@+id/btnMic"
             android:layout_width="44dp"
@@ -142,6 +155,7 @@
             android:src="@drawable/ic_mic" />
 
         <!-- Flag-participant action -->
+        <!-- Opens the reporting flow -->
         <ImageView
             android:id="@+id/btnFlag"
             android:layout_width="44dp"

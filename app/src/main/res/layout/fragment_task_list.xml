@@ -7,7 +7,9 @@
 
     <!-- Task list page -->
     <!-- Shows the task list and the add-task button -->
+
     <!-- Main content stack -->
+    <!-- Card fills most of the page -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,6 +29,7 @@
 
         <!-- White content card -->
         <!-- Scrolls when the task list gets long -->
+        <!-- Keeps the list inside a single white panel -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,6 +39,7 @@
 
             <!-- Page content -->
             <!-- Holds the empty state and the generated task rows -->
+            <!-- Padding keeps task rows away from the card edges -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,6 +48,7 @@
 
                 <!-- Empty state -->
                 <!-- Shown when there are no tasks -->
+                <!-- Starts hidden until code decides the list is empty -->
                 <TextView
                     android:id="@+id/tvEmptyTasks"
                     android:layout_width="wrap_content"
@@ -57,6 +62,7 @@
 
                 <!-- Task list container -->
                 <!-- Task rows are added here at runtime -->
+                <!-- Starts empty in XML -->
                 <LinearLayout
                     android:id="@+id/taskContainer"
                     android:layout_width="match_parent"
@@ -69,6 +75,7 @@
 
     <!-- Add-task button -->
     <!-- Floating action button -->
+    <!-- Stays above the card in the bottom-right corner -->
     <FrameLayout
         android:id="@+id/fab_add_task"
         android:layout_width="56dp"
@@ -83,6 +90,7 @@
         android:focusable="true">
 
         <!-- Plus icon -->
+        <!-- Visual cue for creating a new task -->
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
