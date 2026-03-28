@@ -7,6 +7,11 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
+    <!-- Security code screen -->
+    <!-- Portrait version -->
+    <!-- Used in the password recovery flow -->
+    <!-- Green header on top and white card below -->
+
     <!-- Top header background -->
     <!-- Green header area -->
     <View
@@ -20,7 +25,7 @@
         app:layout_constraintHeight_percent="0.18" />
 
     <!-- Back action -->
-    <!-- Back button -->
+    <!-- Returns to the page -->
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="28dp"
@@ -49,7 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Scrollable white card -->
-    <!-- White card -->
+    <!-- Keeps the full form visible on shorter screens -->
     <ScrollView
         android:id="@+id/cardContainer"
         android:layout_width="0dp"
@@ -63,6 +68,7 @@
 
         <!-- Form content -->
         <!-- Centered form content -->
+        <!-- Stacks the prompt, code row, and buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,8 +76,8 @@
             android:padding="24dp"
             android:gravity="center_horizontal">
 
-            <!-- Main prompt -->
-            <!-- Code prompt -->
+            <!--Code prompt -->
+            <!-- Tells the user what to enter here -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -83,6 +89,7 @@
 
             <!-- Security code row -->
             <!-- Six code boxes -->
+            <!-- One box for each digit -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -90,6 +97,7 @@
                 android:layout_marginTop="32dp">
 
                 <!-- Code digit 1 -->
+                <!-- First number box -->
                 <EditText
                     android:id="@+id/etCode1"
                     android:layout_width="44dp"
@@ -105,6 +113,7 @@
                     android:layout_marginEnd="8dp" />
 
                 <!-- Code digit 2 -->
+                <!-- Second number box -->
                 <EditText
                     android:id="@+id/etCode2"
                     android:layout_width="44dp"
@@ -120,6 +129,7 @@
                     android:layout_marginEnd="8dp" />
 
                 <!-- Code digit 3 -->
+                <!-- Third number box -->
                 <EditText
                     android:id="@+id/etCode3"
                     android:layout_width="44dp"
@@ -135,6 +145,7 @@
                     android:layout_marginEnd="8dp" />
 
                 <!-- Code digit 4 -->
+                <!-- Fourth number box -->
                 <EditText
                     android:id="@+id/etCode4"
                     android:layout_width="44dp"
@@ -150,6 +161,7 @@
                     android:layout_marginEnd="8dp" />
 
                 <!-- Code digit 5 -->
+                <!-- Fifth number box -->
                 <EditText
                     android:id="@+id/etCode5"
                     android:layout_width="44dp"
@@ -165,6 +177,7 @@
                     android:layout_marginEnd="8dp" />
 
                 <!-- Code digit 6 -->
+                <!-- Last number box -->
                 <EditText
                     android:id="@+id/etCode6"
                     android:layout_width="44dp"
@@ -180,6 +193,7 @@
             </LinearLayout>
 
             <!-- Confirm button -->
+            <!-- Main action for this screen -->
             <Button
                 android:id="@+id/btnConfirm"
                 style="@style/PrimaryButton"
@@ -188,6 +202,7 @@
                 android:layout_marginTop="40dp" />
 
             <!-- Send again button -->
+            <!-- Secondary action to request a new code -->
             <Button
                 android:id="@+id/btnSendAgain"
                 style="@style/SecondaryButton"

@@ -7,7 +7,13 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
+    <!-- Create account screen -->
+    <!-- Landscape version -->
+    <!-- Green header on top -->
+    <!-- Landscape keeps the same form with wider side padding -->
+
     <!-- Top header background -->
+    <!-- Fills the top header area -->
     <View
         android:id="@+id/headerBackground"
         android:layout_width="0dp"
@@ -19,6 +25,7 @@
         app:layout_constraintHeight_percent="0.18" />
 
     <!-- Back action -->
+    <!-- Returns to the previous screen -->
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="28dp"
@@ -32,6 +39,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Screen title -->
+    <!-- Main heading for the sign-up page -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -47,6 +55,7 @@
 
     <!-- Scrollable white card -->
     <!-- Holds the full sign-up form -->
+    <!-- Lets the full form stay visible on shorter screens -->
     <ScrollView
         android:id="@+id/cardContainer"
         android:layout_width="0dp"
@@ -60,6 +69,7 @@
 
         <!-- Form content -->
         <!-- Wide side padding keeps the landscape form compact -->
+        <!-- Stacks all fields, the sign-up button, and the footer link -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,6 +80,7 @@
             android:paddingBottom="24dp">
 
             <!-- Username label -->
+            <!-- Label for the username field -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -78,6 +89,7 @@
                 android:layout_marginTop="16dp" />
 
             <!-- Username input -->
+            <!-- Editable username field -->
             <EditText
                 android:id="@+id/etUsername"
                 style="@style/InputField"
@@ -87,6 +99,7 @@
                 android:importantForAutofill="no" />
 
             <!-- Email label -->
+            <!-- Label for the email field -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -95,6 +108,7 @@
                 android:layout_marginTop="16dp" />
 
             <!-- Email input -->
+            <!-- Editable email field -->
             <EditText
                 android:id="@+id/etEmail"
                 style="@style/InputField"
@@ -104,6 +118,7 @@
                 android:importantForAutofill="no" />
 
             <!-- Password label -->
+            <!-- Label for the password field -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -112,13 +127,14 @@
                 android:layout_marginTop="16dp" />
 
             <!-- Password field row -->
-            <!-- Places the toggle over the right edge -->
+            <!-- Input and toggle stay in one row -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp">
 
                 <!-- Password input -->
+                <!-- Main password field -->
                 <EditText
                     android:id="@+id/etPassword"
                     style="@style/InputField"
@@ -127,6 +143,7 @@
                     android:importantForAutofill="no" />
 
                 <!-- Password visibility toggle -->
+                <!-- Shows or hides the password field -->
                 <ImageView
                     android:id="@+id/ivTogglePassword"
                     android:layout_width="24dp"
@@ -138,6 +155,7 @@
             </FrameLayout>
 
             <!-- Confirm password label -->
+            <!-- Label for the confirmation field -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -146,12 +164,14 @@
                 android:layout_marginTop="16dp" />
 
             <!-- Confirm password field row -->
+            <!-- Input and toggle stay in one row -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp">
 
                 <!-- Confirm password input -->
+                <!-- Repeats the password for confirmation -->
                 <EditText
                     android:id="@+id/etConfirmPassword"
                     style="@style/InputField"
@@ -160,6 +180,7 @@
                     android:importantForAutofill="no" />
 
                 <!-- Confirm password visibility toggle -->
+                <!-- Shows or hides the confirmation field -->
                 <ImageView
                     android:id="@+id/ivToggleConfirmPassword"
                     android:layout_width="24dp"
@@ -171,6 +192,7 @@
             </FrameLayout>
 
             <!-- Sign Up button -->
+            <!-- Main action for creating the account -->
             <Button
                 android:id="@+id/btnSignUp"
                 style="@style/PrimaryButton"
@@ -179,6 +201,7 @@
                 android:layout_marginTop="28dp" />
 
             <!-- Already have an account? Log In -->
+            <!-- Prompt and login shortcut stay on one line -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -188,6 +211,7 @@
                 android:layout_marginBottom="16dp">
 
                 <!-- Prompt text -->
+                <!-- Shown before the login shortcut -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -196,6 +220,7 @@
                     android:textSize="14sp" />
 
                 <!-- Login -->
+                <!-- Returns to the login flow -->
                 <TextView
                     android:id="@+id/tvLogIn"
                     android:layout_width="wrap_content"

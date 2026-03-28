@@ -7,8 +7,14 @@
     android:layout_height="match_parent"
     android:background="@color/very_light_mint">
 
+    <!-- Launch options screen -->
+    <!-- Landscape version -->
+    <!-- Branding stays on the left in landscape -->
+    <!-- Login, sign up, and recovery stay on the right -->
+
     <!-- Left branding column -->
     <!-- App logo -->
+    <!-- Brand icon at the top of the left column -->
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="72dp"
@@ -24,6 +30,7 @@
         android:layout_marginBottom="12dp" />
 
     <!-- App name -->
+    <!-- Brand title in the left column -->
     <TextView
         android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
@@ -39,6 +46,7 @@
         android:layout_marginBottom="10dp" />
 
     <!-- Tagline text -->
+    <!-- Short description under the app name -->
     <TextView
         android:id="@+id/tvTagline"
         android:layout_width="0dp"
@@ -56,6 +64,7 @@
 
     <!-- Right action column -->
     <!-- Primary login action -->
+    <!-- Main entry for existing users -->
     <Button
         android:id="@+id/btnLogIn"
         style="@style/PrimaryButton"
@@ -72,6 +81,7 @@
         android:layout_marginBottom="16dp" />
 
     <!-- Secondary sign-up action -->
+    <!-- Starts the account creation flow -->
     <Button
         android:id="@+id/btnSignUp"
         style="@style/SecondaryButton"
@@ -87,6 +97,7 @@
         android:layout_marginBottom="20dp" />
 
     <!-- Forgot-password -->
+    <!-- Starts the recovery flow -->
     <TextView
         android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
@@ -101,6 +112,7 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <!-- Split point between branding and actions -->
+    <!-- Keeps the two columns balanced -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineCenter"
         android:layout_width="wrap_content"

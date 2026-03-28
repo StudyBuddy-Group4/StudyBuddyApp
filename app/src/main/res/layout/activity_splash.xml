@@ -9,7 +9,12 @@
 
     <!-- Splash screen -->
     <!-- Shows the logo and app name -->
+    <!-- Portrait version -->
+
+    <!-- Full green background -->
     <!-- Centered branding -->
+    <!-- Logo sits above the title in portrait -->
+
     <!-- App logo -->
     <ImageView
         android:id="@+id/ivLogo"
@@ -25,6 +30,7 @@
         app:layout_constraintVertical_bias="0.4" />
 
     <!-- App name -->
+    <!-- Placed under the logo with extra top space -->
     <TextView
         android:id="@+id/tvAppName"
         android:layout_width="wrap_content"

@@ -8,6 +8,9 @@
 
     <!-- Admin profile page -->
     <!-- Shows admin info and admin menu items -->
+    <!-- Portrait version -->
+    <!-- Green background stays behind the white card -->
+
     <!-- Screen title -->
     <TextView
         android:layout_width="wrap_content"
@@ -21,6 +24,7 @@
         android:textStyle="bold" />
 
     <!-- White profile card -->
+    <!-- Holds the admin header and action list -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,6 +33,7 @@
         android:paddingTop="32dp">
 
         <!-- Admin name -->
+        <!-- Main line in the admin header -->
         <TextView
             android:id="@+id/tvAdminProfileName"
             android:layout_width="wrap_content"
@@ -40,6 +45,7 @@
             android:textStyle="bold" />
 
         <!-- Role label -->
+        <!-- Small line under the admin name -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,6 +56,7 @@
             android:textSize="14sp" />
 
         <!-- Admin id -->
+        <!-- Secondary identity line -->
         <TextView
             android:id="@+id/tvAdminProfileId"
             android:layout_width="wrap_content"
@@ -61,6 +68,7 @@
             android:textSize="14sp" />
 
         <!-- Divider -->
+        <!-- Splits the header from the actions below -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -70,6 +78,7 @@
             android:background="@color/input_field_bg" />
 
         <!-- Menu list -->
+        <!-- Each row opens an admin action -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,6 +88,7 @@
             android:paddingEnd="24dp">
 
             <!-- Edit profile item -->
+            <!-- Opens the admin edit profile screen -->
             <LinearLayout
                 android:id="@+id/menu_edit_profile"
                 android:layout_width="match_parent"
@@ -92,6 +102,7 @@
                 android:paddingBottom="14dp">
 
                 <!-- Edit profile icon -->
+                <!-- Blue circle behind the icon -->
                 <FrameLayout
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -118,6 +129,7 @@
             </LinearLayout>
 
             <!-- Security item -->
+            <!-- Opens security page -->
             <LinearLayout
                 android:id="@+id/menu_security"
                 android:layout_width="match_parent"
@@ -131,6 +143,7 @@
                 android:paddingBottom="14dp">
 
                 <!-- Security icon -->
+                <!-- Blue circle behind the icon -->
                 <FrameLayout
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -157,6 +170,7 @@
             </LinearLayout>
 
             <!-- History reports item -->
+            <!-- Opens the reports page -->
             <LinearLayout
                 android:id="@+id/menu_history_reports"
                 android:layout_width="match_parent"
@@ -170,6 +184,7 @@
                 android:paddingBottom="14dp">
 
                 <!-- History reports icon -->
+                <!-- Blue circle behind the icon -->
                 <FrameLayout
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -196,6 +211,7 @@
             </LinearLayout>
 
             <!-- Logout item -->
+            <!-- Signs the admin out of the app -->
             <LinearLayout
                 android:id="@+id/menu_logout"
                 android:layout_width="match_parent"
@@ -209,6 +225,7 @@
                 android:paddingBottom="14dp">
 
                 <!-- Logout icon -->
+                <!-- Blue circle behind the icon -->
                 <FrameLayout
                     android:layout_width="40dp"
                     android:layout_height="40dp"

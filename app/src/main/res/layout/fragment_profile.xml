@@ -8,6 +8,8 @@
 
     <!-- Profile page -->
     <!-- Shows user info and menu items -->
+    <!-- Portrait version -->
+
     <!-- Screen title -->
     <TextView
         android:layout_width="wrap_content"
@@ -21,6 +23,7 @@
         android:textStyle="bold" />
 
     <!-- White profile card -->
+    <!-- Holds the profile header and menu list -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,6 +33,7 @@
         android:paddingTop="32dp">
 
         <!-- Profile name -->
+        <!-- Main line in the profile header -->
         <TextView
             android:id="@+id/tvProfileName"
             android:layout_width="wrap_content"
@@ -41,6 +45,7 @@
             android:textStyle="bold" />
 
         <!-- Profile id -->
+        <!-- Smaller line under the name -->
         <TextView
             android:id="@+id/tvProfileId"
             android:layout_width="wrap_content"
@@ -52,6 +57,7 @@
             android:textSize="14sp" />
 
         <!-- Divider -->
+        <!-- Splits the header from the actions below -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -61,6 +67,7 @@
             android:background="@color/input_field_bg" />
 
         <!-- Menu list -->
+        <!-- Each row opens a different profile action -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,6 +77,7 @@
             android:paddingTop="16dp">
 
             <!-- Edit profile item -->
+            <!-- First action in the list -->
             <LinearLayout
                 android:id="@+id/menu_edit_profile"
                 android:layout_width="match_parent"
@@ -83,6 +91,7 @@
                 android:paddingBottom="14dp">
 
                 <!-- Edit profile icon -->
+                <!-- Blue circle behind the icon -->
                 <FrameLayout
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -110,6 +119,7 @@
                     android:textStyle="bold" />
 
                 <!-- Chevron -->
+                <!-- Shows that this row opens another screen -->
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -119,6 +129,7 @@
             </LinearLayout>
 
             <!-- Security item -->
+            <!-- Opens security page-->
             <LinearLayout
                 android:id="@+id/menu_security"
                 android:layout_width="match_parent"
@@ -132,6 +143,7 @@
                 android:paddingBottom="14dp">
 
                 <!-- Security icon -->
+                <!-- Blue circle behind the icon -->
                 <FrameLayout
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -159,6 +171,7 @@
                     android:textStyle="bold" />
 
                 <!-- Chevron -->
+                <!-- Shows that this row opens another screen -->
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -168,6 +181,7 @@
             </LinearLayout>
 
             <!-- Settings item -->
+            <!-- Opens app settings-->
             <LinearLayout
                 android:id="@+id/menu_setting"
                 android:layout_width="match_parent"
@@ -181,6 +195,7 @@
                 android:paddingBottom="14dp">
 
                 <!-- Settings icon -->
+                <!-- Blue circle behind the icon -->
                 <FrameLayout
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -208,6 +223,7 @@
                     android:textStyle="bold" />
 
                 <!-- Chevron -->
+                <!-- Shows that this row opens another screen -->
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -217,6 +233,7 @@
             </LinearLayout>
 
             <!-- Logout item -->
+            <!-- Last action in the list -->
             <LinearLayout
                 android:id="@+id/menu_logout"
                 android:layout_width="match_parent"
@@ -230,6 +247,7 @@
                 android:paddingBottom="14dp">
 
                 <!-- Logout icon -->
+                <!-- Blue circle behind the icon -->
                 <FrameLayout
                     android:layout_width="40dp"
                     android:layout_height="40dp"

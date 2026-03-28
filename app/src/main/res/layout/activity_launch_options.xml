@@ -7,7 +7,13 @@
     android:layout_height="match_parent"
     android:background="@color/very_light_mint">
 
+    <!-- Launch options screen -->
+    <!-- Portrait version -->
+    <!-- Shows the app branding first -->
+    <!-- Login, sign up, and recovery start here -->
+
     <!-- App logo -->
+    <!-- Top branding icon -->
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="80dp"
@@ -22,6 +28,7 @@
         app:layout_constraintVertical_bias="0.2" />
 
     <!-- App name -->
+    <!-- Brand title under the logo -->
     <TextView
         android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
@@ -36,6 +43,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Tagline text -->
+    <!-- Short description under the app name -->
     <TextView
         android:id="@+id/tvTagline"
         android:layout_width="0dp"
@@ -52,6 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Primary login action -->
+    <!-- Main entry for existing users -->
     <Button
         android:id="@+id/btnLogIn"
         style="@style/PrimaryButton"
@@ -68,6 +77,7 @@
         android:layout_marginTop="48dp" />
 
     <!-- Secondary sign-up action -->
+    <!-- Starts the account creation flow -->
     <Button
         android:id="@+id/btnSignUp"
         style="@style/SecondaryButton"
@@ -82,6 +92,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Forgot-password-->
+    <!-- Starts the recovery flow -->
     <TextView
         android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"

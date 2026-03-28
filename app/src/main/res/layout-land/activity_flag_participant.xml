@@ -8,8 +8,14 @@
     android:background="@color/primary_green"
     android:orientation="vertical">
 
+    <!-- Flag participant screen -->
+    <!-- Landscape version -->
+    <!-- Shows the other people in the current meeting -->
+    <!-- Landscape keeps the same grid with wider side padding -->
+
     <!-- Top bar -->
     <!-- Back and title row -->
+    <!-- Keeps the title centered with a spacer on the right -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,6 +27,7 @@
         android:paddingBottom="12dp">
 
         <!-- Back action -->
+        <!-- Returns to the meeting room -->
         <ImageView
             android:id="@+id/ivBack"
             android:layout_width="28dp"
@@ -30,6 +37,7 @@
             app:tint="@color/white" />
 
         <!-- Screen title -->
+        <!-- Main heading for the report screen -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -41,12 +49,14 @@
             android:textStyle="bold" />
 
         <!-- Right spacer for title centering -->
+        <!-- Matches the back icon width -->
         <View
             android:layout_width="28dp"
             android:layout_height="28dp" />
     </LinearLayout>
 
     <!-- Empty state message -->
+    <!-- Shown when there are no other participants to report -->
     <TextView
         android:id="@+id/tvNoParticipants"
         android:layout_width="wrap_content"
@@ -60,6 +70,7 @@
 
     <!-- Participant grid area -->
     <!-- Wider side padding leaves room around the cards -->
+    <!-- Centers the rows inside the remaining screen space -->
     <LinearLayout
         android:id="@+id/participantGrid"
         android:layout_width="match_parent"
@@ -71,6 +82,7 @@
         android:paddingEnd="48dp">
 
         <!-- First participant row -->
+        <!-- Holds the first two visible cards -->
         <LinearLayout
             android:id="@+id/row1"
             android:layout_width="match_parent"
@@ -80,6 +92,7 @@
             android:orientation="horizontal">
 
             <!-- Participant slot 1 -->
+            <!-- Hidden until this slot is assigned a participant -->
             <FrameLayout
                 android:id="@+id/slot1"
                 android:layout_width="0dp"
@@ -89,12 +102,14 @@
                 android:visibility="gone">
 
                 <!-- Rounded video placeholder -->
+                <!-- Background shape for the participant card -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
 
                 <!-- Participant label -->
+                <!-- Shows the uid on top of the card -->
                 <TextView
                     android:id="@+id/tvUid1"
                     android:layout_width="wrap_content"
@@ -110,6 +125,7 @@
                     android:textSize="13sp" />
 
                 <!-- Flag action -->
+                <!-- Opens the reason dialog for this participant -->
                 <ImageView
                     android:id="@+id/flagBtn1"
                     android:layout_width="36dp"
@@ -124,6 +140,7 @@
             </FrameLayout>
 
             <!-- Participant slot 2 -->
+            <!-- Hidden until this slot is assigned a participant -->
             <FrameLayout
                 android:id="@+id/slot2"
                 android:layout_width="0dp"
@@ -132,12 +149,14 @@
                 android:layout_weight="1"
                 android:visibility="gone">
 
+                <!-- Rounded video placeholder -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
 
                 <!-- Participant label -->
+                <!-- Shows the uid on top of the card -->
                 <TextView
                     android:id="@+id/tvUid2"
                     android:layout_width="wrap_content"
@@ -153,6 +172,7 @@
                     android:textSize="13sp" />
 
                 <!-- Flag action -->
+                <!-- Opens the reason dialog for this participant -->
                 <ImageView
                     android:id="@+id/flagBtn2"
                     android:layout_width="36dp"
@@ -169,6 +189,7 @@
 
         <!-- Second participant row -->
         <!-- Hidden until more participants are available -->
+        <!-- Holds the next two visible cards -->
         <LinearLayout
             android:id="@+id/row2"
             android:layout_width="match_parent"
@@ -178,6 +199,7 @@
             android:visibility="gone">
 
             <!-- Participant slot 3 -->
+            <!-- Hidden until this slot is assigned a participant -->
             <FrameLayout
                 android:id="@+id/slot3"
                 android:layout_width="0dp"
@@ -186,12 +208,14 @@
                 android:layout_weight="1"
                 android:visibility="gone">
 
+                <!-- Rounded video placeholder -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
 
                 <!-- Participant label -->
+                <!-- Shows the uid on top of the card -->
                 <TextView
                     android:id="@+id/tvUid3"
                     android:layout_width="wrap_content"
@@ -207,6 +231,7 @@
                     android:textSize="13sp" />
 
                 <!-- Flag action -->
+                <!-- Opens the reason dialog for this participant -->
                 <ImageView
                     android:id="@+id/flagBtn3"
                     android:layout_width="36dp"
@@ -221,6 +246,7 @@
             </FrameLayout>
 
             <!-- Participant slot 4 -->
+            <!-- Hidden until this slot is assigned a participant -->
             <FrameLayout
                 android:id="@+id/slot4"
                 android:layout_width="0dp"
@@ -229,12 +255,14 @@
                 android:layout_weight="1"
                 android:visibility="gone">
 
+                <!-- Rounded video placeholder -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_video_rounded" />
 
                 <!-- Participant label -->
+                <!-- Shows the uid on top of the card -->
                 <TextView
                     android:id="@+id/tvUid4"
                     android:layout_width="wrap_content"
@@ -250,6 +278,7 @@
                     android:textSize="13sp" />
 
                 <!-- Flag action -->
+                <!-- Opens the reason dialog for this participant -->
                 <ImageView
                     android:id="@+id/flagBtn4"
                     android:layout_width="36dp"

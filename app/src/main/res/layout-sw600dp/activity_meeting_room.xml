@@ -10,6 +10,7 @@
     <!-- Meeting room page -->
     <!-- Tablet layout -->
     <!-- Uses larger spacing for wider screens -->
+    <!-- Main video stays above the preview row and controls -->
 
     <!-- Screen title -->
     <TextView
@@ -45,6 +46,7 @@
 
         <!-- Timer bubble -->
         <!-- Floats over the top-right corner -->
+        <!-- Shows the time left in the current session -->
         <TextView
             android:id="@+id/tvTimer"
             android:layout_width="wrap_content"
@@ -66,6 +68,7 @@
     <!-- Thumbnail strip -->
     <!-- Taller to fit larger preview cards -->
     <!-- Sits between the main video and the controls -->
+    <!-- Scrolls sideways when there are many participants -->
     <HorizontalScrollView
         android:id="@+id/thumbnailScroll"
         android:layout_width="0dp"
@@ -81,6 +84,7 @@
 
         <!-- Runtime thumbnail container -->
         <!-- Preview cards are added here from code -->
+        <!-- Starts empty in the XML -->
         <LinearLayout
             android:id="@+id/thumbnailContainer"
             android:layout_width="wrap_content"
@@ -92,6 +96,7 @@
     <!-- Bottom control bar -->
     <!-- Leaves extra room on larger screens -->
     <!-- Groups the in-call actions -->
+    <!-- Centered near the bottom edge -->
     <LinearLayout
         android:id="@+id/controlBar"
         android:layout_width="wrap_content"
@@ -107,7 +112,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <!-- Speaker toggle -->
-        <!-- Speaker output button -->
+        <!-- Turns speaker output on or off -->
         <ImageView
             android:id="@+id/btnSpeaker"
             android:layout_width="44dp"
@@ -119,7 +124,7 @@
             android:src="@drawable/ic_speaker" />
 
         <!-- Camera toggle -->
-        <!-- Camera on or off -->
+        <!-- Turns the local camera on or off -->
         <ImageView
             android:id="@+id/btnCamera"
             android:layout_width="44dp"
@@ -143,7 +148,7 @@
             android:src="@drawable/ic_call_end" />
 
         <!-- Microphone toggle -->
-        <!-- Microphone on or off -->
+        <!-- Turns the microphone on or off -->
         <ImageView
             android:id="@+id/btnMic"
             android:layout_width="44dp"
@@ -155,7 +160,7 @@
             android:src="@drawable/ic_mic" />
 
         <!-- Flag-participant action -->
-        <!-- Opens the reporting flow -->
+        <!-- Opens the participant reporting flow -->
         <ImageView
             android:id="@+id/btnFlag"
             android:layout_width="44dp"

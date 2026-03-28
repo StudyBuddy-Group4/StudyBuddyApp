@@ -7,7 +7,13 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
+    <!-- Login screen -->
+    <!-- Landscape version -->
+    <!-- Green welcome header on top -->
+    <!-- White card holds the form and links -->
+
     <!-- Top header background -->
+    <!-- Green header area -->>
     <View
         android:id="@+id/headerBackground"
         android:layout_width="0dp"
@@ -35,6 +41,7 @@
 
     <!-- Scrollable white card -->
     <!-- Holds the login form and secondary links -->
+    <!-- Lets the full form stay visible on shorter screens -->
     <ScrollView
         android:id="@+id/cardContainer"
         android:layout_width="0dp"
@@ -51,6 +58,7 @@
 
         <!-- Form content -->
         <!-- Wide side padding keeps the landscape form narrow -->
+        <!-- Stacks inputs, button, and helper links -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,6 +70,7 @@
 
 
             <!-- Username or email label -->
+            <!-- First field label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,6 +79,7 @@
                 android:layout_marginTop="16dp" />
 
             <!-- Username or email input -->
+            <!-- Accepts either username or email -->
             <EditText
                 android:id="@+id/etEmail"
                 style="@style/InputField"
@@ -79,6 +89,7 @@
                 android:importantForAutofill="no" />
 
             <!-- Password label -->
+            <!-- Second field label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,13 +98,14 @@
                 android:layout_marginTop="20dp" />
 
             <!-- Password field row -->
-            <!-- Keeps the eye icon over the input -->
+            <!-- Input and toggle stay in one row -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp">
 
                 <!-- Password input -->
+                <!-- Main password input -->
                 <EditText
                     android:id="@+id/etPassword"
                     style="@style/InputField"
@@ -102,6 +114,7 @@
                     android:importantForAutofill="no" />
 
                 <!-- Password visibility toggle -->
+                <!-- Shows or hides the password field -->
                 <ImageView
                     android:id="@+id/ivTogglePassword"
                     android:layout_width="24dp"
@@ -113,6 +126,7 @@
             </FrameLayout>
 
             <!-- Primary login action -->
+            <!-- Main action for this screen -->
             <Button
                 android:id="@+id/btnLogIn"
                 style="@style/PrimaryButton"
@@ -121,6 +135,7 @@
                 android:layout_marginTop="32dp" />
 
             <!-- Sign-up entry -->
+            <!-- Prompt and shortcut stay on one line -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -129,6 +144,7 @@
                 android:layout_marginTop="20dp">
 
                 <!-- Prompt text -->
+                <!-- Shown before the sign-up shortcut -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -137,6 +153,7 @@
                     android:textSize="14sp" />
 
                 <!-- Sign-up shortcut -->
+                <!-- Opens the account creation flow -->
                 <TextView
                     android:id="@+id/tvSignUp"
                     android:layout_width="wrap_content"
@@ -149,6 +166,7 @@
             </LinearLayout>
 
             <!-- Forgot-password shortcut -->
+            <!-- Opens the recovery flow -->
             <TextView
                 android:id="@+id/tvForgotPassword"
                 android:layout_width="wrap_content"

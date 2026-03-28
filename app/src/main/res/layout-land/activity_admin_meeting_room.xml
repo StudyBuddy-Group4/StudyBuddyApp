@@ -8,11 +8,11 @@
     android:background="@color/primary_green"
     android:orientation="vertical">
 
-    <!-- Root container -->
-    <!-- Full-screen admin meeting layout -->
-
+    <!-- Admin meeting room screen -->
+    <!-- Landscape version -->
+    <!-- Header on top -->
+    <!-- Grid shows more cards per row -->
     <!-- Header row -->
-    <!-- Top navigation area -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,6 @@
         android:paddingBottom="12dp">
 
         <!-- Back button -->
-        <!-- Returns to the previous admin screen -->
         <ImageView
             android:id="@+id/ivBack"
             android:layout_width="28dp"
@@ -33,8 +32,7 @@
             android:src="@drawable/ic_arrow_back"
             app:tint="@color/white" />
 
-        <!-- Centered title -->
-        <!-- Keeps the room title visually aligned -->
+        <!-- Screen title -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -45,15 +43,13 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!-- Spacer to balance the back button -->
-        <!-- Matches the back icon width on the right -->
+        <!-- Right spacer -->
         <View
             android:layout_width="28dp"
             android:layout_height="28dp" />
     </LinearLayout>
 
     <!-- Scrollable participant area -->
-    <!-- Horizontal layouts can still grow vertically -->
     <!-- Grid: 4 per row in landscape -->
     <ScrollView
         android:layout_width="match_parent"
@@ -61,8 +57,8 @@
         android:layout_weight="1"
         android:fillViewport="true">
 
-        <!-- Static landscape grid wrapper -->
-        <!-- Extra side padding centers the rows on wide screens -->
+        <!-- Grid wrapper -->
+        <!-- Extra side padding -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,8 +68,7 @@
             android:paddingEnd="60dp"
             android:paddingBottom="24dp">
 
-            <!-- Row 1: 4 tiles -->
-            <!-- First landscape row -->
+            <!-- First row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,7 +76,6 @@
                 android:orientation="horizontal">
 
                 <!-- Tile 1 -->
-                <!-- Video placeholder with moderation action -->
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="150dp"
@@ -176,8 +170,7 @@
                 </FrameLayout>
             </LinearLayout>
 
-            <!-- Row 2: 1 tile + 3 empty -->
-            <!-- Partial second row -->
+            <!-- Second row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -206,15 +199,15 @@
                         app:tint="@color/red_prohibited" />
                 </FrameLayout>
 
-                <!-- Empty spacer cell -->
+                <!-- Empty spacer -->
                 <View android:layout_width="0dp" android:layout_height="150dp"
                     android:layout_marginStart="6dp" android:layout_marginEnd="6dp"
                     android:layout_weight="1" />
-                <!-- Empty spacer cell -->
+                <!-- Empty spacer -->
                 <View android:layout_width="0dp" android:layout_height="150dp"
                     android:layout_marginStart="6dp" android:layout_marginEnd="6dp"
                     android:layout_weight="1" />
-                <!-- Empty spacer cell -->
+                <!-- Empty spacer -->
                 <View android:layout_width="0dp" android:layout_height="150dp"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1" />

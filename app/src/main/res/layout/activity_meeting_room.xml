@@ -7,6 +7,11 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
+    <!-- Meeting room screen -->
+    <!-- Portrait version -->
+    <!-- Main video stays in the center -->
+    <!-- Thumbnails and controls sit below it -->
+
     <!-- Screen title -->
     <TextView
         android:id="@+id/tvTitle"
@@ -39,6 +44,7 @@
 
         <!-- Speaker label -->
         <!-- Hidden until a remote user is promoted to the main view -->
+        <!-- Sits over the bottom-left corner of the video -->
         <TextView
             android:id="@+id/tvSpeakerId"
             android:layout_width="wrap_content"
@@ -57,6 +63,7 @@
 
         <!-- Timer bubble -->
         <!-- Stays over the top-right corner of the main video -->
+        <!-- Shows the time left in the current session -->
         <TextView
             android:id="@+id/tvTimer"
             android:layout_width="wrap_content"
@@ -77,6 +84,7 @@
 
     <!-- Thumbnail strip -->
     <!-- Holds the smaller participant previews -->
+    <!-- Scrolls sideways when there are many participants -->
     <HorizontalScrollView
         android:id="@+id/thumbnailScroll"
         android:layout_width="0dp"
@@ -90,6 +98,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <!-- Runtime thumbnail container -->
+        <!-- Preview cards are added here from code -->
         <LinearLayout
             android:id="@+id/thumbnailContainer"
             android:layout_width="wrap_content"
@@ -100,6 +109,7 @@
 
     <!-- Bottom control bar -->
     <!-- Groups the in-call actions in one floating row -->
+    <!-- Centered near the bottom edge -->
     <LinearLayout
         android:id="@+id/controlBar"
         android:layout_width="wrap_content"
@@ -115,6 +125,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <!-- Speaker toggle -->
+        <!-- Turns speaker output on or off -->
         <ImageView
             android:id="@+id/btnSpeaker"
             android:layout_width="44dp"
@@ -126,6 +137,7 @@
             android:src="@drawable/ic_speaker" />
 
         <!-- Camera toggle -->
+        <!-- Turns the local camera on or off -->
         <ImageView
             android:id="@+id/btnCamera"
             android:layout_width="44dp"
@@ -137,6 +149,7 @@
             android:src="@drawable/ic_videocam" />
 
         <!-- Hang-up action -->
+        <!-- Ends the current room session -->
         <ImageView
             android:id="@+id/btnHangUp"
             android:layout_width="44dp"
@@ -148,6 +161,7 @@
             android:src="@drawable/ic_call_end" />
 
         <!-- Microphone toggle -->
+        <!-- Turns the microphone on or off -->
         <ImageView
             android:id="@+id/btnMic"
             android:layout_width="44dp"
@@ -159,6 +173,7 @@
             android:src="@drawable/ic_mic" />
 
         <!-- Flag-participant action -->
+        <!-- Opens the participant reporting flow -->
         <ImageView
             android:id="@+id/btnFlag"
             android:layout_width="44dp"

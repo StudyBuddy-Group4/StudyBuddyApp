@@ -9,6 +9,10 @@
     android:padding="24dp">
 
     <!-- Home page -->
+    <!-- Focus time is chosen here before joining a room -->
+    <!-- Portrait version -->
+    <!-- Green gradient sits behind the card and button -->
+
     <!-- Screen title -->
     <TextView
         android:layout_width="wrap_content"
@@ -20,6 +24,7 @@
         android:textStyle="bold" />
 
     <!-- Focus card -->
+    <!-- Main card for the timer options -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,6 +36,7 @@
         android:padding="20dp">
 
         <!-- Focus card header -->
+        <!-- Green header inside the white card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,6 +46,7 @@
             android:padding="16dp">
 
             <!-- Clock icon -->
+            <!-- Small icon before the header label -->
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -48,6 +55,7 @@
                 app:tint="@color/white" />
 
             <!-- Focus time title -->
+            <!-- Header text for the timer section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,6 +67,7 @@
         </LinearLayout>
 
             <!-- Divider -->
+            <!-- Splits the header from the chip row -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -67,6 +76,7 @@
                 android:background="@color/input_field_bg" />
 
         <!-- Time chip row -->
+        <!-- Lets the user choose preset or custom time -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,6 +84,8 @@
             android:orientation="horizontal">
 
             <!-- 15-minute chip -->
+            <!-- Default selected option -->
+            <!-- Green colorindicates selected -->
             <TextView
                 android:id="@+id/chip_15_min"
                 android:layout_width="wrap_content"
@@ -89,6 +101,8 @@
                 android:textStyle="bold" />
 
             <!-- 30-minute chip -->
+            <!-- Second preset option -->
+            <!-- White color indicates unselected -->
             <TextView
                 android:id="@+id/chip_30_min"
                 android:layout_width="wrap_content"
@@ -105,6 +119,7 @@
                 android:textStyle="bold" />
 
             <!-- Custom chip -->
+            <!-- Opens the custom duration path -->
             <TextView
                 android:id="@+id/chip_custom"
                 android:layout_width="wrap_content"
@@ -123,6 +138,7 @@
     </LinearLayout>
 
     <!-- Start button -->
+    <!-- Starts the matching or meeting flow -->
     <Button
         android:id="@+id/btn_start"
         style="@style/PrimaryButton"

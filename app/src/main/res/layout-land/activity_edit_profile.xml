@@ -7,7 +7,13 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
+    <!-- Edit profile screen -->
+    <!-- Landscape version -->
+    <!-- Green header on top -->
+    <!-- Landscape keeps the same form with wider side padding -->
+
     <!-- Top header background -->
+    <!-- Green header area -->
     <View
         android:id="@+id/headerBackground"
         android:layout_width="0dp"
@@ -19,6 +25,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Back action -->
+    <!-- Returns to the profile screen -->
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="28dp"
@@ -32,6 +39,7 @@
         app:tint="@color/white" />
 
     <!-- Screen title -->
+    <!-- Main heading for the edit screen -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -47,6 +55,7 @@
 
     <!-- Scrollable white card -->
     <!-- Holds the profile summary and edit form -->
+    <!-- Lets the full form stay visible on shorter screens -->
     <ScrollView
         android:id="@+id/cardContainer"
         android:layout_width="0dp"
@@ -60,6 +69,7 @@
 
         <!-- Form content -->
         <!-- Wide side padding keeps the landscape form narrow -->
+        <!-- Stacks the summary, fields, and action button -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,6 +80,7 @@
             android:paddingBottom="24dp">
 
             <!-- Profile name in the card header -->
+            <!-- Main identity line in the card header -->
             <TextView
                 android:id="@+id/tvHeaderName"
                 android:layout_width="wrap_content"
@@ -82,6 +93,7 @@
                 android:textStyle="bold" />
 
             <!-- Profile id under the name -->
+            <!-- Smaller line under the profile name -->
             <TextView
                 android:id="@+id/tvHeaderId"
                 android:layout_width="wrap_content"
@@ -93,6 +105,7 @@
                 android:textSize="14sp" />
 
             <!-- Account settings section title -->
+            <!-- Starts the editable part of the screen -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -103,6 +116,7 @@
                 android:textStyle="bold" />
 
             <!-- Username label -->
+            <!-- Label for the username field -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -111,6 +125,7 @@
                 style="@style/FieldLabel" />
 
             <!-- Username input -->
+            <!-- Editable username field -->
             <EditText
                 android:id="@+id/etUsername"
                 style="@style/InputField"
@@ -120,6 +135,7 @@
                 android:text="@string/mock_user_name" />
 
             <!-- Email label -->
+            <!-- Label for the email field -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -128,6 +144,7 @@
                 style="@style/FieldLabel" />
 
             <!-- Email input -->
+            <!-- Editable email field -->
             <EditText
                 android:id="@+id/etEmail"
                 style="@style/InputField"
@@ -137,6 +154,7 @@
                 android:text="@string/hint_email" />
 
             <!-- Primary update action -->
+            <!-- Main action for saving profile changes -->
             <Button
                 android:id="@+id/btnUpdateProfile"
                 style="@style/PrimaryButton"
