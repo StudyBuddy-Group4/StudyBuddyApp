@@ -1,35 +1,22 @@
 package com.example.studybuddyapp.api.dto;
 
 /**
- * Data Transfer Object (DTO) for submitting a report against a user.
- * This class encapsulates all necessary data required by the backend
- * to process a moderation flag, fulfilling requirement [MOD-3].
- * It includes the reporting user, the reported user, the meeting context,
- * and the specific written reason for the flag.
+ * Request body for submitting a moderation report against another user.
  */
 public class ReportRequest {
-    // The unique identifier of the user who is submitting the report.
+    // Reporter id
     private long reportingUserId;
-    
-    // The unique identifier of the user who is being reported.
+    // Reported user id
     private long reportedUserId;
-    
-    // The unique identifier or channel name of the meeting where the incident occurred.
+    // Meeting id or channel
     private String meetingId;
-    
-    // The written reason provided by the reporting user describing the inappropriate behavior.
+    // Written reason
     private String reason;
-    
-    // The exact timestamp when the report was generated on the client side.
+    // Client timestamp
     private long timestamp;
 
     /**
-     * Constructor to initialize a new ReportRequest.
-     * * @param reportingUserId ID of the user reporting.
-     * @param reportedUserId ID of the user being reported.
-     * @param meetingId The channel or meeting identifier.
-     * @param reason The written explanation of the offense.
-     * @param timestamp The time the offense was reported.
+     * Creates a report request with the reporter, target user, meeting, and reason.
      */
     public ReportRequest(long reportingUserId, long reportedUserId, String meetingId, String reason, long timestamp) {
         this.reportingUserId = reportingUserId;
@@ -38,6 +25,4 @@ public class ReportRequest {
         this.reason = reason;
         this.timestamp = timestamp;
     }
-
-    // Getters and Setters can be generated here...
 }

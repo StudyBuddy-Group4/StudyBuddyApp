@@ -6,18 +6,25 @@ import com.google.gson.annotations.SerializedName;
  * Represents the profile data returned for the current user.
  */
 public class UserProfileResponse {
+    // User id
     private Long id;
+    // Username
     private String username;
+    // Email address
     private String email;
 
     @SerializedName("admin")
+    // Admin flag
     private boolean isAdmin;
 
     @SerializedName("banned")
+    // Permanent ban flag
     private boolean isBanned;
 
+    // Temporary restriction end
     private String bannedUntil;
 
+    // Rating
     private double rating;
     public Long getId() { return id; }
     public String getUsername() { return username; }
