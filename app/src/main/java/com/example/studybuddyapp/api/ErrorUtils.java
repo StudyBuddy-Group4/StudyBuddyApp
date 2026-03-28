@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import retrofit2.Response;
 
+/**
+ * Small helpers for backend error messages.
+ */
 public final class ErrorUtils {
 
     private ErrorUtils() {}
