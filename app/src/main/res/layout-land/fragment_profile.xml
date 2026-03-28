@@ -6,7 +6,9 @@
     android:background="@drawable/bg_gradient_top"
     android:orientation="vertical">
 
-    <!-- Fixed header area (does not move with scrolling) -->
+    <!-- Profile page -->
+    <!-- Landscape version keeps the card scrollable -->
+    <!-- Screen title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +20,7 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <!-- Scrollable area -->
+    <!-- Scrollable content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -26,6 +28,7 @@
         android:fillViewport="true"
         android:overScrollMode="ifContentScrolls">
 
+        <!-- White profile card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +36,7 @@
             android:orientation="vertical"
             android:paddingTop="32dp">
 
-            <!-- User Info -->
+            <!-- Profile name -->
             <TextView
                 android:id="@+id/tvProfileName"
                 android:layout_width="wrap_content"
@@ -44,6 +47,7 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
+            <!-- Profile id -->
             <TextView
                 android:id="@+id/tvProfileId"
                 android:layout_width="wrap_content"
@@ -54,6 +58,7 @@
                 android:textColor="@color/secondary_text"
                 android:textSize="14sp" />
 
+            <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -62,7 +67,7 @@
                 android:layout_marginEnd="24dp"
                 android:background="@color/input_field_bg" />
 
-            <!-- Menu Items -->
+            <!-- Menu list -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +76,7 @@
                 android:paddingEnd="24dp"
                 android:paddingTop="16dp">
 
-                <!-- Edit Profile -->
+                <!-- Edit profile item -->
                 <LinearLayout
                     android:id="@+id/menu_edit_profile"
                     android:layout_width="match_parent"
@@ -83,11 +88,13 @@
                     android:paddingTop="14dp"
                     android:paddingBottom="14dp">
 
+                    <!-- Edit profile icon -->
                     <FrameLayout
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/bg_icon_circle_blue">
 
+                        <!-- Icon image -->
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -97,6 +104,7 @@
                             app:tint="@color/white" />
                     </FrameLayout>
 
+                    <!-- Edit profile text -->
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -107,6 +115,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
+                    <!-- Chevron -->
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
@@ -115,7 +124,7 @@
                         app:tint="@color/secondary_text" />
                 </LinearLayout>
 
-                <!-- Security -->
+                <!-- Security item -->
                 <LinearLayout
                     android:id="@+id/menu_security"
                     android:layout_width="match_parent"
@@ -127,11 +136,13 @@
                     android:paddingTop="14dp"
                     android:paddingBottom="14dp">
 
+                    <!-- Security icon -->
                     <FrameLayout
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/bg_icon_circle_blue">
 
+                        <!-- Icon image -->
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -141,6 +152,7 @@
                             app:tint="@color/white" />
                     </FrameLayout>
 
+                    <!-- Security text -->
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -151,6 +163,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
+                    <!-- Chevron -->
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
@@ -159,7 +172,7 @@
                         app:tint="@color/secondary_text" />
                 </LinearLayout>
 
-                <!-- Setting -->
+                <!-- Settings item -->
                 <LinearLayout
                     android:id="@+id/menu_setting"
                     android:layout_width="match_parent"
@@ -171,11 +184,13 @@
                     android:paddingTop="14dp"
                     android:paddingBottom="14dp">
 
+                    <!-- Settings icon -->
                     <FrameLayout
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/bg_icon_circle_blue">
 
+                        <!-- Icon image -->
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -185,6 +200,7 @@
                             app:tint="@color/white" />
                     </FrameLayout>
 
+                    <!-- Settings text -->
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -195,6 +211,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
+                    <!-- Chevron -->
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
@@ -203,7 +220,7 @@
                         app:tint="@color/secondary_text" />
                 </LinearLayout>
 
-                <!-- Logout -->
+                <!-- Logout item -->
                 <LinearLayout
                     android:id="@+id/menu_logout"
                     android:layout_width="match_parent"
@@ -215,11 +232,13 @@
                     android:paddingTop="14dp"
                     android:paddingBottom="14dp">
 
+                    <!-- Logout icon -->
                     <FrameLayout
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/bg_icon_circle_blue">
 
+                        <!-- Icon image -->
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -229,6 +248,7 @@
                             app:tint="@color/white" />
                     </FrameLayout>
 
+                    <!-- Logout text -->
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -239,6 +259,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
+                    <!-- Chevron -->
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"

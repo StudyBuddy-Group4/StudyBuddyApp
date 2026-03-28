@@ -7,6 +7,10 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
+    <!-- Splash screen -->
+    <!-- Shows the logo and app name -->
+    <!-- Centered branding -->
+    <!-- App logo -->
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="80dp"
@@ -20,6 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.4" />
 
+    <!-- App name -->
     <TextView
         android:id="@+id/tvAppName"
         android:layout_width="wrap_content"

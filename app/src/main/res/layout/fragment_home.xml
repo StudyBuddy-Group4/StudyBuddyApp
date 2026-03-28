@@ -8,6 +8,8 @@
     android:orientation="vertical"
     android:padding="24dp">
 
+    <!-- Home page -->
+    <!-- Screen title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,6 +19,7 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <!-- Focus card -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,6 +30,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
+        <!-- Focus card header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,6 +39,7 @@
             android:orientation="horizontal"
             android:padding="16dp">
 
+            <!-- Clock icon -->
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -42,6 +47,7 @@
                 android:src="@drawable/ic_clock"
                 app:tint="@color/white" />
 
+            <!-- Focus time title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,6 +58,7 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+            <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -59,12 +66,14 @@
                 android:layout_marginBottom="16dp"
                 android:background="@color/input_field_bg" />
 
+        <!-- Time chip row -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
 
+            <!-- 15-minute chip -->
             <TextView
                 android:id="@+id/chip_15_min"
                 android:layout_width="wrap_content"
@@ -79,6 +88,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
+            <!-- 30-minute chip -->
             <TextView
                 android:id="@+id/chip_30_min"
                 android:layout_width="wrap_content"
@@ -94,6 +104,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
+            <!-- Custom chip -->
             <TextView
                 android:id="@+id/chip_custom"
                 android:layout_width="wrap_content"
@@ -111,6 +122,7 @@
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Start button -->
     <Button
         android:id="@+id/btn_start"
         style="@style/PrimaryButton"
