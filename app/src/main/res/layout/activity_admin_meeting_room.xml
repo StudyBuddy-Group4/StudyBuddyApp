@@ -8,7 +8,9 @@
     android:background="@color/primary_green"
     android:orientation="vertical">
 
-    <!-- Top bar -->
+    <!-- Root container -->
+
+    <!-- Header row -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +21,7 @@
         android:paddingEnd="16dp"
         android:paddingBottom="12dp">
 
+        <!-- Back button -->
         <ImageView
             android:id="@+id/ivBack"
             android:layout_width="28dp"
@@ -27,6 +30,7 @@
             android:src="@drawable/ic_arrow_back"
             app:tint="@color/white" />
 
+        <!-- Centered title -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -37,18 +41,20 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <!-- Spacer to balance the back button -->
         <View
             android:layout_width="28dp"
             android:layout_height="28dp" />
     </LinearLayout>
 
-    <!-- Dynamic participant grid -->
+    <!-- Scrollable participant area -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:fillViewport="true">
 
+        <!-- Runtime-built participant grid -->
         <LinearLayout
             android:id="@+id/participantGrid"
             android:layout_width="match_parent"
