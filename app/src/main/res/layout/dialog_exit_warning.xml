@@ -11,6 +11,7 @@
     android:paddingBottom="28dp">
 
     <!-- Exit warning dialog -->
+    <!-- Shown before leaving an active session -->
     <!-- Warning message -->
     <TextView
         android:id="@+id/tvWarningMessage"
@@ -24,6 +25,7 @@
 
     <!-- Continue button -->
     <!-- Keeps the user in the session -->
+    <!-- First action in the dialog -->
     <Button
         android:id="@+id/btnContinueStudying"
         style="@style/PrimaryButton"
@@ -39,6 +41,7 @@
 
     <!-- Leave button -->
     <!-- Ends the current session -->
+    <!-- Second action under the primary button -->
     <Button
         android:id="@+id/btnLeaveSession"
         style="@style/SecondaryButton"

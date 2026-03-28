@@ -11,6 +11,7 @@
     android:paddingBottom="28dp">
 
     <!-- Session completed dialog -->
+    <!-- Shown after a successful focus session -->
     <!-- Completion message -->
     <TextView
         android:layout_width="wrap_content"
@@ -23,6 +24,7 @@
 
     <!-- Home button -->
     <!-- Returns to the home page -->
+    <!-- Primary action in the dialog -->
     <Button
         android:id="@+id/btnHome"
         style="@style/PrimaryButton"
@@ -38,6 +40,7 @@
 
     <!-- New-session button -->
     <!-- Starts another focus session -->
+    <!-- Secondary action under the home button -->
     <Button
         android:id="@+id/btnStartNewSession"
         style="@style/SecondaryButton"
@@ -53,6 +56,7 @@
 
     <!-- Task-list button -->
     <!-- Opens the task list after the session -->
+    <!-- Last option in the action stack -->
     <Button
         android:id="@+id/btnGoToTaskList"
         style="@style/SecondaryButton"

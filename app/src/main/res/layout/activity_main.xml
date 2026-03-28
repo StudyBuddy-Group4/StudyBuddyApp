@@ -9,6 +9,7 @@
 
     <!-- Main activity placeholder -->
     <!-- Default template screen -->
+    <!-- Stays centered in both directions -->
     <!-- Centered sample text -->
     <TextView
         android:layout_width="wrap_content"

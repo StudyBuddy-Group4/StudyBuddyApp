@@ -8,6 +8,7 @@
     android:padding="24dp">
 
     <!-- Admin decision dialog -->
+    <!-- Opens after the admin selects a moderation target -->
     <!-- Dialog title -->
     <TextView
         android:layout_width="wrap_content"
@@ -20,6 +21,7 @@
 
     <!-- Kick-out button -->
     <!-- Removes the participant without a ban -->
+    <!-- First action in the list -->
     <Button
         android:id="@+id/btnKickOut"
         style="@style/PrimaryButton"
@@ -35,6 +37,7 @@
 
     <!-- Temporary ban button -->
     <!-- Applies a three-day ban -->
+    <!-- Second action in the list -->
     <Button
         android:id="@+id/btnBan3Days"
         style="@style/PrimaryButton"
@@ -50,6 +53,7 @@
 
     <!-- Permanent ban button -->
     <!-- Applies permanent ban -->
+    <!-- Strongest action in the list -->
     <Button
         android:id="@+id/btnBanPermanently"
         style="@style/PrimaryButton"
@@ -65,6 +69,7 @@
 
     <!-- Back button -->
     <!-- Closes the dialog without taking action -->
+    <!-- Last button in the stack -->
     <Button
         android:id="@+id/btnBack"
         style="@style/SecondaryButton"

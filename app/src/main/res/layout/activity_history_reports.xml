@@ -7,8 +7,10 @@
     android:layout_height="match_parent"
     android:background="@color/primary_green">
 
-    <!-- History reports page -->
-    <!-- Shows the admin header and the report list -->
+    <!-- History reports screen -->
+    <!-- Shows the admin summary at the top -->
+    <!-- Report rows are added below at runtime -->
+
     <!-- Green header area -->
     <View
         android:id="@+id/headerBackground"
@@ -51,6 +53,7 @@
 
     <!-- White content card -->
     <!-- Scrolls when the report list gets long -->
+    <!-- Covers the area under the green header -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -70,7 +73,7 @@
             android:padding="24dp">
 
             <!-- Admin name -->
-            <!-- Shown above the report list -->
+            <!-- Main identity line -->
             <TextView
                 android:id="@+id/tvAdminName"
                 android:layout_width="wrap_content"
@@ -83,7 +86,7 @@
                 android:textStyle="bold" />
 
             <!-- Role label -->
-            <!-- Keeps the admin role visible under the name -->
+            <!-- Small line under the name -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -117,6 +120,7 @@
             <!-- Report list container -->
             <!-- Rows are added here at runtime -->
             <!-- Starts empty in the layout file -->
+            <!-- Each row uses the report history item layout -->
             <LinearLayout
                 android:id="@+id/reportsContainer"
                 android:layout_width="match_parent"

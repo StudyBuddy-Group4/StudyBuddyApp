@@ -8,6 +8,7 @@
     android:padding="24dp">
 
     <!-- Ready-to-focus dialog -->
+    <!-- Shown when the user tries to start without tasks -->
     <!-- Dialog title -->
     <TextView
         android:layout_width="wrap_content"
@@ -19,6 +20,7 @@
 
     <!-- Add-task button -->
     <!-- Opens task creation before the session starts -->
+    <!-- Primary action at the top of the action stack -->
     <Button
         android:id="@+id/btn_add_task"
         style="@style/PrimaryButton"
@@ -34,6 +36,7 @@
 
     <!-- Start-anyway button -->
     <!-- Lets the user continue without adding a task -->
+    <!-- Secondary action under the add-task button -->
     <Button
         android:id="@+id/btn_start_anyway"
         style="@style/SecondaryButton"

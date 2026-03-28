@@ -9,6 +9,7 @@
 
     <!-- Security menu page -->
     <!-- Green header area -->
+    <!-- Header background block -->
     <View
         android:id="@+id/headerBackground"
         android:layout_width="0dp"
@@ -21,6 +22,7 @@
 
     <!-- Back button -->
     <!-- Returns to the profile menu -->
+    <!-- Placed in the top-left corner -->
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="28dp"
@@ -35,6 +37,7 @@
 
     <!-- Screen title -->
     <!-- Centered in the header -->
+    <!-- Uses the same title style as other settings pages -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -50,6 +53,7 @@
 
     <!-- White content card -->
     <!-- Holds the available security actions -->
+    <!-- Fills the area under the green header -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -62,6 +66,7 @@
         app:layout_constraintTop_toBottomOf="@id/headerBackground">
 
         <!-- Section title -->
+        <!-- Repeats the current section name inside the card -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,6 +78,7 @@
 
         <!-- Change Password item -->
         <!-- Opens the password change flow -->
+        <!-- Single action row in this screen -->
         <LinearLayout
             android:id="@+id/menuChangePassword"
             android:layout_width="match_parent"
@@ -84,6 +90,7 @@
             android:paddingTop="20dp"
             android:paddingBottom="20dp">
 
+            <!-- Item text takes the flexible space -->
             <!-- Menu text -->
             <TextView
                 android:layout_width="0dp"
@@ -94,6 +101,7 @@
                 android:textSize="16sp" />
 
             <!-- Chevron -->
+            <!-- Indicates navigation to the next screen -->
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -103,6 +111,7 @@
         </LinearLayout>
 
         <!-- Divider -->
+        <!-- Ends the single-item list -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

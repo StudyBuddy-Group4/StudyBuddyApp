@@ -9,6 +9,8 @@
     android:padding="24dp">
 
     <!-- Flag reason dialog -->
+    <!-- Opens after selecting a participant to flag -->
+
     <!-- Flag icon -->
     <ImageView
         android:layout_width="40dp"
@@ -19,6 +21,7 @@
 
     <!-- Dialog title -->
     <!-- Asks why the participant is being flagged -->
+    <!-- Sits directly under the icon -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +33,7 @@
 
     <!-- Reason input -->
     <!-- Multi-line text box for the report reason -->
+    <!-- Leaves room for a few short lines of text -->
     <EditText
         android:id="@+id/etReason"
         style="@style/InputField"
@@ -43,6 +47,7 @@
 
     <!-- Save button -->
     <!-- Submits the entered reason -->
+    <!-- Primary action in the dialog -->
     <Button
         android:id="@+id/btnSave"
         style="@style/PrimaryButton"
@@ -58,6 +63,7 @@
 
     <!-- Cancel button -->
     <!-- Closes the dialog without reporting -->
+    <!-- Secondary action under save -->
     <Button
         android:id="@+id/btnCancel"
         style="@style/SecondaryButton"

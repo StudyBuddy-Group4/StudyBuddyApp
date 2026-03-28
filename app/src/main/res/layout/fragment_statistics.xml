@@ -7,6 +7,7 @@
 
     <!-- Statistics page -->
     <!-- Shows rating, focus time, and session history -->
+    <!-- Summary stays above the history list -->
     <!-- Screen title -->
     <TextView
         android:layout_width="wrap_content"
@@ -21,6 +22,7 @@
 
     <!-- White content card -->
     <!-- Scrolls when the history list gets long -->
+    <!-- Main body of the page -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,6 +32,7 @@
 
         <!-- Page content -->
         <!-- Keeps all statistics in one vertical column -->
+        <!-- Centered so the summary stays aligned -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,6 +43,7 @@
             <!-- Personal Rating -->
             <!-- Rating row -->
             <!-- Places the score beside the help icon -->
+            <!-- First summary block -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,6 +51,7 @@
                 android:orientation="horizontal">
 
                 <!-- Rating value -->
+                <!-- Filled with the current personal score -->
                 <TextView
                     android:id="@+id/tvRating"
                     android:layout_width="wrap_content"
@@ -58,6 +63,7 @@
 
                 <!-- Rating help icon -->
                 <!-- Opens the explanation dialog -->
+                <!-- Small clickable icon beside the score -->
                 <ImageView
                     android:id="@+id/ic_question"
                     android:layout_width="22dp"
@@ -71,6 +77,7 @@
             </LinearLayout>
 
             <!-- Rating label -->
+            <!-- Caption under the score -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -80,6 +87,7 @@
 
             <!-- Accumulated Focus Time -->
             <!-- Focus time value -->
+            <!-- Second summary block -->
             <TextView
                 android:id="@+id/tvFocusTime"
                 android:layout_width="wrap_content"
@@ -91,6 +99,7 @@
                 android:textStyle="bold" />
 
             <!-- Focus time label -->
+            <!-- Caption under the total time -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -109,6 +118,7 @@
 
             <!-- Dynamic session history container -->
             <!-- History rows are added here at runtime -->
+            <!-- Starts empty in XML -->
             <LinearLayout
                 android:id="@+id/sessionHistoryContainer"
                 android:layout_width="match_parent"
@@ -117,6 +127,7 @@
 
             <!-- Empty state -->
             <!-- Shown when there are no session history rows -->
+            <!-- Hidden once at least one history row is added -->
             <TextView
                 android:id="@+id/tvEmptyHistory"
                 android:layout_width="wrap_content"

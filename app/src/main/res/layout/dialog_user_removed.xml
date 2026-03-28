@@ -11,6 +11,7 @@
     android:paddingBottom="28dp">
 
     <!-- User removed dialog -->
+    <!-- Shown when the meeting room forces the user out -->
     <!-- Removal title -->
     <TextView
         android:id="@+id/tvRemovedTitle"
@@ -24,6 +25,7 @@
 
     <!-- Removal message -->
     <!-- Filled with the reason text at runtime -->
+    <!-- Can span more than one line -->
     <TextView
         android:id="@+id/tvRemovedMessage"
         android:layout_width="wrap_content"
@@ -35,6 +37,7 @@
 
     <!-- Back button -->
     <!-- Closes the dialog and returns -->
+    <!-- Only action in this dialog -->
     <Button
         android:id="@+id/btnBack"
         style="@style/SecondaryButton"

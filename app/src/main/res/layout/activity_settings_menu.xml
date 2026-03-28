@@ -9,6 +9,7 @@
 
     <!-- Settings menu page -->
     <!-- Green header area -->
+    <!-- Header background block -->
     <View
         android:id="@+id/headerBackground"
         android:layout_width="0dp"
@@ -21,6 +22,7 @@
 
     <!-- Back button -->
     <!-- Returns to the profile menu -->
+    <!-- Placed in the top-left corner -->
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="28dp"
@@ -35,6 +37,7 @@
 
     <!-- Screen title -->
     <!-- Centered in the header -->
+    <!-- Uses the shared settings title style -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -50,6 +53,7 @@
 
     <!-- White content card -->
     <!-- Holds the available settings entries -->
+    <!-- Fills the area under the green header -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -65,6 +69,7 @@
 
         <!-- Notification Settings -->
         <!-- Opens the notification settings page -->
+        <!-- First menu row -->
         <LinearLayout
             android:id="@+id/menuNotificationSettings"
             android:layout_width="match_parent"
@@ -77,6 +82,7 @@
             android:paddingBottom="16dp">
 
             <!-- Notification icon -->
+            <!-- Circular icon wrapper -->
             <FrameLayout
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -93,6 +99,7 @@
             </FrameLayout>
 
             <!-- Notification text -->
+            <!-- Uses the flexible middle space -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -104,6 +111,7 @@
                 android:textStyle="bold" />
 
             <!-- Chevron -->
+            <!-- Indicates navigation to another page -->
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -113,6 +121,7 @@
         </LinearLayout>
 
         <!-- Divider -->
+        <!-- Separates the two settings rows -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -120,6 +129,7 @@
 
         <!-- Delete Account -->
         <!-- Opens the delete account page -->
+        <!-- Second menu row -->
         <LinearLayout
             android:id="@+id/menuDeleteAccount"
             android:layout_width="match_parent"
@@ -132,6 +142,7 @@
             android:paddingBottom="16dp">
 
             <!-- Delete icon -->
+            <!-- Circular icon wrapper -->
             <FrameLayout
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -148,6 +159,7 @@
             </FrameLayout>
 
             <!-- Delete text -->
+            <!-- Uses the flexible middle space -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -159,6 +171,7 @@
                 android:textStyle="bold" />
 
             <!-- Chevron -->
+            <!-- Indicates navigation to another page -->
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
