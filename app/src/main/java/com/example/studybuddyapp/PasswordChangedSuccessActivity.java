@@ -11,6 +11,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * Short success screen before sending the user back into the app.
+ */
 public class PasswordChangedSuccessActivity extends AppCompatActivity {
 
     @Override
@@ -18,14 +21,18 @@ public class PasswordChangedSuccessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_password_changed_success);
+
+        // Apply system-bar padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Wait briefly before opening the main hub
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent = new Intent(this, MainHubActivity.class);
+            // Clear the back stack for the new root screen
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }, 2000);
