@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
             // Lock the button while the login request is in progress.
             btnLogIn.setEnabled(false);
+            // The auth API is resolved fresh here so it uses the current app context.
             AuthApi api = ApiClient.getAuthApi(this);
             api.login(new LoginRequest(usernameOrEmail, password)).enqueue(new Callback<LoginResponse>() {
                 @Override
@@ -86,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         // Start the main hub and clear the login screen from the back stack.
                         Intent intent = new Intent(LoginActivity.this, MainHubActivity.class);
+                        // Clearing the stack stops the user from returning to the login form with the back button.
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(MainHubActivity.EXTRA_IS_ADMIN, body.isAdmin());
                         startActivity(intent);
@@ -102,17 +104,16 @@ public class LoginActivity extends AppCompatActivity {
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
                     // Network failures also need to unlock the button so the user can retry.
                     btnLogIn.setEnabled(true);
+                    // The current email and password stay in the fields so the retry is easy.
                     Toast.makeText(LoginActivity.this,
                             "Network error. Is the backend running?", Toast.LENGTH_SHORT).show();
                 }
             });
         });
 
-        // Let new users jump to the sign-up flow from the footer link.
         tvSignUp.setOnClickListener(v ->
                 startActivity(new Intent(this, CreateAccountActivity.class)));
 
-        // This link opens the password recovery flow.
         tvForgotPassword.setOnClickListener(v ->
                 startActivity(new Intent(this, ForgotPasswordActivity.class)));
     }

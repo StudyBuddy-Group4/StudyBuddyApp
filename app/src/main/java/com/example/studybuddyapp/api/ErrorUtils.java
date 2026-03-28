@@ -13,8 +13,10 @@ public final class ErrorUtils {
      * The backend may return a plain string or a JSON object with validation details.
      */
     public static String parseError(Response<?> response, String fallback) {
+        // Without an error body there is nothing more specific to show.
         if (response.errorBody() == null) return fallback;
         try {
+            // Read the body once and keep only the part that is safe to show in the UI.
             String body = response.errorBody().string();
             if (body != null && !body.isEmpty()) {
                 // If body contains "default message [", extract the readable part
@@ -30,12 +32,14 @@ public final class ErrorUtils {
                 }
                 // Try to use the body directly if it's short enough
                 if (body.length() < 200) {
+                    // Short plain-text backend errors are usually already readable enough for the UI.
                     return body;
                 }
             }
         } catch (IOException ignored) {
-            // fall through
+            // Fall back to the provided default message when the body cannot be read safely.
         }
+        // Long or unreadable payloads are hidden behind the caller-provided fallback message.
         return fallback;
     }
 }

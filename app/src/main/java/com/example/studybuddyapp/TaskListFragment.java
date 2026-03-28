@@ -32,14 +32,17 @@ import retrofit2.Response;
  */
 public class TaskListFragment extends Fragment {
 
+    // The container is rebuilt from scratch every time the task list is re-rendered.
     private LinearLayout taskContainer;
     private TextView tvEmptyTasks;
+    // Keep a local copy of the latest task data so the UI can be refreshed after edits and deletes.
     private final List<TaskItem> currentTasks = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // The task tab is rebuilt from XML each time because rows are added dynamically later.
         return inflater.inflate(R.layout.fragment_task_list, container, false);
     }
 
@@ -47,6 +50,7 @@ public class TaskListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Bind the list container and empty-state label from the fragment layout.
         taskContainer = view.findViewById(R.id.taskContainer);
         tvEmptyTasks = view.findViewById(R.id.tvEmptyTasks);
 
@@ -56,6 +60,7 @@ public class TaskListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        // Reload when returning to this tab so the list reflects the latest backend state.
         loadTasks();
     }
 
@@ -63,21 +68,25 @@ public class TaskListFragment extends Fragment {
      * Loads the latest pending tasks from the backend whenever the fragment becomes active.
      */
     private void loadTasks() {
+        // Pending tasks are the only ones shown in this fragment.
         TaskApi api = ApiClient.getTaskApi(requireContext());
         api.getPendingTasks().enqueue(new Callback<List<TaskItem>>() {
             @Override
             public void onResponse(Call<List<TaskItem>> c, Response<List<TaskItem>> response) {
                 if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
+                    // Replace the old in-memory list before rebuilding the UI.
                     currentTasks.clear();
                     currentTasks.addAll(response.body());
                     renderTasks();
                 }
+                // Unsuccessful responses leave the last rendered task list intact.
             }
 
             @Override
             public void onFailure(Call<List<TaskItem>> c, Throwable t) {
                 if (!isAdded()) return;
+                // Keep the old UI in place and simply notify the user about the failed refresh.
                 Toast.makeText(requireContext(),
                         "Failed to load tasks", Toast.LENGTH_SHORT).show();
             }
@@ -88,6 +97,7 @@ public class TaskListFragment extends Fragment {
      * Rebuilds the task list from the current in-memory task data.
      */
     private void renderTasks() {
+        // Recreate the list from scratch to keep runtime-created rows in sync with currentTasks.
         taskContainer.removeAllViews();
 
         // Show the empty-state message when there are no tasks to render.
@@ -117,15 +127,17 @@ public class TaskListFragment extends Fragment {
             }
 
             boolean completed = Boolean.TRUE.equals(task.getCompleted());
+            // The status icon reflects the last completion state known to the fragment.
             ivStatus.setImageResource(completed
                     ? R.drawable.ic_check_circle : R.drawable.ic_unchecked_circle);
 
+            // Tapping the status icon toggles completion without leaving the list screen.
             ivStatus.setOnClickListener(v -> toggleTaskCompletion(task, ivStatus));
 
-            // Every rendered row can be deleted directly from the list.
             ivDelete.setVisibility(View.VISIBLE);
             ivDelete.setOnClickListener(v -> deleteTask(task));
 
+            // Add the fully configured row before optionally appending its divider.
             taskContainer.addView(row);
 
             // Add a divider between rows so multiple tasks stay visually separated.
@@ -146,6 +158,7 @@ public class TaskListFragment extends Fragment {
         TaskApi api = ApiClient.getTaskApi(requireContext());
         boolean currentlyCompleted = Boolean.TRUE.equals(task.getCompleted());
 
+        // Choose the matching backend endpoint based on the task's current completion state.
         Call<String> call = currentlyCompleted
                 ? api.markIncomplete(task.getId())
                 : api.markComplete(task.getId());
@@ -161,11 +174,13 @@ public class TaskListFragment extends Fragment {
                     ivStatus.setImageResource(newState
                             ? R.drawable.ic_check_circle : R.drawable.ic_unchecked_circle);
                 }
+                // Failed HTTP responses are ignored here so the last confirmed local state remains visible.
             }
 
             @Override
             public void onFailure(Call<String> c, Throwable t) {
                 if (!isAdded()) return;
+                // Failed updates leave the previous icon and local state unchanged.
                 Toast.makeText(requireContext(),
                         "Failed to update task", Toast.LENGTH_SHORT).show();
             }
@@ -182,14 +197,17 @@ public class TaskListFragment extends Fragment {
             public void onResponse(Call<String> c, Response<String> response) {
                 if (!isAdded()) return;
                 if (response.isSuccessful()) {
+                    // Remove the deleted task locally so the list updates immediately.
                     currentTasks.remove(task);
                     renderTasks();
                 }
+                // Unsuccessful delete responses keep the existing row visible.
             }
 
             @Override
             public void onFailure(Call<String> c, Throwable t) {
                 if (!isAdded()) return;
+                // On failure the row stays visible because the backend did not confirm deletion.
                 Toast.makeText(requireContext(),
                         "Failed to delete task", Toast.LENGTH_SHORT).show();
             }
@@ -203,18 +221,20 @@ public class TaskListFragment extends Fragment {
         View dialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.dialog_create_task, null);
 
+        // Use a custom dialog layout so task title and note can be entered together.
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
                 .setCancelable(true)
                 .create();
 
         if (dialog.getWindow() != null) {
+            // The dialog layout includes its own rounded background styling.
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
         EditText etTask = dialogView.findViewById(R.id.et_task);
         EditText etNote = dialogView.findViewById(R.id.et_note);
-
+        // Back simply closes the dialog without creating anything.
         dialogView.findViewById(R.id.btn_dialog_back).setOnClickListener(v -> dialog.dismiss());
 
         dialogView.findViewById(R.id.btn_dialog_save).setOnClickListener(v -> {
@@ -228,10 +248,12 @@ public class TaskListFragment extends Fragment {
                 return;
             }
 
+            // Close the dialog before creating the task so the list can refresh underneath it.
             dialog.dismiss();
             createTask(title, note);
         });
 
+        // Show the dialog only after both button listeners and fields have been wired up.
         dialog.show();
     }
 
@@ -240,6 +262,7 @@ public class TaskListFragment extends Fragment {
      */
     private void createTask(String title, String note) {
         TaskApi api = ApiClient.getTaskApi(requireContext());
+        // Empty notes are converted to null so the request matches the backend DTO shape.
         api.createTask(new CreateTaskRequest(title, note.isEmpty() ? null : note))
                 .enqueue(new Callback<TaskItem>() {
                     @Override
@@ -248,13 +271,16 @@ public class TaskListFragment extends Fragment {
                         if (response.isSuccessful()) {
                             Toast.makeText(requireContext(),
                                     "Task created!", Toast.LENGTH_SHORT).show();
+                            // Reload from the backend so the new task appears in the same order as the server.
                             loadTasks();
                         }
+                        // Unsuccessful responses leave the current list unchanged.
                     }
 
                     @Override
                     public void onFailure(Call<TaskItem> c, Throwable t) {
                         if (!isAdded()) return;
+                        // Creation failures keep the fragment state untouched so the user can try again.
                         Toast.makeText(requireContext(),
                                 "Network error", Toast.LENGTH_SHORT).show();
                     }

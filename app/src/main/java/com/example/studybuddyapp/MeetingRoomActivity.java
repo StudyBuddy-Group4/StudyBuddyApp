@@ -95,6 +95,7 @@ public class MeetingRoomActivity extends AppCompatActivity
         // Returning from the background during an unfinished session shows the distraction warning once.
         if (userLeftForeground && videoCallManager.isInChannel() && !isSessionCompleted) {
             userLeftForeground = false;
+            // Reset the flag before showing the dialog so it does not reopen repeatedly.
             showDistractionWarningDialog();
         }
     }
@@ -113,6 +114,7 @@ public class MeetingRoomActivity extends AppCompatActivity
         // Rebind all views after a configuration change so video containers point at the new layout.
         setContentView(R.layout.activity_meeting_room);
         bindViews();
+        // The video manager rebuilds surfaces into the new layout hierarchy.
         videoCallManager.rebindContainers(mainVideoContainer, thumbnailContainer);
         wireControlButtons();
         refreshUiState();
@@ -122,6 +124,7 @@ public class MeetingRoomActivity extends AppCompatActivity
     public void onChannelJoined() {
         // The focus timer only starts after Agora confirms the user actually joined the room.
         startFocusTimer();
+        // Backend session tracking begins at the same point as the visible timer.
         sessionCoordinator.onChannelJoined();
     }
 
@@ -271,6 +274,7 @@ public class MeetingRoomActivity extends AppCompatActivity
      * Requests the missing runtime permissions needed to start the call.
      */
     private void requestPermissions() {
+        // Request every permission returned by the version-aware helper in one system prompt.
         ActivityCompat.requestPermissions(this, getRequiredPermissions(), PERMISSION_REQ_ID);
     }
 
@@ -328,6 +332,7 @@ public class MeetingRoomActivity extends AppCompatActivity
      */
     private void cancelFocusTimer() {
         if (focusTimer != null) {
+            // Nulling the timer reference makes later restart logic simpler.
             focusTimer.cancel();
             focusTimer = null;
         }
@@ -386,10 +391,12 @@ public class MeetingRoomActivity extends AppCompatActivity
     }
 
     private void showManualExitWarningDialog() {
+        // Manual exits may be canceled, so this dialog stays dismissible.
         showExitDialog(R.string.manual_exit_warning, true);
     }
 
     private void showDistractionWarningDialog() {
+        // Distraction warnings should be acknowledged explicitly before leaving.
         showExitDialog(R.string.distraction_warning, false);
     }
 
@@ -399,6 +406,7 @@ public class MeetingRoomActivity extends AppCompatActivity
     private void showExitDialog(int messageResId, boolean cancelable) {
         if (isFinishing() || isDestroyed()) return;
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_exit_warning, null);
+        // The same dialog layout is reused with different message text depending on why it opened.
         ((TextView) view.findViewById(R.id.tvWarningMessage)).setText(messageResId);
         AlertDialog dialog = createDialog(view, cancelable);
         // Continuing simply closes the warning and leaves the current room untouched.
@@ -418,6 +426,7 @@ public class MeetingRoomActivity extends AppCompatActivity
     private void showRemovalNotification(UserProfileResponse profile) {
         if (isFinishing() || isDestroyed()) return;
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_user_removed, null);
+        // This dialog explains forced removal after a moderation or restriction event.
         ((TextView) view.findViewById(R.id.tvRemovedTitle)).setText("You Have Been Removed");
         ((TextView) view.findViewById(R.id.tvRemovedMessage)).setText(getRemovalMessage(profile));
         AlertDialog dialog = createDialog(view, false);
@@ -492,6 +501,7 @@ public class MeetingRoomActivity extends AppCompatActivity
      */
     private void restartFocusTimer() {
         isSessionCompleted = false;
+        // Restarting clears the old timer before creating a fresh backend-tracked session.
         cancelFocusTimer();
         sessionCoordinator.restartSession();
         startFocusTimer();
@@ -501,6 +511,7 @@ public class MeetingRoomActivity extends AppCompatActivity
      * Ends both the backend session tracking and the Agora call state.
      */
     private void leaveMeeting() {
+        // Session cleanup is delegated so both helper classes release their own resources properly.
         sessionCoordinator.onMeetingEnded();
         videoCallManager.leaveAndCleanup();
     }

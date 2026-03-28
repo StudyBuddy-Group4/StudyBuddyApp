@@ -20,6 +20,7 @@ public class SessionManager {
      * Creates a session manager backed by the app's shared preferences.
      */
     public SessionManager(Context context) {
+        // Use the application context so the manager does not accidentally hold onto an activity instance.
         prefs = context.getApplicationContext()
                 .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
@@ -28,6 +29,7 @@ public class SessionManager {
      * Saves the values needed to restore the signed-in user later.
      */
     public void saveLoginSession(String token, long userId, String username, boolean isAdmin) {
+        // apply() is enough here because session writes do not need a synchronous disk commit.
         prefs.edit()
                 .putString(KEY_TOKEN, token)
                 .putLong(KEY_USER_ID, userId)
@@ -69,6 +71,7 @@ public class SessionManager {
      */
     public boolean isLoggedIn() {
         String token = getToken();
+        // A non-empty token is treated as the minimal signal that a login session exists.
         return token != null && !token.isEmpty();
     }
 
@@ -76,6 +79,7 @@ public class SessionManager {
      * Clears all stored session data during logout or account removal.
      */
     public void clearSession() {
+        // Logging out or deleting the account wipes every stored session value in one step.
         prefs.edit().clear().apply();
     }
 }

@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // The home screen is lightweight enough to be fully recreated from its XML layout each time.
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -56,7 +57,6 @@ public class HomeFragment extends Fragment {
         Button btnStart = view.findViewById(R.id.btn_start);
 
         chip15.setOnClickListener(v -> {
-            // Reset back to the default preset when the user chooses 15 minutes again.
             selectedDurationMinutes = 15;
             isCustomSelected = false;
             chipCustom.setText(getString(R.string.time_custom));
@@ -64,7 +64,6 @@ public class HomeFragment extends Fragment {
         });
 
         chip30.setOnClickListener(v -> {
-            // Reset back to the second preset and clear any previous custom label.
             selectedDurationMinutes = 30;
             isCustomSelected = false;
             chipCustom.setText(getString(R.string.time_custom));
@@ -140,6 +139,7 @@ public class HomeFragment extends Fragment {
                     // Save the custom value and make the custom chip look selected.
                     selectedDurationMinutes = minutes;
                     isCustomSelected = true;
+                    // Replace the placeholder text with the exact custom duration the user entered.
                     chipCustom.setText(minutes + " min");
                     selectChip(chipCustom);
                 })
@@ -255,6 +255,7 @@ public class HomeFragment extends Fragment {
                 .create();
 
         if (dialog.getWindow() != null) {
+            // The warning dialog keeps the same transparent window treatment as the other modals in this flow.
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
@@ -267,6 +268,7 @@ public class HomeFragment extends Fragment {
 
         View btnLeave = dialogView.findViewById(R.id.btnLeaveSession);
         if (btnLeave != null) {
+            // This shared dialog layout normally has a second action, but restrictions only allow acknowledgement.
             btnLeave.setVisibility(View.GONE);
         }
 
@@ -293,6 +295,7 @@ public class HomeFragment extends Fragment {
                     // Pass the duration and backend-provided channel into the meeting screen.
                     intent.putExtra(MeetingRoomActivity.EXTRA_FOCUS_DURATION, selectedDurationMinutes);
                     intent.putExtra(MeetingRoomActivity.EXTRA_CHANNEL_NAME, meeting.getChannelName());
+                    // MeetingRoomActivity relies on these extras to rebuild the room after recreation.
                     startActivity(intent);
                 } else {
                     // Keep the failure message simple so the user can retry immediately.

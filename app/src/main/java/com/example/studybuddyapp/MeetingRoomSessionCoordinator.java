@@ -25,6 +25,9 @@ import retrofit2.Response;
  */
 class MeetingRoomSessionCoordinator {
 
+    /**
+     * Allows the coordinator to delegate UI decisions back to the owning activity.
+     */
     interface Callbacks {
         boolean shouldHandleCallbacks();
         void onUserRestricted(UserProfileResponse profile);
@@ -57,6 +60,7 @@ class MeetingRoomSessionCoordinator {
      * Starts backend tracking after Agora confirms that the user joined the channel.
      */
     void onChannelJoined() {
+        // Joining the room is the point where backend session bookkeeping should begin.
         isInChannel = true;
         recordSessionStart();
         startBanPolling();
@@ -66,6 +70,7 @@ class MeetingRoomSessionCoordinator {
      * Stops backend polling and notifies the matching service when the meeting is over.
      */
     void onMeetingEnded() {
+        // Ending the room always stops future polling before any leave notification is sent.
         isInChannel = false;
         stopBanPolling();
         notifyMatchingLeave();
@@ -76,12 +81,14 @@ class MeetingRoomSessionCoordinator {
      */
     void recordSessionComplete() {
         if (backendSessionId < 0) {
+            // Skip completion calls when the backend session never started successfully.
             return;
         }
         SessionApi api = ApiClient.getSessionApi(appContext);
         api.completeSession(backendSessionId).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                // Completion acknowledgement is only logged because the UI has already moved on.
                 Log.d(TAG, "Session marked complete");
             }
 
@@ -97,12 +104,14 @@ class MeetingRoomSessionCoordinator {
      */
     void recordSessionIncomplete() {
         if (backendSessionId < 0) {
+            // Early exits before a backend session exists have nothing to mark incomplete.
             return;
         }
         SessionApi api = ApiClient.getSessionApi(appContext);
         api.incompleteSession(backendSessionId).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                // Incomplete-session acknowledgement is also background bookkeeping only.
                 Log.d(TAG, "Session marked incomplete");
             }
 
@@ -117,6 +126,7 @@ class MeetingRoomSessionCoordinator {
      * Starts a fresh backend session record for another focus round in the same room.
      */
     void restartSession() {
+        // Clearing the previous id forces the next start call to register a brand-new backend session.
         backendSessionId = -1;
         recordSessionStart();
     }
@@ -125,6 +135,7 @@ class MeetingRoomSessionCoordinator {
      * Polls the backend for restriction updates while the user remains in the meeting.
      */
     private void startBanPolling() {
+        // Reset any previous polling loop before starting a new one for this room join.
         stopBanPolling();
         banCheckHandler = new Handler(Looper.getMainLooper());
         banCheckHandler.postDelayed(new Runnable() {
@@ -133,7 +144,6 @@ class MeetingRoomSessionCoordinator {
                 if (!isInChannel) {
                     return;
                 }
-                // Polling stays lightweight and repeats on a fixed interval until the meeting ends.
                 checkBanStatus();
                 if (banCheckHandler != null) {
                     banCheckHandler.postDelayed(this, BAN_CHECK_INTERVAL_MS);
@@ -147,6 +157,7 @@ class MeetingRoomSessionCoordinator {
      */
     private void stopBanPolling() {
         if (banCheckHandler != null) {
+            // Removing all callbacks stops the repeating poll immediately.
             banCheckHandler.removeCallbacksAndMessages(null);
             banCheckHandler = null;
         }
@@ -171,10 +182,12 @@ class MeetingRoomSessionCoordinator {
                     stopBanPolling();
                     callbacks.onUserRestricted(profile);
                 }
+                // Non-restricted users simply stay in the room until the next poll.
             }
 
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                // Failed polls are intentionally ignored because the next scheduled poll will retry.
                 Log.d(TAG, "Ban check failed, retrying on next poll", t);
             }
         });
@@ -185,6 +198,7 @@ class MeetingRoomSessionCoordinator {
      */
     private void recordSessionStart() {
         SessionApi api = ApiClient.getSessionApi(appContext);
+        // The backend session ties the selected duration to the channel currently being used.
         StartSessionRequest request = new StartSessionRequest(focusDurationMinutes, channelName);
         api.startSession(request).enqueue(new Callback<StartSessionResponse>() {
             @Override
@@ -197,10 +211,12 @@ class MeetingRoomSessionCoordinator {
                     // Task assignment only happens after the backend has created a concrete session id.
                     assignPendingTasks(backendSessionId);
                 }
+                // If the backend does not return a valid body, the room continues without session tracking.
             }
 
             @Override
             public void onFailure(Call<StartSessionResponse> call, Throwable t) {
+                // Session tracking can fail independently from the Agora room itself.
                 Log.w(TAG, "Failed to record session start", t);
             }
         });
@@ -211,15 +227,18 @@ class MeetingRoomSessionCoordinator {
      */
     private void assignPendingTasks(long sessionId) {
         TaskApi taskApi = ApiClient.getTaskApi(appContext);
+        // Task assignment is best-effort and should not block the meeting from continuing.
         taskApi.assignTasksToSession(new AssignTasksRequest(sessionId))
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
+                        // Task assignment success is informational only and does not change room UI.
                         Log.d(TAG, "Tasks assigned to session " + sessionId);
                     }
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
+                        // Task assignment failure is logged only because the session itself can still continue.
                         Log.w(TAG, "Failed to assign tasks", t);
                     }
                 });
@@ -230,6 +249,7 @@ class MeetingRoomSessionCoordinator {
      */
     private void notifyMatchingLeave() {
         if (matchingLeaveNotified || channelName == null || channelName.isEmpty()) {
+            // Skip duplicate notifications and invalid channel names.
             return;
         }
         matchingLeaveNotified = true;
@@ -239,11 +259,13 @@ class MeetingRoomSessionCoordinator {
             @Override
             public void onResponse(Call<LeaveMeetingResponse> call,
                                    Response<LeaveMeetingResponse> response) {
+                // The room is already closing, so a log entry is enough here.
                 Log.d(TAG, "Notified matching engine of leave");
             }
 
             @Override
             public void onFailure(Call<LeaveMeetingResponse> call, Throwable t) {
+                // Leave notification failures are logged only because the room is already closing.
                 Log.w(TAG, "Failed to notify matching engine of leave", t);
             }
         });

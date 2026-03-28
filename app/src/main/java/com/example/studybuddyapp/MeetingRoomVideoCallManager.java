@@ -40,23 +40,17 @@ class MeetingRoomVideoCallManager {
 
     private static final String TAG = "MeetingRoom";
 
-    // The hosting activity is reused for context, resources, and safe UI-thread dispatch.
     private final AppCompatActivity activity;
-    // These containers hold the large active video and the smaller thumbnail strip.
     private FrameLayout mainVideoContainer;
     private LinearLayout thumbnailContainer;
     private final Callbacks callbacks;
 
-    // Keep remote participants in join order so promotion and removal stay predictable.
     private final List<Integer> remoteUids = new ArrayList<>();
-    // Each remote uid owns a dedicated SurfaceView while the user stays in the room.
     private final Map<Integer, SurfaceView> remoteSurfaces = new HashMap<>();
 
-    // Agora engine and local rendering state used throughout the session.
     private RtcEngine rtcEngine;
     private SurfaceView localSurface;
     private boolean isInChannel = false;
-    // Uid 0 is reserved for the local preview when it occupies the main view.
     private int mainViewUid = 0;
 
     private final IRtcEngineEventHandler rtcEventHandler = new IRtcEngineEventHandler() {
@@ -86,6 +80,7 @@ class MeetingRoomVideoCallManager {
 
         @Override
         public void onError(int err) {
+            // Agora errors are only logged here; user-facing failures are handled near the triggering action.
             Log.e(TAG, "Agora error: " + err);
         }
     };
@@ -142,6 +137,7 @@ class MeetingRoomVideoCallManager {
     void rebindContainers(FrameLayout mainVideoContainer, LinearLayout thumbnailContainer) {
         this.mainVideoContainer = mainVideoContainer;
         this.thumbnailContainer = thumbnailContainer;
+        // Layout recreation requires every surface to be attached to the new containers.
         rebuildVideoLayout();
     }
 
@@ -171,6 +167,7 @@ class MeetingRoomVideoCallManager {
      */
     void setSpeakerOff(boolean isSpeakerOff) {
         if (rtcEngine != null) {
+            // The stored UI flag is inverted because Agora expects an "enabled" value here.
             rtcEngine.setEnableSpeakerphone(!isSpeakerOff);
         }
     }
@@ -237,6 +234,7 @@ class MeetingRoomVideoCallManager {
      */
     private SurfaceView createLocalSurface() {
         SurfaceView surface = new SurfaceView(activity);
+        // Agora uses uid 0 to represent the local preview canvas.
         rtcEngine.setupLocalVideo(new VideoCanvas(surface, VIDEO_RENDER_MODE, 0));
         return surface;
     }
@@ -245,6 +243,7 @@ class MeetingRoomVideoCallManager {
      * Places the local preview in the large main video container.
      */
     private void attachLocalSurfaceToMain() {
+        // Detach first because the same SurfaceView may be moved between multiple parents.
         detachSurface(localSurface);
         mainVideoContainer.addView(localSurface, 0, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
@@ -346,6 +345,7 @@ class MeetingRoomVideoCallManager {
         for (int i = mainVideoContainer.getChildCount() - 1; i >= 0; i--) {
             View child = mainVideoContainer.getChildAt(i);
             if (child instanceof SurfaceView) {
+                // Only remove runtime-added video surfaces and leave any non-video decoration alone.
                 mainVideoContainer.removeViewAt(i);
             }
         }
@@ -380,6 +380,7 @@ class MeetingRoomVideoCallManager {
                 FrameLayout.LayoutParams.MATCH_PARENT));
         // The label keeps remote thumbnails identifiable even when video is small.
         addLabelToFrame(frame, "ID:" + uid);
+        // Remote thumbnails are appended after any local thumbnail already shown at index 0.
         thumbnailContainer.addView(frame);
     }
 
@@ -394,6 +395,7 @@ class MeetingRoomVideoCallManager {
                 FrameLayout.LayoutParams.MATCH_PARENT));
         // The local preview keeps a simple "You" label instead of an Agora uid.
         addLabelToFrame(frame, "You");
+        // Keep the local preview first in the strip for a stable visual layout.
         thumbnailContainer.addView(frame, 0);
     }
 
@@ -488,6 +490,7 @@ class MeetingRoomVideoCallManager {
 
         if (localSurface != null) {
             if (mainViewUid == 0) {
+                // Preserve whether the local preview belonged in the main view before recreation.
                 attachLocalSurfaceToMain();
             } else {
                 addThumbnailForLocal();
