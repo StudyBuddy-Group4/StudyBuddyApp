@@ -34,9 +34,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      - name: Run unit tests
-        run: ./gradlew :app:testDebugUnitTest
-
       - name: Run instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
