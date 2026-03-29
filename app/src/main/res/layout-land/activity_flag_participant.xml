@@ -12,10 +12,12 @@
     <!-- Landscape version -->
     <!-- Shows the other people in the current meeting -->
     <!-- Landscape keeps the same grid with wider side padding -->
+    <!-- Green background fills the full screen -->
 
     <!-- Top bar -->
     <!-- Back and title row -->
     <!-- Keeps the title centered with a spacer on the right -->
+    <!-- Stays pinned above the participant grid -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,6 +30,7 @@
 
         <!-- Back action -->
         <!-- Returns to the meeting room -->
+        <!-- Left icon in the top bar -->
         <ImageView
             android:id="@+id/ivBack"
             android:layout_width="28dp"
@@ -38,6 +41,7 @@
 
         <!-- Screen title -->
         <!-- Main heading for the report screen -->
+        <!-- Center text in the top bar -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -50,6 +54,7 @@
 
         <!-- Right spacer for title centering -->
         <!-- Matches the back icon width -->
+        <!-- Empty view on the right side -->
         <View
             android:layout_width="28dp"
             android:layout_height="28dp" />
@@ -57,6 +62,7 @@
 
     <!-- Empty state message -->
     <!-- Shown when there are no other participants to report -->
+    <!-- Hidden while participant cards are visible -->
     <TextView
         android:id="@+id/tvNoParticipants"
         android:layout_width="wrap_content"
@@ -103,6 +109,7 @@
 
                 <!-- Rounded video placeholder -->
                 <!-- Background shape for the participant card -->
+                <!-- Fills the full slot area -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -126,6 +133,7 @@
 
                 <!-- Flag action -->
                 <!-- Opens the reason dialog for this participant -->
+                <!-- Sits in the bottom-right corner -->
                 <ImageView
                     android:id="@+id/flagBtn1"
                     android:layout_width="36dp"
@@ -150,6 +158,7 @@
                 android:visibility="gone">
 
                 <!-- Rounded video placeholder -->
+                <!-- Background shape for the participant card -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -173,6 +182,7 @@
 
                 <!-- Flag action -->
                 <!-- Opens the reason dialog for this participant -->
+                <!-- Sits in the bottom-right corner -->
                 <ImageView
                     android:id="@+id/flagBtn2"
                     android:layout_width="36dp"
@@ -190,6 +200,7 @@
         <!-- Second participant row -->
         <!-- Hidden until more participants are available -->
         <!-- Holds the next two visible cards -->
+        <!-- Bottom row in landscape -->
         <LinearLayout
             android:id="@+id/row2"
             android:layout_width="match_parent"
@@ -209,6 +220,7 @@
                 android:visibility="gone">
 
                 <!-- Rounded video placeholder -->
+                <!-- Background shape for the participant card -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -232,6 +244,7 @@
 
                 <!-- Flag action -->
                 <!-- Opens the reason dialog for this participant -->
+                <!-- Sits in the bottom-right corner -->
                 <ImageView
                     android:id="@+id/flagBtn3"
                     android:layout_width="36dp"
@@ -256,6 +269,7 @@
                 android:visibility="gone">
 
                 <!-- Rounded video placeholder -->
+                <!-- Background shape for the participant card -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -279,6 +293,7 @@
 
                 <!-- Flag action -->
                 <!-- Opens the reason dialog for this participant -->
+                <!-- Sits in the bottom-right corner -->
                 <ImageView
                     android:id="@+id/flagBtn4"
                     android:layout_width="36dp"

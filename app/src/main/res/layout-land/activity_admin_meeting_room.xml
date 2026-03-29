@@ -12,6 +12,7 @@
     <!-- Landscape version -->
     <!-- Header on top -->
     <!-- Grid shows more cards per row -->
+    <!-- Green background fills the full screen -->
     <!-- Header row -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,6 +25,7 @@
         android:paddingBottom="12dp">
 
         <!-- Back button -->
+        <!-- Returns to the admin profile flow -->
         <ImageView
             android:id="@+id/ivBack"
             android:layout_width="28dp"
@@ -33,6 +35,7 @@
             app:tint="@color/white" />
 
         <!-- Screen title -->
+        <!-- Center title for the room -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -44,6 +47,7 @@
             android:textStyle="bold" />
 
         <!-- Right spacer -->
+        <!-- Balances the back icon width -->
         <View
             android:layout_width="28dp"
             android:layout_height="28dp" />
@@ -51,6 +55,7 @@
 
     <!-- Scrollable participant area -->
     <!-- Grid: 4 per row in landscape -->
+    <!-- Lets the grid grow past one screen -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -59,6 +64,7 @@
 
         <!-- Grid wrapper -->
         <!-- Extra side padding -->
+        <!-- Keeps the rows away from the edges -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,6 +75,7 @@
             android:paddingBottom="24dp">
 
             <!-- First row -->
+            <!-- Full row with four tiles -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,17 +83,20 @@
                 android:orientation="horizontal">
 
                 <!-- Tile 1 -->
+                <!-- First participant card -->
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="150dp"
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1">
                     <!-- Tile background -->
+                    <!-- Rounded card background -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_video_rounded" />
                     <!-- Prohibit action -->
+                    <!-- Admin moderation button -->
                     <ImageView
                         android:id="@+id/prohibitBtn1"
                         android:layout_width="40dp"
@@ -99,6 +109,7 @@
                 </FrameLayout>
 
                 <!-- Tile 2 -->
+                <!-- Second participant card -->
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="150dp"
@@ -106,11 +117,13 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1">
                     <!-- Tile background -->
+                    <!-- Rounded card background -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_video_rounded" />
                     <!-- Prohibit action -->
+                    <!-- Admin moderation button -->
                     <ImageView
                         android:id="@+id/prohibitBtn2"
                         android:layout_width="40dp"
@@ -123,6 +136,7 @@
                 </FrameLayout>
 
                 <!-- Tile 3 -->
+                <!-- Third participant card -->
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="150dp"
@@ -130,11 +144,13 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1">
                     <!-- Tile background -->
+                    <!-- Rounded card background -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_video_rounded" />
                     <!-- Prohibit action -->
+                    <!-- Admin moderation button -->
                     <ImageView
                         android:id="@+id/prohibitBtn3"
                         android:layout_width="40dp"
@@ -147,17 +163,20 @@
                 </FrameLayout>
 
                 <!-- Tile 4 -->
+                <!-- Fourth participant card -->
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="150dp"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1">
                     <!-- Tile background -->
+                    <!-- Rounded card background -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_video_rounded" />
                     <!-- Prohibit action -->
+                    <!-- Admin moderation button -->
                     <ImageView
                         android:id="@+id/prohibitBtn4"
                         android:layout_width="40dp"
@@ -171,23 +190,27 @@
             </LinearLayout>
 
             <!-- Second row -->
+            <!-- One tile and three spacers -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <!-- Tile 5 -->
+                <!-- Fifth participant card -->
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="150dp"
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1">
                     <!-- Tile background -->
+                    <!-- Rounded card background -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_video_rounded" />
                     <!-- Prohibit action -->
+                    <!-- Admin moderation button -->
                     <ImageView
                         android:id="@+id/prohibitBtn5"
                         android:layout_width="40dp"
@@ -200,14 +223,17 @@
                 </FrameLayout>
 
                 <!-- Empty spacer -->
+                <!-- Keeps the row width aligned -->
                 <View android:layout_width="0dp" android:layout_height="150dp"
                     android:layout_marginStart="6dp" android:layout_marginEnd="6dp"
                     android:layout_weight="1" />
                 <!-- Empty spacer -->
+                <!-- Keeps the row width aligned -->
                 <View android:layout_width="0dp" android:layout_height="150dp"
                     android:layout_marginStart="6dp" android:layout_marginEnd="6dp"
                     android:layout_weight="1" />
                 <!-- Empty spacer -->
+                <!-- Keeps the row width aligned -->
                 <View android:layout_width="0dp" android:layout_height="150dp"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1" />

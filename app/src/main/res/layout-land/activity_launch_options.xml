@@ -11,10 +11,12 @@
     <!-- Landscape version -->
     <!-- Branding stays on the left in landscape -->
     <!-- Login, sign up, and recovery stay on the right -->
+    <!-- Light background fills the full screen -->
 
     <!-- Left branding column -->
     <!-- App logo -->
     <!-- Brand icon at the top of the left column -->
+    <!-- First item in the branding column -->
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="72dp"
@@ -31,6 +33,7 @@
 
     <!-- App name -->
     <!-- Brand title in the left column -->
+    <!-- Center item in the branding column -->
     <TextView
         android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
@@ -47,6 +50,7 @@
 
     <!-- Tagline text -->
     <!-- Short description under the app name -->
+    <!-- Last item in the branding column -->
     <TextView
         android:id="@+id/tvTagline"
         android:layout_width="0dp"
@@ -65,6 +69,7 @@
     <!-- Right action column -->
     <!-- Primary login action -->
     <!-- Main entry for existing users -->
+    <!-- First action on the right side -->
     <Button
         android:id="@+id/btnLogIn"
         style="@style/PrimaryButton"
@@ -82,6 +87,7 @@
 
     <!-- Secondary sign-up action -->
     <!-- Starts the account creation flow -->
+    <!-- Second action on the right side -->
     <Button
         android:id="@+id/btnSignUp"
         style="@style/SecondaryButton"
@@ -98,6 +104,7 @@
 
     <!-- Forgot-password -->
     <!-- Starts the recovery flow -->
+    <!-- Text link under the two buttons -->
     <TextView
         android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"

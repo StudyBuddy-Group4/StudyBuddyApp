@@ -11,8 +11,10 @@
     <!-- Portrait version -->
     <!-- Main video stays in the center -->
     <!-- Thumbnails and controls sit below it -->
+    <!-- Green background fills the full screen -->
 
     <!-- Screen title -->
+    <!-- At the top -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -28,6 +30,7 @@
 
     <!-- Main video area -->
     <!-- Shows the main stream -->
+    <!-- Uses side margins to keep the frame away from the edges -->
     <FrameLayout
         android:id="@+id/mainVideoContainer"
         android:layout_width="0dp"
@@ -45,6 +48,7 @@
         <!-- Speaker label -->
         <!-- Hidden until a remote user is promoted to the main view -->
         <!-- Sits over the bottom-left corner of the video -->
+        <!-- Dark background keeps the text readable -->
         <TextView
             android:id="@+id/tvSpeakerId"
             android:layout_width="wrap_content"
@@ -64,6 +68,7 @@
         <!-- Timer bubble -->
         <!-- Stays over the top-right corner of the main video -->
         <!-- Shows the time left in the current session -->
+        <!-- Rounded shape -->
         <TextView
             android:id="@+id/tvTimer"
             android:layout_width="wrap_content"
@@ -85,6 +90,7 @@
     <!-- Thumbnail strip -->
     <!-- Holds the smaller participant previews -->
     <!-- Scrolls sideways when there are many participants -->
+    <!-- Sits between the main video and the controls -->
     <HorizontalScrollView
         android:id="@+id/thumbnailScroll"
         android:layout_width="0dp"
@@ -99,6 +105,7 @@
 
         <!-- Runtime thumbnail container -->
         <!-- Preview cards are added here from code -->
+        <!-- Starts empty in XML -->
         <LinearLayout
             android:id="@+id/thumbnailContainer"
             android:layout_width="wrap_content"
@@ -108,6 +115,7 @@
     </HorizontalScrollView>
 
     <!-- Bottom control bar -->
+    <!-- Shared container for the five action buttons -->
     <!-- Groups the in-call actions in one floating row -->
     <!-- Centered near the bottom edge -->
     <LinearLayout
@@ -126,6 +134,7 @@
 
         <!-- Speaker toggle -->
         <!-- Turns speaker output on or off -->
+        <!-- First button in the control row -->
         <ImageView
             android:id="@+id/btnSpeaker"
             android:layout_width="44dp"
@@ -138,6 +147,7 @@
 
         <!-- Camera toggle -->
         <!-- Turns the local camera on or off -->
+        <!-- Second button in the control row -->
         <ImageView
             android:id="@+id/btnCamera"
             android:layout_width="44dp"
@@ -150,6 +160,7 @@
 
         <!-- Hang-up action -->
         <!-- Ends the current room session -->
+        <!-- Red center button -->
         <ImageView
             android:id="@+id/btnHangUp"
             android:layout_width="44dp"
@@ -162,6 +173,7 @@
 
         <!-- Microphone toggle -->
         <!-- Turns the microphone on or off -->
+        <!-- Fourth button in the control row -->
         <ImageView
             android:id="@+id/btnMic"
             android:layout_width="44dp"
@@ -174,6 +186,7 @@
 
         <!-- Flag-participant action -->
         <!-- Opens the participant reporting flow -->
+        <!-- Last button in the control row -->
         <ImageView
             android:id="@+id/btnFlag"
             android:layout_width="44dp"

@@ -11,8 +11,10 @@
     <!-- Tablet layout -->
     <!-- Uses larger spacing for wider screens -->
     <!-- Main video stays above the preview row and controls -->
+    <!-- Green background fills the full screen -->
 
     <!-- Screen title -->
+    <!-- At the top -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -29,6 +31,7 @@
     <!-- Main video area -->
     <!-- Larger margins and a max height keep the tablet layout balanced -->
     <!-- Main stream container -->
+    <!-- Rounded frame -->
     <FrameLayout
         android:id="@+id/mainVideoContainer"
         android:layout_width="0dp"
@@ -47,6 +50,7 @@
         <!-- Timer bubble -->
         <!-- Floats over the top-right corner -->
         <!-- Shows the time left in the current session -->
+        <!-- Rounded shape -->
         <TextView
             android:id="@+id/tvTimer"
             android:layout_width="wrap_content"
@@ -85,6 +89,7 @@
         <!-- Runtime thumbnail container -->
         <!-- Preview cards are added here from code -->
         <!-- Starts empty in the XML -->
+        <!-- Holds the generated thumbnail cards in one row -->
         <LinearLayout
             android:id="@+id/thumbnailContainer"
             android:layout_width="wrap_content"
@@ -95,6 +100,7 @@
 
     <!-- Bottom control bar -->
     <!-- Leaves extra room on larger screens -->
+    <!-- Shared container for the five action buttons -->
     <!-- Groups the in-call actions -->
     <!-- Centered near the bottom edge -->
     <LinearLayout
@@ -113,6 +119,7 @@
 
         <!-- Speaker toggle -->
         <!-- Turns speaker output on or off -->
+        <!-- First button in the control row -->
         <ImageView
             android:id="@+id/btnSpeaker"
             android:layout_width="44dp"
@@ -125,6 +132,7 @@
 
         <!-- Camera toggle -->
         <!-- Turns the local camera on or off -->
+        <!-- Second button in the control row -->
         <ImageView
             android:id="@+id/btnCamera"
             android:layout_width="44dp"
@@ -137,6 +145,7 @@
 
         <!-- Hang-up action -->
         <!-- Ends the current room -->
+        <!-- Red center button -->
         <ImageView
             android:id="@+id/btnHangUp"
             android:layout_width="44dp"
@@ -149,6 +158,7 @@
 
         <!-- Microphone toggle -->
         <!-- Turns the microphone on or off -->
+        <!-- Fourth button in the control row -->
         <ImageView
             android:id="@+id/btnMic"
             android:layout_width="44dp"
@@ -161,6 +171,7 @@
 
         <!-- Flag-participant action -->
         <!-- Opens the participant reporting flow -->
+        <!-- Last button in the control row -->
         <ImageView
             android:id="@+id/btnFlag"
             android:layout_width="44dp"
