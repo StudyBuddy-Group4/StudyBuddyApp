@@ -25,6 +25,7 @@ public class NewPasswordActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_new_password);
 
+        // This screen keeps the password-reset flow on a single simple form.
         // Apply system-bar padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -40,6 +41,7 @@ public class NewPasswordActivity extends AppCompatActivity {
         EditText etNew = findViewById(R.id.etNewPassword);
         EditText etConfirm = findViewById(R.id.etConfirmNewPassword);
 
+        // Both fields reuse the same visibility toggle behaviour.
         // Toggle password visibility
         setupPasswordToggle(findViewById(R.id.ivToggleNewPassword), etNew);
         setupPasswordToggle(findViewById(R.id.ivToggleConfirmPassword), etConfirm);

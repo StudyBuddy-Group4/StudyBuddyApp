@@ -94,6 +94,7 @@ class MeetingRoomVideoCallManager {
                                 FrameLayout mainVideoContainer,
                                 LinearLayout thumbnailContainer,
                                 Callbacks callbacks) {
+        // The activity owns the lifecycle while this helper only manages call state and views.
         this.activity = activity;
         this.mainVideoContainer = mainVideoContainer;
         this.thumbnailContainer = thumbnailContainer;
@@ -205,6 +206,7 @@ class MeetingRoomVideoCallManager {
     private boolean initRtcEngine() {
         try {
             RtcEngineConfig config = new RtcEngineConfig();
+            // The engine is created once per room entry and reused until leaveAndCleanup().
             config.mContext = activity.getApplicationContext();
             config.mAppId = AgoraConfig.APP_ID;
             config.mEventHandler = rtcEventHandler;
@@ -236,6 +238,7 @@ class MeetingRoomVideoCallManager {
         attachLocalSurfaceToMain();
         // StartPreview lets the local user immediately see their own video before others join.
         rtcEngine.startPreview();
+        // Uid 0 is reserved for the local preview in this screen.
         mainViewUid = 0;
     }
 
