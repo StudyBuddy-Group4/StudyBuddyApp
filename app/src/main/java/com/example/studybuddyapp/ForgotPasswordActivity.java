@@ -22,6 +22,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_forgot_password);
 
+        // This screen starts the mocked password-recovery flow used in the app.
         // Apply system-bar padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -29,13 +30,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return insets;
         });
 
+        // The back arrow and next-step button are the only actions on this page.
         // Screen actions
         ImageView ivBack = findViewById(R.id.ivBack);
         Button btnNextStep = findViewById(R.id.btnNextStep);
 
+        // Leaving here keeps the user in the auth flow instead of opening the app.
         // Back returns to the previous screen
         ivBack.setOnClickListener(v -> finish());
 
+        // The next step opens the mock verification-code screen.
         // Continue to the security-code step
         btnNextStep.setOnClickListener(v ->
                 startActivity(new Intent(this, SecurityCodeActivity.class)));

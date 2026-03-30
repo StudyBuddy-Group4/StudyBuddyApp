@@ -19,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        // This activity only exists to host a simple top-level layout.
+        // There is no extra setup here beyond the root content view.
+        // The same inset handling keeps the root view away from system bars.
         // Apply system-bar padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

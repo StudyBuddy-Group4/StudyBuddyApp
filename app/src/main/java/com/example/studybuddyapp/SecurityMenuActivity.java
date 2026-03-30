@@ -20,6 +20,7 @@ public class SecurityMenuActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_security_menu);
 
+        // This menu keeps security-related actions separate from general settings.
         // Apply system-bar padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -27,9 +28,11 @@ public class SecurityMenuActivity extends AppCompatActivity {
             return insets;
         });
 
+        // The top-left arrow returns to the previous profile/settings screen.
         // Back closes this screen
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
 
+        // The single menu row opens the password-change flow.
         // Open the change-password flow
         findViewById(R.id.menuChangePassword).setOnClickListener(v ->
                 startActivity(new Intent(this, ChangePasswordActivity.class)));

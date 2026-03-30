@@ -19,6 +19,7 @@ public class NotificationSettingsActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_notification_settings);
 
+        // This page only exposes a single notification toggle and a back action.
         // Apply system-bar padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -26,6 +27,7 @@ public class NotificationSettingsActivity extends AppCompatActivity {
             return insets;
         });
 
+        // The top-left arrow returns to the settings menu.
         // Back closes this screen
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
     }
