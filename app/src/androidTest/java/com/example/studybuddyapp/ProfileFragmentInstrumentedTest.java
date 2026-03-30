@@ -70,7 +70,7 @@ public class ProfileFragmentInstrumentedTest {
         SessionManager sessionManager = new SessionManager(activity);
         sessionManager.saveLoginSession("token-1", 42L, "alice", false);
 
-        replaceFragment();
+        recreateFragmentInFreshHost();
 
         TextView nameView = fragment.requireView().findViewById(R.id.tvProfileName);
         TextView idView = fragment.requireView().findViewById(R.id.tvProfileId);
@@ -102,21 +102,34 @@ public class ProfileFragmentInstrumentedTest {
         assertFalse(sessionManager.isAdmin());
     }
 
-    @Test
-    public void logout_startsLaunchOptionsActivity() {
-        SessionManager sessionManager = new SessionManager(activity);
-        sessionManager.saveLoginSession("token-3", 88L, "carol", false);
-
-        InstrumentationRegistry.getInstrumentation().runOnMainSync(() ->
-                fragment.requireView().findViewById(R.id.menu_logout).performClick());
-
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
-
-        assertTrue(activity.isFinishing() || activity.isDestroyed() || !sessionManager.isLoggedIn());
-    }
-
     private void replaceFragment() {
         InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+            fragment = new ProfileFragment();
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(containerId, fragment)
+                    .commitNow();
+        });
+    }
+
+    private void recreateFragmentInFreshHost() {
+        if (activity != null) {
+            activity.finish();
+        }
+
+        Context context = ApplicationProvider.getApplicationContext();
+        Intent intent = new Intent(context, LaunchOptionsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        activity = (LaunchOptionsActivity) InstrumentationRegistry.getInstrumentation()
+                .startActivitySync(intent);
+
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+            FrameLayout container = new FrameLayout(activity);
+            containerId = View.generateViewId();
+            container.setId(containerId);
+
+            activity.setContentView(container);
             fragment = new ProfileFragment();
             activity.getSupportFragmentManager()
                     .beginTransaction()

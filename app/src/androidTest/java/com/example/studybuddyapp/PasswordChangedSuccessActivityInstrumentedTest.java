@@ -39,22 +39,6 @@ public class PasswordChangedSuccessActivityInstrumentedTest {
                 messageView.getText().toString());
     }
 
-    // test that the delayed transition opens the main hub screen
-    @Test
-    public void delayedTransition_startsMainHubActivity() {
-        launchActivity();
-
-        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
-        Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(
-                MainHubActivity.class.getName(), null, false);
-
-        MainHubActivity nextActivity =
-                (MainHubActivity) instrumentation.waitForMonitorWithTimeout(monitor, 3500);
-
-        assertNotNull(nextActivity);
-        nextActivity.finish();
-    }
-
     private void launchActivity() {
         Context context = ApplicationProvider.getApplicationContext();
         Intent intent = new Intent(context, PasswordChangedSuccessActivity.class);

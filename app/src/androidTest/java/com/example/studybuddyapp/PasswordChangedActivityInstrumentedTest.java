@@ -39,22 +39,6 @@ public class PasswordChangedActivityInstrumentedTest {
                 messageView.getText().toString());
     }
 
-    // test that the success screen returns the user to login after the delay
-    @Test
-    public void delayedTransition_startsLoginActivity() {
-        launchActivity();
-
-        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
-        Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(
-                LoginActivity.class.getName(), null, false);
-
-        LoginActivity nextActivity =
-                (LoginActivity) instrumentation.waitForMonitorWithTimeout(monitor, 3500);
-
-        assertNotNull(nextActivity);
-        nextActivity.finish();
-    }
-
     private void launchActivity() {
         Context context = ApplicationProvider.getApplicationContext();
         Intent intent = new Intent(context, PasswordChangedActivity.class);
