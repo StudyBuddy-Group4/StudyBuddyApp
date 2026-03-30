@@ -71,10 +71,13 @@ public class TaskListFragment extends Fragment {
     private void loadTasks() {
         // Pending tasks are the only ones shown in this fragment.
         TaskApi api = ApiClient.getTaskApi(requireContext());
+        // Enqueue the api request for loading the tasks.
         api.getPendingTasks().enqueue(new Callback<List<TaskItem>>() {
             @Override
             public void onResponse(Call<List<TaskItem>> c, Response<List<TaskItem>> response) {
+                // When fragment is not displayed.
                 if (!isAdded()) return;
+                // Otherwise.
                 if (response.isSuccessful() && response.body() != null) {
                     // Replace the old in-memory list before rebuilding the UI.
                     currentTasks.clear();
