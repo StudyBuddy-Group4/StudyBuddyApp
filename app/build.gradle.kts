@@ -81,7 +81,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
 
     // Run BOTH test types before generating report
     dependsOn("testDebugUnitTest")
-    // dependsOn("connectedDebugAndroidTest") disabled for GitHub actions
+     dependsOn("connectedDebugAndroidTest")
     //Configure output formats
     reports {
         xml.required.set(true) // XML -> required for SonarQube
