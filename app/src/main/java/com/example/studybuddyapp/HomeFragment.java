@@ -57,6 +57,7 @@ public class HomeFragment extends Fragment {
         Button btnStart = view.findViewById(R.id.btn_start);
 
         chip15.setOnClickListener(v -> {
+            // Preset chips clear any previous custom value.
             selectedDurationMinutes = 15;
             isCustomSelected = false;
             chipCustom.setText(getString(R.string.time_custom));
@@ -64,6 +65,7 @@ public class HomeFragment extends Fragment {
         });
 
         chip30.setOnClickListener(v -> {
+            // Preset chips restore the default custom label text.
             selectedDurationMinutes = 30;
             isCustomSelected = false;
             chipCustom.setText(getString(R.string.time_custom));
@@ -118,6 +120,7 @@ public class HomeFragment extends Fragment {
                 .setMessage("Enter the number of minutes:")
                 .setView(input)
                 .setPositiveButton("OK", (dialog, which) -> {
+                    // Read the dialog field only when the user confirms.
                     String value = input.getText().toString().trim();
 
                     // Stop early when the user closes the dialog without entering a number.
@@ -177,6 +180,7 @@ public class HomeFragment extends Fragment {
 
         dialogView.findViewById(R.id.btn_start_anyway).setOnClickListener(v -> {
             // Starting anyway continues into the account-status check and matching flow.
+            // The dialog is only a checkpoint, not a separate stateful screen.
             dialog.dismiss();
             checkUserStatusAndLaunch();
         });
@@ -290,6 +294,7 @@ public class HomeFragment extends Fragment {
 
                 if (response.isSuccessful() && response.body() != null) {
                     JoinMeetingResponse meeting = response.body();
+                    // The meeting screen reads both extras on startup.
                     Intent intent = new Intent(requireContext(), MeetingRoomActivity.class);
 
                     // Pass the duration and backend-provided channel into the meeting screen.

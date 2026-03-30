@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
+        // Login is the main path back into the app after sign-up, splash, and password reset.
         // Apply system bar insets so the header and form are not clipped by the device edges.
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -111,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
             });
         });
 
+        // Secondary links keep the other auth flows reachable from the login page.
         tvSignUp.setOnClickListener(v ->
                 startActivity(new Intent(this, CreateAccountActivity.class)));
 

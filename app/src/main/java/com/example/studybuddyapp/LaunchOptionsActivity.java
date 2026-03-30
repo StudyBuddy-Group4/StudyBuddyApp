@@ -22,6 +22,7 @@ public class LaunchOptionsActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_launch_options);
 
+        // This screen is the unauthenticated hub for all entry paths.
         // Apply system-bar padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -34,6 +35,7 @@ public class LaunchOptionsActivity extends AppCompatActivity {
         Button btnSignUp = findViewById(R.id.btnSignUp);
         TextView tvForgotPassword = findViewById(R.id.tvForgotPassword);
 
+        // Each action opens a separate authentication step.
         // Open login
         btnLogIn.setOnClickListener(v ->
                 startActivity(new Intent(this, LoginActivity.class)));

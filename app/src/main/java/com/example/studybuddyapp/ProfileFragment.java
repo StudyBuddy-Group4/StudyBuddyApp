@@ -47,6 +47,7 @@ public class ProfileFragment extends Fragment {
         // Show whatever data is already available locally before the backend refresh finishes.
         showCachedData();
 
+        // Each menu row opens one profile-related settings flow.
         view.findViewById(R.id.menu_edit_profile).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), EditProfileActivity.class)));
 
@@ -96,6 +97,7 @@ public class ProfileFragment extends Fragment {
      * Refreshes the profile from the backend and updates the cached session values.
      */
     private void loadProfileFromBackend() {
+        // The latest profile is fetched on demand instead of being kept in memory by the fragment.
         UserApi api = ApiClient.getUserApi(requireContext());
         api.getProfile().enqueue(new Callback<UserProfileResponse>() {
             @Override

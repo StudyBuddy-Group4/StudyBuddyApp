@@ -54,6 +54,7 @@ public class TaskListFragment extends Fragment {
         taskContainer = view.findViewById(R.id.taskContainer);
         tvEmptyTasks = view.findViewById(R.id.tvEmptyTasks);
 
+        // The floating action button is the only entry point for creating a task from this tab.
         view.findViewById(R.id.fab_add_task).setOnClickListener(v -> showCreateTaskDialog());
     }
 
@@ -110,6 +111,7 @@ public class TaskListFragment extends Fragment {
         for (int i = 0; i < currentTasks.size(); i++) {
             TaskItem task = currentTasks.get(i);
 
+            // Every task row is inflated on demand from the shared item layout.
             View row = LayoutInflater.from(requireContext())
                     .inflate(R.layout.item_task, taskContainer, false);
 
@@ -238,6 +240,7 @@ public class TaskListFragment extends Fragment {
         dialogView.findViewById(R.id.btn_dialog_back).setOnClickListener(v -> dialog.dismiss());
 
         dialogView.findViewById(R.id.btn_dialog_save).setOnClickListener(v -> {
+            // Read both fields only when the user confirms the dialog.
             String title = etTask.getText().toString().trim();
             String note = etNote.getText().toString().trim();
 

@@ -245,6 +245,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
 
             int uid = remoteUids.get(i);
             FrameLayout cell = createParticipantCell(uid);
+            // Equal weights keep both columns the same width.
             LinearLayout.LayoutParams cellLp = new LinearLayout.LayoutParams(
                     0, dpToPx(150), 1f);
             cellLp.setMarginEnd(countInRow == 0 ? dpToPx(6) : 0);

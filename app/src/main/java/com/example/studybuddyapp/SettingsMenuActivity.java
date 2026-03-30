@@ -20,6 +20,7 @@ public class SettingsMenuActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_settings_menu);
 
+        // This screen groups account settings that do not belong on the profile header itself.
         // Apply system-bar padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -30,6 +31,7 @@ public class SettingsMenuActivity extends AppCompatActivity {
         // Back closes this screen
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
 
+        // Each menu row forwards into its own settings flow.
         // Open notification settings
         findViewById(R.id.menuNotificationSettings).setOnClickListener(v ->
                 startActivity(new Intent(this, NotificationSettingsActivity.class)));
