@@ -297,6 +297,7 @@ public class TaskListFragment extends Fragment {
      * Converts density-independent pixels to actual pixels for runtime-created views.
      */
     private int dpToPx(int dp) {
+        // Runtime dividers use this helper instead of hard-coded pixel values.
         return Math.round(dp * getResources().getDisplayMetrics().density);
     }
 }

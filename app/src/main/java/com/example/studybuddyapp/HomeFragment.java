@@ -171,6 +171,7 @@ public class HomeFragment extends Fragment {
         }
 
         dialogView.findViewById(R.id.btn_add_task).setOnClickListener(v -> {
+            // Adding tasks leaves the home tab and moves the user to task setup first.
             dialog.dismiss();
 
             // Reuse the existing tasks tab instead of opening a separate screen.
@@ -277,6 +278,7 @@ public class HomeFragment extends Fragment {
             btnLeave.setVisibility(View.GONE);
         }
 
+        // The warning is shown only after both dialog actions are configured.
         dialog.show();
     }
 

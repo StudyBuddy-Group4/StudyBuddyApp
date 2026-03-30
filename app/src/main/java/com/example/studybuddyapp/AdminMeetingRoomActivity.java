@@ -117,6 +117,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         }
 
         if (checkPermissions()) {
+            // Start observing the room immediately when permission is already available.
             initAndJoinAsSpectator();
         } else {
             // Request the media permissions used by this spectator join flow before opening the room.
@@ -425,6 +426,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
      * Converts dp units for the runtime-generated participant grid.
      */
     private int dpToPx(int dp) {
+        // All runtime-created sizes in this screen go through the same density helper.
         return Math.round(dp * getResources().getDisplayMetrics().density);
     }
 }
