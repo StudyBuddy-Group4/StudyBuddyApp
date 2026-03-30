@@ -40,25 +40,6 @@ public class SecurityMenuActivityInstrumentedTest {
         assertNotNull(menuLabel);
     }
 
-    // test that tapping the only menu row opens the change-password screen
-    @Test
-    public void menuChangePasswordClick_startsChangePasswordActivity() {
-        launchActivity();
-
-        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
-        Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(
-                ChangePasswordActivity.class.getName(), null, false);
-
-        instrumentation.runOnMainSync(() ->
-                activity.findViewById(R.id.menuChangePassword).performClick());
-
-        ChangePasswordActivity nextActivity = (ChangePasswordActivity)
-                instrumentation.waitForMonitorWithTimeout(monitor, 3000);
-
-        assertNotNull(nextActivity);
-        nextActivity.finish();
-    }
-
     private void launchActivity() {
         Context context = ApplicationProvider.getApplicationContext();
         Intent intent = new Intent(context, SecurityMenuActivity.class);

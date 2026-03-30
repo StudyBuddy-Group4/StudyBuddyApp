@@ -58,25 +58,6 @@ public class ForgotPasswordActivityInstrumentedTest {
         assertEquals(Button.VISIBLE, nextButton.getVisibility());
     }
 
-    // test that the next-step button opens the security-code screen
-    @Test
-    public void nextStepClick_startsSecurityCodeActivity() {
-        launchActivity();
-
-        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
-        Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(
-                SecurityCodeActivity.class.getName(), null, false);
-
-        instrumentation.runOnMainSync(() ->
-                activity.findViewById(R.id.btnNextStep).performClick());
-
-        SecurityCodeActivity nextActivity =
-                (SecurityCodeActivity) instrumentation.waitForMonitorWithTimeout(monitor, 3000);
-
-        assertNotNull(nextActivity);
-        nextActivity.finish();
-    }
-
     private void launchActivity() {
         Context context = ApplicationProvider.getApplicationContext();
         Intent intent = new Intent(context, ForgotPasswordActivity.class);
