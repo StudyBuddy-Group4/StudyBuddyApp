@@ -1,9 +1,10 @@
 package com.example.studybuddyapp;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -100,6 +101,25 @@ public class AdminMeetingRoomActivityTest {
             verify(moderationApi).applyAdminAction(44, "KICK");
             verify(moderationApi).updateReportStatus(9L, "ACTIONED");
         }
+    }
+
+    @Test
+    public void removeParticipant_removesUidAndRebuildsGrid() throws Exception {
+        AdminMeetingRoomActivity activity = buildActivity();
+        Method addParticipant = AdminMeetingRoomActivity.class.getDeclaredMethod("addParticipant", int.class);
+        Method removeParticipant = AdminMeetingRoomActivity.class.getDeclaredMethod("removeParticipant", int.class);
+        addParticipant.setAccessible(true);
+        removeParticipant.setAccessible(true);
+
+        addParticipant.invoke(activity, 12);
+        addParticipant.invoke(activity, 13);
+        removeParticipant.invoke(activity, 12);
+
+        @SuppressWarnings("unchecked")
+        List<Integer> remoteUids = (List<Integer>) getField(activity, "remoteUids");
+        assertEquals(1, remoteUids.size());
+        assertFalse(remoteUids.contains(12));
+        assertTrue(remoteUids.contains(13));
     }
 
     private static AdminMeetingRoomActivity buildActivity() {

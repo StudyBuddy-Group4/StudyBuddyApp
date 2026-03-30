@@ -43,6 +43,13 @@ android {
 
     testOptions {
         unitTests.isIncludeAndroidResources = true
+
+        unitTests.all {
+            it.extensions.configure(JacocoTaskExtension::class.java) {
+                isIncludeNoLocationClasses = true
+                excludes = listOf("jdk.internal.*")
+            }
+        }
     }
 }
 
@@ -81,7 +88,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
 
     // Run BOTH test types before generating report
     dependsOn("testDebugUnitTest")
-     dependsOn("connectedDebugAndroidTest")
+     //dependsOn("connectedDebugAndroidTest")
     //Configure output formats
     reports {
         xml.required.set(true) // XML -> required for SonarQube

@@ -5,8 +5,11 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -70,6 +73,40 @@ public class MeetingRoomVideoCallManagerTest {
         assertEquals(false, getField(manager, "isInChannel"));
     }
 
+    @Test
+    public void rebindContainers_rebuildsLocalThumbnailWhenRemoteOwnsMainView() throws Exception {
+        AppCompatActivity activity = Robolectric.buildActivity(AppCompatActivity.class).setup().get();
+        FrameLayout oldMain = new FrameLayout(activity);
+        LinearLayout oldThumbs = new LinearLayout(activity);
+        MeetingRoomVideoCallManager manager =
+                new MeetingRoomVideoCallManager(activity, oldMain, oldThumbs, new NoOpCallbacks());
+
+        setField(manager, "localSurface", new SurfaceView(activity));
+        setField(manager, "mainViewUid", 99);
+
+        FrameLayout newMain = new FrameLayout(activity);
+        LinearLayout newThumbs = new LinearLayout(activity);
+        manager.rebindContainers(newMain, newThumbs);
+
+        assertEquals(1, newThumbs.getChildCount());
+        assertEquals("local", newThumbs.getChildAt(0).getTag());
+    }
+
+    @Test
+    public void addLabelToFrame_addsVisibleTextLabel() throws Exception {
+        MeetingRoomVideoCallManager manager = buildManager();
+        AppCompatActivity activity = Robolectric.buildActivity(AppCompatActivity.class).setup().get();
+        FrameLayout frame = new FrameLayout(activity);
+
+        java.lang.reflect.Method method = MeetingRoomVideoCallManager.class
+                .getDeclaredMethod("addLabelToFrame", FrameLayout.class, String.class);
+        method.setAccessible(true);
+        method.invoke(manager, frame, "You");
+
+        TextView label = findTextView(frame, "You");
+        assertEquals("You", label.getText().toString());
+    }
+
     private static MeetingRoomVideoCallManager buildManager() {
         AppCompatActivity activity = Robolectric.buildActivity(AppCompatActivity.class).setup().get();
         FrameLayout main = new FrameLayout(activity);
@@ -97,6 +134,20 @@ public class MeetingRoomVideoCallManagerTest {
         Field field = target.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
         field.set(target, value);
+    }
+
+    private static TextView findTextView(View root, String text) {
+        if (root instanceof TextView && text.equals(((TextView) root).getText().toString())) {
+            return (TextView) root;
+        }
+        if (root instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) root;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                TextView found = findTextView(group.getChildAt(i), text);
+                if (found != null) return found;
+            }
+        }
+        return null;
     }
 
     private static final class NoOpCallbacks implements MeetingRoomVideoCallManager.Callbacks {

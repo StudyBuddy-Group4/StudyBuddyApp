@@ -2,13 +2,17 @@ package com.example.studybuddyapp;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Intent;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.studybuddyapp.api.ApiClient;
@@ -24,6 +28,7 @@ import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowDialog;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -83,6 +88,73 @@ public class HomeFragmentTest {
             assertEquals(15, nextIntent.getIntExtra(MeetingRoomActivity.EXTRA_FOCUS_DURATION, -1));
             assertEquals("focus-15-room",
                     nextIntent.getStringExtra(MeetingRoomActivity.EXTRA_CHANNEL_NAME));
+        }
+    }
+
+    @Test
+    public void checkUserStatusAndLaunch_restrictedUserShowsRestrictionDialog() throws Exception {
+        UserApi userApi = mock(UserApi.class);
+        Call<UserProfileResponse> profileCall = mock(Call.class);
+        UserProfileResponse profile = new UserProfileResponse();
+
+        setField(profile, "isBanned", true);
+        when(userApi.getProfile()).thenReturn(profileCall);
+        Mockito.doAnswer(invocation -> {
+            Callback<UserProfileResponse> callback = invocation.getArgument(0);
+            callback.onResponse(profileCall, Response.success(profile));
+            return null;
+        }).when(profileCall).enqueue(any());
+
+        try (MockedStatic<ApiClient> apiClientMock = Mockito.mockStatic(ApiClient.class)) {
+            apiClientMock.when(() -> ApiClient.getUserApi(any())).thenReturn(userApi);
+
+            FragmentActivity activity = Robolectric.buildActivity(FragmentActivity.class).setup().get();
+            HomeFragment fragment = new HomeFragment();
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(android.R.id.content, fragment)
+                    .commitNow();
+
+            Method method = HomeFragment.class.getDeclaredMethod("checkUserStatusAndLaunch");
+            method.setAccessible(true);
+            method.invoke(fragment);
+
+            AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+            assertNotNull(dialog);
+            TextView messageView = dialog.findViewById(R.id.tvWarningMessage);
+            assertNotNull(messageView);
+            assertTrue(messageView.getText().toString().contains("permanently banned"));
+        }
+    }
+
+    @Test
+    public void launchMeetingRoom_unsuccessfulResponse_doesNotStartActivity() throws Exception {
+        MatchingApi matchingApi = mock(MatchingApi.class);
+        Call<JoinMeetingResponse> joinMeetingCall = mock(Call.class);
+
+        when(matchingApi.joinMeeting(15)).thenReturn(joinMeetingCall);
+        Mockito.doAnswer(invocation -> {
+            Callback<JoinMeetingResponse> callback = invocation.getArgument(0);
+            callback.onResponse(joinMeetingCall, Response.error(500,
+                    okhttp3.ResponseBody.create(null, "server error")));
+            return null;
+        }).when(joinMeetingCall).enqueue(any());
+
+        try (MockedStatic<ApiClient> apiClientMock = Mockito.mockStatic(ApiClient.class)) {
+            apiClientMock.when(() -> ApiClient.getMatchingApi(any())).thenReturn(matchingApi);
+
+            FragmentActivity activity = Robolectric.buildActivity(FragmentActivity.class).setup().get();
+            HomeFragment fragment = new HomeFragment();
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(android.R.id.content, fragment)
+                    .commitNow();
+
+            Method method = HomeFragment.class.getDeclaredMethod("launchMeetingRoom");
+            method.setAccessible(true);
+            method.invoke(fragment);
+
+            assertNull(shadowOf(activity).getNextStartedActivity());
         }
     }
 

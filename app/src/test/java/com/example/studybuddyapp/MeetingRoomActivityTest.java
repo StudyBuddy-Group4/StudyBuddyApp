@@ -2,6 +2,7 @@ package com.example.studybuddyapp;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -19,6 +20,7 @@ import org.robolectric.annotation.Config;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 28)
@@ -70,6 +72,49 @@ public class MeetingRoomActivityTest {
         assertEquals("room-30", nextIntent.getStringExtra(MeetingRoomActivity.EXTRA_CHANNEL_NAME));
         assertEquals(remoteUids, nextIntent.getIntegerArrayListExtra("remote_uids"));
         assertTrue((Boolean) getField(activity, "isNavigatingToChild"));
+    }
+
+    @Test
+    public void getRemovalMessage_returnsPermanentBanMessage() throws Exception {
+        MeetingRoomActivity activity = buildActivity();
+        com.example.studybuddyapp.api.dto.UserProfileResponse profile =
+                new com.example.studybuddyapp.api.dto.UserProfileResponse();
+        setField(profile, "isBanned", true);
+
+        Method method = MeetingRoomActivity.class
+                .getDeclaredMethod("getRemovalMessage",
+                        com.example.studybuddyapp.api.dto.UserProfileResponse.class);
+        method.setAccessible(true);
+        String message = (String) method.invoke(activity, profile);
+
+        assertTrue(message.contains("Banned Permanently"));
+    }
+
+    @Test
+    public void getRemovalMessage_returnsThreeDayBanMessageForLongRestriction() throws Exception {
+        MeetingRoomActivity activity = buildActivity();
+        com.example.studybuddyapp.api.dto.UserProfileResponse profile =
+                new com.example.studybuddyapp.api.dto.UserProfileResponse();
+        setField(profile, "bannedUntil", LocalDateTime.now().plusDays(3).toString());
+
+        Method method = MeetingRoomActivity.class
+                .getDeclaredMethod("getRemovalMessage",
+                        com.example.studybuddyapp.api.dto.UserProfileResponse.class);
+        method.setAccessible(true);
+        String message = (String) method.invoke(activity, profile);
+
+        assertTrue(message.contains("Banned For 3 Days"));
+    }
+
+    @Test
+    public void isLongTermBan_returnsFalseForInvalidTimestamp() throws Exception {
+        MeetingRoomActivity activity = buildActivity();
+        Method method = MeetingRoomActivity.class.getDeclaredMethod("isLongTermBan", String.class);
+        method.setAccessible(true);
+
+        boolean result = (Boolean) method.invoke(activity, "not-a-date");
+
+        assertFalse(result);
     }
 
     private static MeetingRoomActivity buildActivity() {
