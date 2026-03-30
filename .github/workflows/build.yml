@@ -38,6 +38,8 @@ jobs:
         run: ./gradlew :app:testDebugUnitTest
 
       - name: Run instrumented tests
+        id: instrumented_tests
+        continue-on-error: true
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
@@ -46,10 +48,18 @@ jobs:
           script: ./gradlew :app:connectedDebugAndroidTest
 
       - name: Generate JaCoCo report
+        if: always()
         run: ./gradlew :app:jacocoTestReport
 
       - name: SonarQube analysis
+        if: always()
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: ./gradlew sonar --info
+
+      - name: Fail job if instrumented tests failed
+        if: ${{ always() && steps.instrumented_tests.outcome == 'failure' }}
+        run: |
+          echo "Instrumented tests failed. Coverage and SonarQube analysis were still generated."
+          exit 1
