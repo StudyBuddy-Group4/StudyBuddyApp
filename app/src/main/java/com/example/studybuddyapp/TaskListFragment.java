@@ -120,6 +120,7 @@ public class TaskListFragment extends Fragment {
             TextView tvNote = row.findViewById(R.id.tvTaskNote);
             ImageView ivDelete = row.findViewById(R.id.ivDeleteTask);
 
+            // The row title is always shown.
             tvTitle.setText(task.getTitle());
 
             // Only show the note field when the task actually has extra text.
@@ -129,6 +130,7 @@ public class TaskListFragment extends Fragment {
             }
 
             boolean completed = Boolean.TRUE.equals(task.getCompleted());
+            // The stored completion flag controls both icon choice and later toggle direction.
             // The status icon reflects the last completion state known to the fragment.
             ivStatus.setImageResource(completed
                     ? R.drawable.ic_check_circle : R.drawable.ic_unchecked_circle);
@@ -137,6 +139,7 @@ public class TaskListFragment extends Fragment {
             ivStatus.setOnClickListener(v -> toggleTaskCompletion(task, ivStatus));
 
             ivDelete.setVisibility(View.VISIBLE);
+            // Delete stays available for every pending task row.
             ivDelete.setOnClickListener(v -> deleteTask(task));
 
             // Add the fully configured row before optionally appending its divider.

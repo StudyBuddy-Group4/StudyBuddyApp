@@ -48,12 +48,15 @@ public class ProfileFragment extends Fragment {
         showCachedData();
 
         // Each menu row opens one profile-related settings flow.
+        // Edit profile leads to the screen that can change username and email.
         view.findViewById(R.id.menu_edit_profile).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), EditProfileActivity.class)));
 
+        // Security opens the password-related menu.
         view.findViewById(R.id.menu_security).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), SecurityMenuActivity.class)));
 
+        // Settings opens the more general account options.
         view.findViewById(R.id.menu_setting).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), SettingsMenuActivity.class)));
 

@@ -20,6 +20,7 @@ public class NotificationSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification_settings);
 
         // This page only exposes a single notification toggle and a back action.
+        // No backend call is needed before the screen becomes usable.
         // Apply system-bar padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -27,6 +28,7 @@ public class NotificationSettingsActivity extends AppCompatActivity {
             return insets;
         });
 
+        // There is no extra local state to initialise here.
         // The top-left arrow returns to the settings menu.
         // Back closes this screen
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());

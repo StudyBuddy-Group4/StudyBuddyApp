@@ -86,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                                 body.isAdmin()
                         );
 
+                        // MainHubActivity reads the admin flag to choose the right tab set.
                         // Start the main hub and clear the login screen from the back stack.
                         Intent intent = new Intent(LoginActivity.this, MainHubActivity.class);
                         // Clearing the stack stops the user from returning to the login form with the back button.
@@ -113,9 +114,11 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // Secondary links keep the other auth flows reachable from the login page.
+        // Sign-up is for users who do not have an account yet.
         tvSignUp.setOnClickListener(v ->
                 startActivity(new Intent(this, CreateAccountActivity.class)));
 
+        // Forgot password opens the separate recovery flow.
         tvForgotPassword.setOnClickListener(v ->
                 startActivity(new Intent(this, ForgotPasswordActivity.class)));
     }

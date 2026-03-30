@@ -64,6 +64,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
     private final IRtcEngineEventHandler rtcEventHandler = new IRtcEngineEventHandler() {
         @Override
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
+            // The admin join event is only logged because no extra UI change is needed here.
             Log.d(TAG, "Admin joined channel: " + channel);
         }
 
@@ -81,6 +82,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
 
         @Override
         public void onError(int err) {
+            // Agora errors are logged for debugging but do not show a second admin dialog here.
             Log.e(TAG, "Agora error: " + err);
         }
     };
@@ -100,6 +102,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         // Root container for runtime-generated participant cards
         participantGrid = findViewById(R.id.participantGrid);
 
+        // The back arrow leaves moderation mode immediately.
         findViewById(R.id.ivBack).setOnClickListener(v -> {
             // Leaving this screen should always clean up the Agora spectator connection first.
             leaveAndCleanup();
@@ -164,6 +167,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
             // The admin still needs video enabled to subscribe to remote participant streams.
             rtcEngine.enableVideo();
         } catch (Exception e) {
+            // If Agora cannot be created there is no useful spectator fallback.
             Log.e(TAG, "Failed to init RtcEngine", e);
             finish();
             return;
@@ -184,6 +188,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
 
         // Join the reported room with the shared temporary token setup.
         String token = AgoraConfig.TEMP_TOKEN.isEmpty() ? null : AgoraConfig.TEMP_TOKEN;
+        // Joining starts the live spectator session for the current moderation target.
         rtcEngine.joinChannel(token, channelName, uid, options);
     }
 
@@ -298,6 +303,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         FrameLayout.LayoutParams labelLp = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT);
+        // The uid badge stays near the top edge of the participant tile.
         labelLp.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
         labelLp.topMargin = dpToPx(6);
         frame.addView(uidLabel, labelLp);
@@ -308,6 +314,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         prohibitBtn.setContentDescription("Take action");
         FrameLayout.LayoutParams btnLp = new FrameLayout.LayoutParams(
                 dpToPx(40), dpToPx(40));
+        // The moderation button stays pinned to the lower-right corner of the tile.
         btnLp.gravity = Gravity.BOTTOM | Gravity.END;
         btnLp.setMargins(0, 0, dpToPx(8), dpToPx(8));
         frame.addView(prohibitBtn, btnLp);
@@ -356,6 +363,7 @@ public class AdminMeetingRoomActivity extends AppCompatActivity {
         dialogView.findViewById(R.id.btnBack).setOnClickListener(v -> dialog.dismiss());
         // Backing out of the dialog leaves the admin connected to the room without applying any action.
 
+        // The dialog only appears after all handlers have been attached.
         dialog.show();
     }
 

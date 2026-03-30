@@ -56,6 +56,7 @@ public class HomeFragment extends Fragment {
         chipCustom = view.findViewById(R.id.chip_custom);
         Button btnStart = view.findViewById(R.id.btn_start);
 
+        // The screen starts on the 15-minute preset.
         chip15.setOnClickListener(v -> {
             // Preset chips clear any previous custom value.
             selectedDurationMinutes = 15;
