@@ -72,8 +72,6 @@ To run tests and generate coverage:
 To run SonarQube analysis:
   ./gradlew sonar
 
-SonarQube project: 2IS70-Android-App (NOT SURE)
-
 
 Project Structure
 -----------------
