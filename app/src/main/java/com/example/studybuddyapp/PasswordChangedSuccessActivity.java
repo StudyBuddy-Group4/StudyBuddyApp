@@ -18,8 +18,10 @@ public class PasswordChangedSuccessActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Standard android boilerplate
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        // use the activity xml layout
         setContentView(R.layout.activity_password_changed_success);
 
         // This page is only a short stop between the password flow and the main app.

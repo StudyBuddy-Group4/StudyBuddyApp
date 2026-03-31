@@ -15,8 +15,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // standard android boilerplate
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        // use the activity xml layout
         setContentView(R.layout.activity_main);
 
         // This activity only exists to host a simple top-level layout.

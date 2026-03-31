@@ -18,8 +18,10 @@ public class LaunchOptionsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // standard android boilerplate
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        // use the activity xml layout
         setContentView(R.layout.activity_launch_options);
 
         // This screen is the unauthenticated hub for all entry paths.

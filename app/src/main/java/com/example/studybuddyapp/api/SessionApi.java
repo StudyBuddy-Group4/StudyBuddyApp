@@ -23,11 +23,19 @@ public interface SessionApi {
     @POST("api/session/start")
     Call<StartSessionResponse> startSession(@Body StartSessionRequest request);
 
-    // Mark a session as complete
+    /**
+     * Mark a session as complete
+     * @param sessionId id of the session to mark as complete
+     * @return response from the backend
+     */
     @PUT("api/session/{id}/complete")
     Call<String> completeSession(@Path("id") long sessionId);
 
-    // Mark a session as incomplete
+    /**
+     * Mark a session as incomplete
+     * @param sessionId id of the session to mark as incomplete
+     * @return response from the backend
+     */
     @PUT("api/session/{id}/incomplete")
     Call<String> incompleteSession(@Path("id") long sessionId);
 

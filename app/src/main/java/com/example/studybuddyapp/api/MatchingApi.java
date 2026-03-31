@@ -12,11 +12,19 @@ import retrofit2.http.Path;
  */
 public interface MatchingApi {
 
-    // Join a room for the selected duration
+    /**
+     * Join a room for the selected duration
+     * @param duration the duration to search a match for will be +- 5
+     * @return returns a meeting response
+     */
     @POST("api/matching/join/{duration}")
     Call<JoinMeetingResponse> joinMeeting(@Path("duration") int duration);
 
-    // Leave the current room
+    /**
+     * Leave the current room.
+     * @param channelName name of the channel(meeting) to leave
+     * @return a response from the backend
+     */
     @POST("api/matching/leave/{channelName}")
     Call<LeaveMeetingResponse> leaveMeeting(@Path("channelName") String channelName);
 }
