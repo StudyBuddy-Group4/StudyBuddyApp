@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.widget.LinearLayout;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.After;
@@ -19,9 +21,13 @@ import org.junit.runner.RunWith;
 public class AdminMeetingRoomActivityInstrumentedTest {
 
     private AdminMeetingRoomActivity activity;
+    private ActivityScenario<AdminMeetingRoomActivity> scenario;
 
     @After
     public void tearDown() {
+        if (scenario != null) {
+            scenario.close();
+        }
         if (activity != null) {
             activity.finish();
         }
@@ -29,11 +35,12 @@ public class AdminMeetingRoomActivityInstrumentedTest {
 
     @Test
     public void onCreate_withoutChannel_finishesActivity() {
-        launchActivity(null, -1L, -1L);
+        Intent intent = buildIntent(null, -1L, -1L);
 
+        scenario = ActivityScenario.launch(intent);
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
 
-        assertTrue(activity.isFinishing() || activity.isDestroyed());
+        assertTrue(scenario.getState() == Lifecycle.State.DESTROYED);
     }
 
     @Test
@@ -51,6 +58,13 @@ public class AdminMeetingRoomActivityInstrumentedTest {
     }
 
     private void launchActivity(String channelName, long reportId, long reportedUserId) {
+        Intent intent = buildIntent(channelName, reportId, reportedUserId);
+        activity = (AdminMeetingRoomActivity) InstrumentationRegistry.getInstrumentation()
+                .startActivitySync(intent);
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+    }
+
+    private Intent buildIntent(String channelName, long reportId, long reportedUserId) {
         Context context = ApplicationProvider.getApplicationContext();
         Intent intent = new Intent(context, AdminMeetingRoomActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -60,9 +74,6 @@ public class AdminMeetingRoomActivityInstrumentedTest {
         }
         intent.putExtra("report_id", reportId);
         intent.putExtra("reported_user_id", reportedUserId);
-
-        activity = (AdminMeetingRoomActivity) InstrumentationRegistry.getInstrumentation()
-                .startActivitySync(intent);
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        return intent;
     }
 }
